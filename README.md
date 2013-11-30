@@ -24,5 +24,7 @@ One of the most interesting feature of the environment consists in the construct
 
 # Advanced features
 ## Dropbox synchronization
+The local filesystem can be automaticaly synchronized by using a Dropbox(TM) datastore (require to have a free Dropbox account). Export of all the local filesystem as regular files in a dedicated Dropbox folder. By enabling this functionality, the local filesystem is always synchronized, whatever the computer/smartphone/tablet is used.
 
 ## Utilization of external libraries
+Many powerfull javascript libraries are available accross the internet (for managing webgl 3D, data visualization, OpenStreetMap managment,....). AlgoScript integrates a simple mechanism allowing the use of these external libraries, allowing to design some very powerfull applications.
