@@ -12,3 +12,17 @@ Several functions allowing to manage simple "console-like" text intputs/outputs.
 
 ## Debugging tools
 The environment implementes an automatic trace inspector.
+
+## Local filesystem for storing sources
+The HTML5 local filesystem is used to store several source and data files. Tools for browsing the filesystem and to add external files to this local filesystem are available.
+
+## Sound management
+Highlevel functions allow to deal with sounds (edition of wav files, sound synthesis,...).
+
+## Standalone applications creation
+One of the most interesting feature of the environment consists in the construction of universal standalone applcation in one click.
+
+# Advanced features
+## Dropbox synchronization
+
+## Utilization of external libraries
