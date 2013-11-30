@@ -4,6 +4,7 @@ Several libraries allows to deal with OpenStreetMap data (leaflet, Mapbox,...). 
 
 # Using extensions with AlgoScript (general presentation)
 Adding an extension to AlgoScript is quite simple. It suffises to add these lines to the local file AlgoScript.config. 
+
 	[extension name]
 	TITLE=Extension description
 	ENABLED=yes or no or ask : Extension is enabled
