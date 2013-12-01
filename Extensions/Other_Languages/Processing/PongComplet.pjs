@@ -1,0 +1,51 @@
+
+
+float balle_x = 100;
+float balle_y = 10;
+float dep_x = 2;
+float dep_y = 1;
+float raquette_y=0;
+int nbballes=0;
+float vitesse=1;
+
+void setup() {
+  size(800, 600);
+}
+
+void draw() {
+  background(0);
+  fill(128, 128, 0);
+  ellipse(balle_x, balle_y, 10, 10);
+
+  fill(0, 0, 255);
+  rect(10, raquette_y, 10, 100);
+
+  raquette_y=raquette_y+(mouseY-raquette_y)/10;
+  
+  if (balle_x > 10 && balle_x < 20 && balle_y > raquette_y && balle_y < raquette_y + 100) {
+    dep_x = -dep_x;
+  }
+
+  balle_x = balle_x + vitesse*dep_x;
+  balle_y = balle_y + vitesse*dep_y;
+
+  if (balle_x > 800) {
+    dep_x = -dep_x;
+    vitesse=vitesse*1.1;
+  }
+  if (balle_y < 0 || balle_y > 600) {
+    dep_y = -dep_y;
+  }
+  if (balle_x<10) {
+    balle_x=random(300)+100;
+    balle_y=random(300)+100;
+    dep_x=3*random(100)/100; // un réel [0,3]
+    dep_y=6*random(100)/100-3; // un réel [-3, 3]
+    vitesse=1;
+  }
+  
+  fill(255);
+  text(nbballes+" balles perdues !",10,550);
+}
+
+

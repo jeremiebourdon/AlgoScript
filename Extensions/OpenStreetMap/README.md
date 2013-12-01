@@ -22,3 +22,4 @@ Adding an extension to AlgoScript is quite simple. It suffises to add these line
 # Example
 
 The presented example is derivated from the basic example of Leaflet library.
+The complete documentation of Leaflet API can be found [here](http://leafletjs.com "Leaflet.js") 
