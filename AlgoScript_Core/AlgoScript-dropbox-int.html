@@ -18,6 +18,7 @@ var globaleval = function(script) {
     builtin_nbprompt=0; return window.eval(script);
   }
 }
+
 var evalligne=17;
 var builtin_nbprompt=0; 
 
@@ -54,8 +55,6 @@ for (var i = 0; i < (ConfigTable.length); i++) {
 
 //Ecrire('Bonjour');
 //Ecrire(Taille(AllExtensions));
-
-
 
 for (var i = 0; i < (AllExtensions.length); i++) {
   //for (var p in AllExtensions[i]) Ecrire(p + '=' + AllExtensions[i][p]);
@@ -1798,7 +1797,7 @@ var CodeMirror = (function() {
       measure.innerHTML = "<pre>" + line.getHTML(makeTab, ch) +
         '<span id="CodeMirror-temp-' + tempId + '">' + htmlEscape(line.text.charAt(ch) || " ") + "</span>" +
         extra + "</pre>";
-      var elt = document.getElementById("CodeMirror-temp-" + tempId);
+      var elt = GEBID("CodeMirror-temp-" + tempId);
       var top = elt.offsetTop, left = elt.offsetLeft;
       // Older IEs report zero offsets for spans directly after a wrap
       if (ie && top == 0 && left == 0) {
@@ -4736,14 +4735,14 @@ if (typeof exports !== "undefined") exports.js_beautify = js_beautify;
 // Fonction Indente: adaptée de jsBeautify
 
 function Indente() {
-  document.getElementById('lecode').value = editor.getValue();
-  var js_source = document.getElementById('lecode').value.replace(/^\s+/, '');
-  document.getElementById('lecode').value = js_beautify(js_source, {
+  GEBID('lecode').value = editor.getValue();
+  var js_source = GEBID('lecode').value.replace(/^\s+/, '');
+  GEBID('lecode').value = js_beautify(js_source, {
     indent_size: 2, braces_on_own_line: false
   });
-  //js_source = document.getElementById('builtin_codejs').value.replace(/^\s+/, '');
-  //document.getElementById('builtin_codejs').value = js_beautify(js_source,{indent_size :2});
-  editor.setValue(document.getElementById('lecode').value);
+  //js_source = GEBID('builtin_codejs').value.replace(/^\s+/, '');
+  //GEBID('builtin_codejs').value = js_beautify(js_source,{indent_size :2});
+  editor.setValue(GEBID('lecode').value);
   return true;
 }
 
@@ -4882,7 +4881,7 @@ builtin_oldfilename='';
 function builtincapturetouch(e) {
 	// Ecrire('capturetouch '+ e.changedTouches[0].pageY);
 	e.preventDefault();
-	var decy=document.getElementById('mycanvas').style.top.replace('px','');
+	var decy=GEBID('mycanvas').style.top.replace('px','');
 	var y=(e.changedTouches[0].clientY-decy) * Math.abs(maxviewport_y-minviewport_y) / size_canvas_y;
 	if (viewport_dir == 1) {
 		y+=minviewport_y;
@@ -4899,7 +4898,7 @@ function builtinMouseDown(e) {
 	// Ecrire('MouseDown');
 	e.preventDefault();
 	builtinclick=true;
-	var decy=document.getElementById('mycanvas').style.top.replace('px','');
+	var decy=GEBID('mycanvas').style.top.replace('px','');
         
 	if (typeof(e.changedTouches) != 'undefined') builtincapturemouse({layerX:e.changedTouches[0].clientX, layerY:(e.changedTouches[0].clientY-decy)});
 	else builtincapturemouse(e);
@@ -5310,15 +5309,15 @@ Exemples_javascripts_inst[0] = "var tab=new Array(1,3,5,2,4);\nvar tab2=new Arra
 Exemples_javascripts_fonctions[0] = "";
 
 function texte_a_etudier() {
-  return document.getElementById("MonTexte").value;
+  return GEBID("MonTexte").value;
 }
 
 function getEntreetexte() {
-  return document.getElementById("MonTexte").value;
+  return GEBID("MonTexte").value;
 }
 
 function setEntreetexte(valeur) {
-  document.getElementById("MonTexte").value=valeur;
+  GEBID("MonTexte").value=valeur;
 }
 
 function AfficherTableau(tab) {
@@ -5364,14 +5363,14 @@ Exemples_javascripts_fonctions[3] = "function TranslateX(x) {\n	return x*3/300-2
 
 
 function putExemple(i) {
-  if (Exemples_javascripts_inst[i] != '') document.getElementById('lecode').value = Exemples_javascripts_inst[i];
-  //	if (Exemples_javascripts_fonctions[i] != '') document.getElementById('builtin_codejs').value=Exemples_javascripts_fonctions[i];
-  if (Exemples_javascripts_fonctions[i] != '') document.getElementById('lecode').value += Exemples_javascripts_fonctions[i];
-  //document.getElementById('Aide').style.visibility='hidden';
+  if (Exemples_javascripts_inst[i] != '') GEBID('lecode').value = Exemples_javascripts_inst[i];
+  //	if (Exemples_javascripts_fonctions[i] != '') GEBID('builtin_codejs').value=Exemples_javascripts_fonctions[i];
+  if (Exemples_javascripts_fonctions[i] != '') GEBID('lecode').value += Exemples_javascripts_fonctions[i];
+  //GEBID('Aide').style.visibility='hidden';
   // pour CodeMirror
-  editor.setValue(document.getElementById('lecode').value);
+  editor.setValue(GEBID('lecode').value);
   // fin
-  document.getElementById('titre_onglet').selectedIndex = 0;
+  GEBID('titre_onglet').selectedIndex = 0;
   MontreFenetre(0);
 }
 
@@ -5400,7 +5399,7 @@ function builtin_max(a, b) {
 }
 
 function InitGraphic() {
-  canvas = document.getElementById('mycanvas');
+  canvas = GEBID('mycanvas');
   ctx = canvas.getContext('2d');
   DrawTurtle();
   CacheGraphique();
@@ -5521,7 +5520,7 @@ function CerclePlein(x0, y0, r, color) {
 
 function DrawImage(imageurl,x,y,w,h) { 
 	var monim=new Image();
-	monim.src=imageurl.replace(/^[\s\n]+/g,'').replace(/[\s\n]+$/g,'');
+	monim.src=imageurl.replace(/^[\s\n]+/g,'').replace(/[\s\n]+$/g,'').replace(/\n/g,'');
 	ctx.drawImage(monim,ViewX(x), ViewY(y),ViewX(w), ViewY(h));
 }
 
@@ -5914,16 +5913,16 @@ var size_canvas_x;
 var size_canvas_y;
 
 function Init() {
-  document.getElementById('sortie').disabled = true;
+  GEBID('sortie').disabled = true;
   size_canvas_x = 800;
   size_canvas_y = 600;
-  // document.getElementById('mycanvas').onclick=builtincapturemouse;
-  document.getElementById('mycanvas').ontouchstart=builtinMouseDown;
-  document.getElementById('mycanvas').ontouchmove=builtincapturetouch;
-  document.getElementById('mycanvas').ontouchend=builtinMouseUp;
-  document.getElementById('mycanvas').onmousedown=builtinMouseDown;
-  document.getElementById('mycanvas').onmouseup=builtinMouseUp;
-  document.getElementById('mycanvas').onmousemove=builtinMouseMoveEvent;
+  // GEBID('mycanvas').onclick=builtincapturemouse;
+  GEBID('mycanvas').ontouchstart=builtinMouseDown;
+  GEBID('mycanvas').ontouchmove=builtincapturetouch;
+  GEBID('mycanvas').ontouchend=builtinMouseUp;
+  GEBID('mycanvas').onmousedown=builtinMouseDown;
+  GEBID('mycanvas').onmouseup=builtinMouseUp;
+  GEBID('mycanvas').onmousemove=builtinMouseMoveEvent;
   document.onkeypress=function (k) {Keypressed(k['charCode']+1000*k['keyCode']);};
 
 }
@@ -6034,12 +6033,12 @@ function Evaluer() {
   Initialiser();
   BeginningEvent=true;
   contenu_memoire = '';
-  Variables_a_inspecter = document.getElementById('builtin_inspector').value;
+  Variables_a_inspecter = GEBID('builtin_inspector').value;
 
   // Pour CodeMirror
-  document.getElementById('lecode').value = editor.getValue();
+  GEBID('lecode').value = editor.getValue();
   // Fin
-  var tabcode = document.getElementById('lecode').value;
+  var tabcode = GEBID('lecode').value;
   // début sauvegarde automatique des 10 dernières exécutions
   for(var i=8; i>=0; i--) {
   	if (FileExists('Sauvegardes/save'+i+'.js')) {
@@ -6085,8 +6084,8 @@ function Evaluer() {
   if (builtin_allvariables == '') {
     // si premi&egrave;re ex&eacute;cution m&eacute;moirise les variables de base
     var ch = '|';
-
-    for (var p in window) {
+	var p;
+    for (p in window) {
       var letype = ""
       try {
         letype = typeof(eval('window.' + p));
@@ -6102,10 +6101,11 @@ function Evaluer() {
   } else {
     // sinon efface les variables cr&eacute;&eacute;es par la pr&eacute;c&eacute;dente ex&eacute;cution
     var supprimees = "";
-    for (var p in window) {
+    var p;
+    for (p in window) {
       var letype = ""
       try {
-        letype = typeof(eval('window.' + p));
+        letype = typeof(eval('window["' + p+'"]'));
       } catch (e) {
         letype = "NONE";
       } finally {}
@@ -6113,7 +6113,8 @@ function Evaluer() {
       if ((letype == "string") || (letype == "boolean") || (letype == "number")) {
         if (builtin_allvariables.indexOf('|' + p + '|') < 0) {
           //eval('window.' + p + '= "undefined";');
-          eval('delete window.' + p + ';');
+          Ecrire("Suppression de ("+p+")");
+          eval('delete window["' + p + '"];');
           //supprimees+=p+'\n';
         }
       }
@@ -6122,16 +6123,32 @@ function Evaluer() {
   }
 
 
-  //globaleval(document.getElementById('builtin_codejs').value);
+  //globaleval(GEBID('builtin_codejs').value);
   builtin_courant = '';
-  document.getElementById('sortie').value = builtin_courant;
-  globaleval(tabcode);
+  GEBID('sortie').value = builtin_courant;
+  var submemory=[];
+  with (submemory) globaleval(tabcode);
 
   if (Variables_a_inspecter != '') {
     Inspection();
   }
 
   //alert('VAR\n'+supprimees);
+}
+
+function Evaluer_debug() {
+  Initialiser();
+  BeginningEvent=true;
+  contenu_memoire = '';
+
+  // Pour CodeMirror
+  document.getElementById('lecode').value = editor.getValue();
+  // Fin
+  var tabcode = GEBID('lecode').value;
+  
+  builtin_courant = '';
+  document.getElementById('sortie').value = builtin_courant;
+  globaleval(tabcode);
 }
 
 function Executer(ligne, temporisation) {
@@ -6172,7 +6189,7 @@ function Afficher(ch) {
 
 function EffacerEcran() {
   builtin_courant = "";
-  document.getElementById('sortie').value = builtin_courant;
+  GEBID('sortie').value = builtin_courant;
 }
 
 
@@ -6311,8 +6328,8 @@ function builtin_waitOff() {
 }
 
 function Help() {
-  document.getElementById('Aide').style.visibility = 'visible';
-  // setTimeout("document.getElementById('Aide').style.visibility='hidden';",10000);
+  GEBID('Aide').style.visibility = 'visible';
+  // setTimeout("GEBID('Aide').style.visibility='hidden';",10000);
 }
 
 var builtin_fg = false;
@@ -6320,13 +6337,13 @@ var builtin_fg = false;
 function FenetreGraphique() {
   if (builtin_fg) {
     CacheGraphique();
-    document.getElementById('bouton_fg').style.backgroundColor = 'rgb(230,230,230)';
-    document.getElementById('bouton_fg').style.color = 'black';
+    GEBID('bouton_fg').style.backgroundColor = 'rgb(230,230,230)';
+    GEBID('bouton_fg').style.color = 'black';
     builtin_fg = false;
   } else {
     AfficheGraphique();
-    document.getElementById('bouton_fg').style.backgroundColor = 'red';
-    document.getElementById('bouton_fg').style.color = 'black';
+    GEBID('bouton_fg').style.backgroundColor = 'red';
+    GEBID('bouton_fg').style.color = 'black';
     builtin_fg = true;
   }
 }
@@ -6338,8 +6355,8 @@ var positionTUTOY = 0;
 function MoveTuto(x, y) {
   positionTUTOX = x;
   positionTUTOY = y;
-  document.getElementById('divtuto').style.left = x + 'px';
-  document.getElementById('divtuto').style.top = y + 'px';
+  GEBID('divtuto').style.left = x + 'px';
+  GEBID('divtuto').style.top = y + 'px';
 }
 
 function Deplacement(debut, fin, t, nbsteps) {
@@ -6363,8 +6380,8 @@ function MonInnerHTML_value(b, ch) {
 }
 
 function HTMLoutput(ch) {
-  //MonInnerHTML(document.getElementById('frameweboutput').contentDocument,ch);
-  var maframe = document.getElementById('frameweboutput').contentDocument
+  //MonInnerHTML(GEBID('frameweboutput').contentDocument,ch);
+  var maframe = GEBID('frameweboutput').contentDocument
   maframe.open();
   maframe.writeln(ch);
   maframe.close();
@@ -6430,24 +6447,24 @@ function getTransformProperty(element) {
 }
 
 function RetailleFenetre(fen,viz,zindex,echelleX,echelleY) {
-	var leselect = document.getElementById('titre_onglet');
+	var leselect = GEBID('titre_onglet');
 	if (leselect) {
-	var tr=getTransformProperty(document.getElementById(leselect.options[fen].value));
+	var tr=getTransformProperty(GEBID(leselect.options[fen].value));
 	if (tr) {
-		document.getElementById(leselect.options[fen].value).style.visibility = viz;
-		document.getElementById(leselect.options[fen].value).style.zIndex = zindex;
-		document.getElementById(leselect.options[fen].value).style[tr] = 'scaleX('+echelleX+') scaleY('+echelleY+')';
+		GEBID(leselect.options[fen].value).style.visibility = viz;
+		GEBID(leselect.options[fen].value).style.zIndex = zindex;
+		GEBID(leselect.options[fen].value).style[tr] = 'scaleX('+echelleX+') scaleY('+echelleY+')';
 	}
 	}
 }
 
 function MontreFenetre(nb) {
-  var leselect = document.getElementById('titre_onglet');
+  var leselect = GEBID('titre_onglet');
   if (leselect) {
   if ((fenetre_courante + nb >= 0) && (fenetre_courante + nb < Taille(leselect.options))) {
-    document.getElementById(leselect.options[fenetre_courante].value).style.visibility = 'hidden';
-//    document.getElementById(leselect.options[fenetre_courante].value).style.display = 'none';
-    document.getElementById(leselect.options[fenetre_courante].value).style.zIndex = -1;
+    GEBID(leselect.options[fenetre_courante].value).style.visibility = 'hidden';
+//    GEBID(leselect.options[fenetre_courante].value).style.display = 'none';
+    GEBID(leselect.options[fenetre_courante].value).style.zIndex = -1;
     if (leselect.options[fenetre_courante].value == 'lecode') {
     	// Même traitement pour l'éditeur
 	    editor.getTextArea().style.visibility = 'hidden';
@@ -6460,8 +6477,8 @@ function MontreFenetre(nb) {
       leselect.selectedIndex = fenetre_courante;
     } else
     fenetre_courante = leselect.selectedIndex;
-    document.getElementById(leselect.options[fenetre_courante].value).style.visibility = 'visible';
-//	if (fenetre_courante == 3) document.getElementById('MonTexte').focus();
+    GEBID(leselect.options[fenetre_courante].value).style.visibility = 'visible';
+//	if (fenetre_courante == 3) GEBID('MonTexte').focus();
 	if (leselect.value == 'GestionFichiers') UpdateFS();
 
 	if (builtin_verrou >=0) {
@@ -6478,7 +6495,7 @@ function MontreFenetre(nb) {
     	editor.getTextArea().style.zIndex = 101;
     }
 
-    document.getElementById(leselect.options[fenetre_courante].value).style.zIndex = 100;
+    GEBID(leselect.options[fenetre_courante].value).style.zIndex = 100;
     window.scrollTo(0, 1);
   }
   }
@@ -6492,74 +6509,74 @@ if (b) {
 }
 
 function AdapterTaille(x, y) {
-  TailleBoite(document.getElementById('sortie'), x, y - 30);
-  TailleBoite(document.getElementById('lecode'), x, 'auto');
+  TailleBoite(GEBID('sortie'), x, y - 30);
+  TailleBoite(GEBID('lecode'), x, 'auto');
   TailleBoite(editor.getTextArea(), x, 'auto');
-  TailleBoite(document.getElementById('credits'), x, 'auto');
-  TailleBoite(document.getElementById('GestionFichiers'), x, 'auto');
-  TailleBoite(document.getElementById('resizecode'), x, y - 30);
+  TailleBoite(GEBID('credits'), x, 'auto');
+  TailleBoite(GEBID('GestionFichiers'), x, 'auto');
+  TailleBoite(GEBID('resizecode'), x, y - 30);
 
   editor.getWrapperElement().style.position = 'absolute';
   editor.getWrapperElement().style.width = x + 'px';
   editor.getWrapperElement().style.height = (y - 30) + 'px';
 
-  TailleBoite(document.getElementById('Aide'), x, y - 30);
-  TailleBoite(document.getElementById('divtuto'), x, y - 30);
-  TailleBoite(document.getElementById('mycanvas'), x, y - 30);
+  TailleBoite(GEBID('Aide'), x, y - 30);
+  TailleBoite(GEBID('divtuto'), x, y - 30);
+  TailleBoite(GEBID('mycanvas'), x, y - 30);
   size_canvas_x = x;
   size_canvas_y = y - 30;
-  document.getElementById('mycanvas').width = x;
-  document.getElementById('mycanvas').height = (y - 30);
-  TailleBoite(document.getElementById('SaisieTexte'), x, 'auto');
-  TailleBoite(document.getElementById('MonTexte'), x, y - 30);
-  TailleBoite(document.getElementById('weboutput'), x, y-30);
+  GEBID('mycanvas').width = x;
+  GEBID('mycanvas').height = (y - 30);
+  TailleBoite(GEBID('SaisieTexte'), x, 'auto');
+  TailleBoite(GEBID('MonTexte'), x, y - 30);
+  TailleBoite(GEBID('weboutput'), x, y-30);
   if (x <= 419) {
-    TailleBoite(document.getElementById('boutons'), x, 61);
+    TailleBoite(GEBID('boutons'), x, 61);
     editor.getWrapperElement().style.top = '60px';
-    document.getElementById('sortie').style.top = '60px';
-    document.getElementById('GestionFichiers').style.top = '60px';
-    document.getElementById('lecode').style.top = '60px';
+    GEBID('sortie').style.top = '60px';
+    GEBID('GestionFichiers').style.top = '60px';
+    GEBID('lecode').style.top = '60px';
 	editor.getTextArea().style.top = '60px';
-    document.getElementById('Aide').style.top = '60px';
-    document.getElementById('credits').style.top = '60px';
-    document.getElementById('divtuto').style.top = '60px';
-    document.getElementById('mycanvas').style.top = '60px';
-    document.getElementById('SaisieTexte').style.top = '60px';
-    document.getElementById('weboutput').style.top = '60px';
+    GEBID('Aide').style.top = '60px';
+    GEBID('credits').style.top = '60px';
+    GEBID('divtuto').style.top = '60px';
+    GEBID('mycanvas').style.top = '60px';
+    GEBID('SaisieTexte').style.top = '60px';
+    GEBID('weboutput').style.top = '60px';
   } else {
-    TailleBoite(document.getElementById('boutons'), x, 31);
+    TailleBoite(GEBID('boutons'), x, 31);
     editor.getWrapperElement().style.top = '30px';
-    document.getElementById('sortie').style.top = '30px';
-    document.getElementById('lecode').style.top = '30px';
+    GEBID('sortie').style.top = '30px';
+    GEBID('lecode').style.top = '30px';
 	editor.getTextArea().style.top = '30px';
-    document.getElementById('GestionFichiers').style.top = '30px';
-    document.getElementById('Aide').style.top = '30px';
-    document.getElementById('credits').style.top = '30px';
-    document.getElementById('divtuto').style.top = '30px';
-    document.getElementById('mycanvas').style.top = '30px';
-    document.getElementById('SaisieTexte').style.top = '30px';
-    document.getElementById('weboutput').style.top = '30px';
+    GEBID('GestionFichiers').style.top = '30px';
+    GEBID('Aide').style.top = '30px';
+    GEBID('credits').style.top = '30px';
+    GEBID('divtuto').style.top = '30px';
+    GEBID('mycanvas').style.top = '30px';
+    GEBID('SaisieTexte').style.top = '30px';
+    GEBID('weboutput').style.top = '30px';
   }
 
 }
 
 function AdapterTaille2(x, y) {
-  TailleBoite(document.getElementById('sortie'), x, y);
-  TailleBoite(document.getElementById('mycanvas'), x, y);
+  TailleBoite(GEBID('sortie'), x, y);
+  TailleBoite(GEBID('mycanvas'), x, y);
   size_canvas_x = x;
   size_canvas_y = y;
-  document.getElementById('mycanvas').width = x;
-  document.getElementById('mycanvas').height = y;
+  GEBID('mycanvas').width = x;
+  GEBID('mycanvas').height = y;
 }
 
 
 
 function InitImages() {
-	document.getElementById('MemExec').src=document.getElementById('icoExec').src;
-	document.getElementById('MemIndent').src=document.getElementById('icoIndent').src;
-	document.getElementById('MemResize').src=document.getElementById('icoResize').src;
-	document.getElementById('MemSave').src=document.getElementById('icoSave').src;
-	document.getElementById('MemLoad').src=document.getElementById('icoLoad').src;
+	GEBID('MemExec').src=GEBID('icoExec').src;
+	GEBID('MemIndent').src=GEBID('icoIndent').src;
+	GEBID('MemResize').src=GEBID('icoResize').src;
+	GEBID('MemSave').src=GEBID('icoSave').src;
+	GEBID('MemLoad').src=GEBID('icoLoad').src;
 	}
 
 // Un début pour un bel affichage de la liste des fichiers.
@@ -6615,8 +6632,8 @@ function UpdateFS() {
 	var tab = directory().split('\n').sort();
 	var monFS=new FS('/');
 	monFS.CreateFS(tab);
-	document.getElementById('internalFS').innerHTML=monFS.PrintPretty('','');
-	document.getElementById('internalFS_standalone').innerHTML=document.getElementById('internalFS').innerHTML;
+	GEBID('internalFS').innerHTML=monFS.PrintPretty('','');
+	GEBID('internalFS_standalone').innerHTML=GEBID('internalFS').innerHTML;
 	delete monFS;
 }
 
@@ -6626,7 +6643,7 @@ function readExternal(fichier,dest) {
 	switch (dest) {
 		case 1:
 		fr.onload=function (e) {
-			editor.setValue(e.target.result); document.getElementById('lecode').value=editor.getValue();
+			editor.setValue(e.target.result); GEBID('lecode').value=editor.getValue();
 		}
 		break;
 		case 2:
@@ -6685,19 +6702,19 @@ for (var i = 0; i < (AllExtensions.length); i++) {
 	
 	switch (style) {
 	case 1:
-	res+='<title>'+title+'</title>'+document.getElementById("AllScripts").outerHTML+document.getElementById("AllStyles").outerHTML+'</head><body onload=" Init(); InitGraphic(); AdapterTaille2(window.innerWidth,window.innerHeight); window.onresize=function () {AdapterTaille2(window.innerWidth,window.innerHeight);};document.getElementById(\'Libraries\').value=UnMaskCode(document.getElementById(\'Libraries\').value); readAllFS(document.getElementById(\'Libraries\').value); document.getElementById(\'SourceCode\').value=UnMaskCode(document.getElementById(\'SourceCode\').value); setTimeout(function() {window.eval(document.getElementById(\'SourceCode\').value);}, 10);">';
+	res+='<title>'+title+'</title>'+GEBID("AllScripts").outerHTML+GEBID("AllStyles").outerHTML+'</head><body onload=" Init(); InitGraphic(); AdapterTaille2(window.innerWidth,window.innerHeight); window.onresize=function () {AdapterTaille2(window.innerWidth,window.innerHeight);};GEBID(\'Libraries\').value=UnMaskCode(GEBID(\'Libraries\').value); readAllFS(GEBID(\'Libraries\').value); GEBID(\'SourceCode\').value=UnMaskCode(GEBID(\'SourceCode\').value); setTimeout(function() {window.eval(GEBID(\'SourceCode\').value);}, 10);">';
 	res+='<div id="weboutput" style="visibility: hidden; top:0px; left: 0px; width:100%; height: 100%"></div><textarea style="visibility: visible; border:0; top:0px; left: 0px; width: 100%; height: 100%" id="sortie"></textarea><canvas style="visibility: hidden; top:0px; left: 0%; width: 100%; height: 100%" id="mycanvas" width="480" height="300"></canvas>';
 	break;
 	case 2:
-	res+='<title>'+title+'</title>'+document.getElementById("AllScripts").outerHTML+document.getElementById("AllStyles").outerHTML+'</head><body onload="Init(); InitGraphic(); AdapterTaille2(Math.floor(window.innerWidth/2),window.innerHeight); window.onresize=function () {AdapterTaille(Math.floor(window.innerWidth/2),window.innerHeight);};document.getElementById(\'Libraries\').value=UnMaskCode(document.getElementById(\'Libraries\').value); readAllFS(document.getElementById(\'Libraries\').value); document.getElementById(\'SourceCode\').value=UnMaskCode(document.getElementById(\'SourceCode\').value); setTimeout(function() {window.eval(document.getElementById(\'SourceCode\').value);}, 10);">';
+	res+='<title>'+title+'</title>'+GEBID("AllScripts").outerHTML+GEBID("AllStyles").outerHTML+'</head><body onload="Init(); InitGraphic(); AdapterTaille2(Math.floor(window.innerWidth/2),window.innerHeight); window.onresize=function () {AdapterTaille(Math.floor(window.innerWidth/2),window.innerHeight);};GEBID(\'Libraries\').value=UnMaskCode(GEBID(\'Libraries\').value); readAllFS(GEBID(\'Libraries\').value); GEBID(\'SourceCode\').value=UnMaskCode(GEBID(\'SourceCode\').value); setTimeout(function() {window.eval(GEBID(\'SourceCode\').value);}, 10);">';
 	res+='<div id="weboutput" style="visibility: hidden; top:0px; left: 0px; width:100%; height: 100%"></div><textarea style="visibility: visible; border:0; top:0px; left: 0px; width: 50%; height: 100%" id="sortie"></textarea><canvas style="visibility: visible; top:0px; left: 50%; width: 50%; height: 100%" id="mycanvas" width="480" height="300"></canvas>';
 	break;
 	case 3:
-	res+='<title>'+title+'</title>'+document.getElementById("AllScripts").outerHTML+document.getElementById("AllStyles").outerHTML+'</head><body onload="Init(); InitGraphic(); AdapterTaille2(window.innerWidth,window.innerHeight); window.onresize=function () {AdapterTaille2(window.innerWidth,window.innerHeight);}; document.getElementById(\'Libraries\').value=UnMaskCode(document.getElementById(\'Libraries\').value); readAllFS(document.getElementById(\'Libraries\').value); document.getElementById(\'SourceCode\').value=UnMaskCode(document.getElementById(\'SourceCode\').value); setTimeout(function() {window.eval(document.getElementById(\'SourceCode\').value);}, 10);">';
+	res+='<title>'+title+'</title>'+GEBID("AllScripts").outerHTML+GEBID("AllStyles").outerHTML+'</head><body onload="Init(); InitGraphic(); AdapterTaille2(window.innerWidth,window.innerHeight); window.onresize=function () {AdapterTaille2(window.innerWidth,window.innerHeight);}; GEBID(\'Libraries\').value=UnMaskCode(GEBID(\'Libraries\').value); readAllFS(GEBID(\'Libraries\').value); GEBID(\'SourceCode\').value=UnMaskCode(GEBID(\'SourceCode\').value); setTimeout(function() {window.eval(GEBID(\'SourceCode\').value);}, 10);">';
 	res+='<div id="weboutput" style="visibility: hidden; top:0px; left: 0px; width:100%; height: 100%"></div><canvas style="visibility: visible; top:0px; left: 0px; width: 100%; height: 100%" id="mycanvas" width="480" height="300"></canvas><textarea style="visibility: hidden; border:0; top:0px; left: 0px; width: 100%; height: 100%" id="sortie"></textarea>';
 	break;
 	case 4:
-	res+='<title>'+title+'</title>'+document.getElementById("AllScripts").outerHTML+document.getElementById("AllStyles").outerHTML+'</head><body onload="Init(); InitGraphic(); AdapterTaille2(window.innerWidth,window.innerHeight); window.onresize=function () {AdapterTaille2(window.innerWidth,window.innerHeight);}; document.getElementById(\'Libraries\').value=UnMaskCode(document.getElementById(\'Libraries\').value); readAllFS(document.getElementById(\'Libraries\').value); document.getElementById(\'SourceCode\').value=UnMaskCode(document.getElementById(\'SourceCode\').value);  setTimeout(function() {window.eval(document.getElementById(\'SourceCode\').value);}, 10);">\n';
+	res+='<title>'+title+'</title>'+GEBID("AllScripts").outerHTML+GEBID("AllStyles").outerHTML+'</head><body onload="Init(); InitGraphic(); AdapterTaille2(window.innerWidth,window.innerHeight); window.onresize=function () {AdapterTaille2(window.innerWidth,window.innerHeight);}; GEBID(\'Libraries\').value=UnMaskCode(GEBID(\'Libraries\').value); readAllFS(GEBID(\'Libraries\').value); GEBID(\'SourceCode\').value=UnMaskCode(GEBID(\'SourceCode\').value);  setTimeout(function() {window.eval(GEBID(\'SourceCode\').value);}, 10);">\n';
 	res+='<div id="weboutput" style="visibility: visible; position: absolute; background-color: white; top:0px; left: 0px; width:100%; height: 100%"></div><canvas style="visibility: hidden; top:0px; left: 0%; width: 100%; height: 100%" id="mycanvas" width="480" height="300"></canvas><textarea style="visibility: hidden; border:0; top:0px; left: 0px; width: 100%; height: 100%" id="sortie"></textarea>';
 	break;
 	}
@@ -6739,6 +6756,16 @@ function createLibraryApp(ch,title,style,files) {
 
 
 // Gestion des assertions
+function GEBID(e) {
+	var res;
+	try {
+		res=document.getElementById(e);
+	} catch (error) {
+		Ecrire("Affichage = "+e);
+	}
+	return res;
+}
+
 
 function EcrireAssert(ch) {
 	console.log(ch);
@@ -7354,21 +7381,21 @@ z-index:100;
     
     </style>
     </head>
-    <body onload="Init(); InitGraphic(); document.getElementById('titre_onglet').selectedIndex=0; var builtin_oldfilename=''; fenetre_courante=0; MontreFenetre(0); AdapterTaille(window.innerWidth,window.innerHeight); window.onresize=function () {AdapterTaille(window.innerWidth,window.innerHeight);}; /*setTimeout('document.getElementById(\'divtuto\').style.visibility=\'hidden\';',2000);*/ readAllFS(document.getElementById('Libraries').value); window.onerror=fonctionerreur; document.getElementById('sortie').value=''; document.getElementById('MonTexte').value='Votre texte ici'; document.getElementById('MonTexte').disabled=false; builtin_ong=document.getElementById('onglet1'); builtin_bong=document.getElementById('bonglet1'); builtin_oldfilename=''; Dropboxsync=confirm('Do you want to synchronize the internal filesystem with Dropbox ?'); if (Dropboxsync) InitDropbox(); if (MustCreateAlgoScriptConfigflag) MustCreateAlgoScriptConfig();/* InitImages();*/">
+    <body onload="Init(); InitGraphic(); GEBID('titre_onglet').selectedIndex=0; var builtin_oldfilename=''; fenetre_courante=0; MontreFenetre(0); AdapterTaille(window.innerWidth,window.innerHeight); window.onresize=function () {AdapterTaille(window.innerWidth,window.innerHeight);}; /*setTimeout('GEBID(\'divtuto\').style.visibility=\'hidden\';',2000);*/ readAllFS(GEBID('Libraries').value); window.onerror=fonctionerreur; GEBID('sortie').value=''; GEBID('MonTexte').value='Votre texte ici'; GEBID('MonTexte').disabled=false; builtin_ong=GEBID('onglet1'); builtin_bong=GEBID('bonglet1'); builtin_oldfilename=''; Dropboxsync=confirm('Do you want to synchronize the internal filesystem with Dropbox ?'); if (Dropboxsync) InitDropbox(); if (MustCreateAlgoScriptConfigflag) MustCreateAlgoScriptConfig();/* InitImages();*/">
         <form name="f" id="f" action="javascript:void(0)" method="post">
 	<textarea id="lecode" style="border: 0;">// Javascript code here
 </textarea>
 	<div id="boutons">
 	<table><tr><td style="text-align: left; vertical-align: middle; margin: 0; border: 0; padding: 0;">
-	<img id="icoExec" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAFn0lEQVR4Xp2Qe4xcZRmHn/c7Z3ZuO9vZW3e73bSFtlto2i5aWRZK0UZbLTXUYEktW4iKQgy6a21qYiAE/wBNiFUk/qd4wVtTQzSYEAxFGosp1mgF6lrpZblIpXSuO9dz+V5nZmcbSBog/nKe8zsn53vPk7y8W4av+7Oz8uP/umHT58/et3Xq3C+2f+P8k5/c99/fbr7rzCOj257+7MC67y3iPWK4RBaNH+1Y+6mXJ1ePLTs1ccfQs7vvHPzm5FTvrfumej6xd6r3pi/cPfTl274y/uiWiYmZ0e1PHewb2bf2fQsWbzyxevHKRX+58dMLH578Uu+yzR+OM3plhKFFDukeQ2+fw4plETasj3HHrgUdd05dv2Ps5j3HBkcfui/Ws8l9V8HAtS9cNzySPrLzMz3rrlkfVYmJVhDK2mjbhCZUtNFAVUSHh13dvSPd8ZGdn7u/c+mtP3NT47FLCrpG/zbSvTj9xLatnd3pXoeSipRCGijNLgZIwW81sxYpWWmdaVIzwg3jMdmwbfuujoU3fVeilzvvEHQsf8pxksnHrt+Q6HHihkIoFAIYTigj8ZB6pUy+FlD0oRg0EQr2bYSGohWuWhtl+fjtd0l8zS3vEEh04PbLRjqvjqaMZn3RXCBk/FBH0q4u6ezgY4OdusJ4WswVNFsJKPmqJR8KoWjOGs2FQmNGCwE62pAkLpt6AGdh+qLATcT2DAw6ZOoiGa9BYMgGIqFFAoVQRZank7J1KCULqkVeeD0r03mf18oqGV8kExoyvpELnkjjYnjFyOUm+aGbAdzIij+t7uqLr6kq+DWIeoLrG2oFH89CREFEQSHmGrYs7WFswOeJMwUOZ1zKksKxDq4v1OtC4EFXj4PTu3mHnX3m565E4hs74kLeA+qiVA1+SeiKaCPMRVFEmX9PRyM6cWUfG/M1/fGJLH/MxAnrMU14Aj5Yg3Z0X/0B/2zQZTBmpa9IwaMpkbfqIrVA8AIEVNoSARFpMf+uDC+IyT3X9su3Pij0a1bOVwLJe1CsqziJwX4k2mewuW4L6lvwVVQFDSx4vqpVVFHmqgE6d2/3/Mf1Q0m+89Eu9UoXtBpALVDFcQ3ipFysV1ZF2v8R2oOh5eKzImIFRGFOIvMLE0XIlqr6g0P/FqQbtL1Qay0ahq76xVdtoBBYaLe1SmBgfjuqXIzOt0LVC/jV0dM8erxIsWMpJhqHoocNFFvLldBKwdjyiWN+TVHPghdC3WI9xQ8F1Sag0Grb7sAqTx4/y8RP/8oPZzqpDFyFcdOIr+CH2Lri5/9xGjTfEDx31Cvk3rQ1C7VQpRoolQDPl/aaQRW1bY6eOscXH3teH3pRyfSPapAaUhs4UAmVagv8imqQ+cMRoGi0dKjuvXnoJ/6sQjkQSr4w62Mbz1ZpWSwiJ9/IyVd/fUy+frjAmdQaCdLLqGpMvJq2zktzrjlTDqlls2Wb//1BwDcAYeZ3+yvnL7wVFkNah4tNQv7+SonXM2Xuffw4ux9/jedZhdc7QpkkpbqDV7ZQ8Bt4UPRbs/WCpXbmkd9gS8cBhHZM966dqXUP/DI5GBHpjkDKxTolrJSQ3n5MKg2uAwqECvUQKgFSDqDotUTehYDiy8+drJ+87RYIXwJwacfOPnuwNL1/BNl7f8KqmMCKSSYwiZRScoW6hxoBUAms4FmlFgpNwayvXi6U2Znp/9RP3f01CKdpR3h7nH7HLNgymVh174OJ/kTMTRkk7ihRR3ANGEBRQhX8lmBu53nV8szhf3qnJ/di888A/qUFAKbTSGTJeGR477djizdtiKYccWKCici8AA0V64FfVmqZc4XazMMHbPbA98GeBELeXyIJoldscQb3/Ch6xYGXEuuP5ZLXTNeTYy9W4uuefiOybP8R03Xjg0h0DOjk/4+4wAJgCbCqzVKgG3B5j/wPFVAowDGOz14AAAAASUVORK5CYII=" alt="&#x2714;: Run" onclick="document.getElementById('sortie').value='Execution en cours'; Evaluer();"  style="color:green; width:24px; height: 24px;" class="fleche"/><div><div>Execute</div></div>
+	<img id="icoExec" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAFn0lEQVR4Xp2Qe4xcZRmHn/c7Z3ZuO9vZW3e73bSFtlto2i5aWRZK0UZbLTXUYEktW4iKQgy6a21qYiAE/wBNiFUk/qd4wVtTQzSYEAxFGosp1mgF6lrpZblIpXSuO9dz+V5nZmcbSBog/nKe8zsn53vPk7y8W4av+7Oz8uP/umHT58/et3Xq3C+2f+P8k5/c99/fbr7rzCOj257+7MC67y3iPWK4RBaNH+1Y+6mXJ1ePLTs1ccfQs7vvHPzm5FTvrfumej6xd6r3pi/cPfTl274y/uiWiYmZ0e1PHewb2bf2fQsWbzyxevHKRX+58dMLH578Uu+yzR+OM3plhKFFDukeQ2+fw4plETasj3HHrgUdd05dv2Ps5j3HBkcfui/Ws8l9V8HAtS9cNzySPrLzMz3rrlkfVYmJVhDK2mjbhCZUtNFAVUSHh13dvSPd8ZGdn7u/c+mtP3NT47FLCrpG/zbSvTj9xLatnd3pXoeSipRCGijNLgZIwW81sxYpWWmdaVIzwg3jMdmwbfuujoU3fVeilzvvEHQsf8pxksnHrt+Q6HHihkIoFAIYTigj8ZB6pUy+FlD0oRg0EQr2bYSGohWuWhtl+fjtd0l8zS3vEEh04PbLRjqvjqaMZn3RXCBk/FBH0q4u6ezgY4OdusJ4WswVNFsJKPmqJR8KoWjOGs2FQmNGCwE62pAkLpt6AGdh+qLATcT2DAw6ZOoiGa9BYMgGIqFFAoVQRZank7J1KCULqkVeeD0r03mf18oqGV8kExoyvpELnkjjYnjFyOUm+aGbAdzIij+t7uqLr6kq+DWIeoLrG2oFH89CREFEQSHmGrYs7WFswOeJMwUOZ1zKksKxDq4v1OtC4EFXj4PTu3mHnX3m565E4hs74kLeA+qiVA1+SeiKaCPMRVFEmX9PRyM6cWUfG/M1/fGJLH/MxAnrMU14Aj5Yg3Z0X/0B/2zQZTBmpa9IwaMpkbfqIrVA8AIEVNoSARFpMf+uDC+IyT3X9su3Pij0a1bOVwLJe1CsqziJwX4k2mewuW4L6lvwVVQFDSx4vqpVVFHmqgE6d2/3/Mf1Q0m+89Eu9UoXtBpALVDFcQ3ipFysV1ZF2v8R2oOh5eKzImIFRGFOIvMLE0XIlqr6g0P/FqQbtL1Qay0ahq76xVdtoBBYaLe1SmBgfjuqXIzOt0LVC/jV0dM8erxIsWMpJhqHoocNFFvLldBKwdjyiWN+TVHPghdC3WI9xQ8F1Sag0Grb7sAqTx4/y8RP/8oPZzqpDFyFcdOIr+CH2Lri5/9xGjTfEDx31Cvk3rQ1C7VQpRoolQDPl/aaQRW1bY6eOscXH3teH3pRyfSPapAaUhs4UAmVagv8imqQ+cMRoGi0dKjuvXnoJ/6sQjkQSr4w62Mbz1ZpWSwiJ9/IyVd/fUy+frjAmdQaCdLLqGpMvJq2zktzrjlTDqlls2Wb//1BwDcAYeZ3+yvnL7wVFkNah4tNQv7+SonXM2Xuffw4ux9/jedZhdc7QpkkpbqDV7ZQ8Bt4UPRbs/WCpXbmkd9gS8cBhHZM966dqXUP/DI5GBHpjkDKxTolrJSQ3n5MKg2uAwqECvUQKgFSDqDotUTehYDiy8+drJ+87RYIXwJwacfOPnuwNL1/BNl7f8KqmMCKSSYwiZRScoW6hxoBUAms4FmlFgpNwayvXi6U2Znp/9RP3f01CKdpR3h7nH7HLNgymVh174OJ/kTMTRkk7ihRR3ANGEBRQhX8lmBu53nV8szhf3qnJ/di888A/qUFAKbTSGTJeGR477djizdtiKYccWKCici8AA0V64FfVmqZc4XazMMHbPbA98GeBELeXyIJoldscQb3/Ch6xYGXEuuP5ZLXTNeTYy9W4uuefiOybP8R03Xjg0h0DOjk/4+4wAJgCbCqzVKgG3B5j/wPFVAowDGOz14AAAAASUVORK5CYII=" alt="&#x2714;: Run" onclick="GEBID('sortie').value='Execution en cours'; Evaluer();"  style="color:green; width:24px; height: 24px;" class="fleche"/><div><div>Execute</div></div>
 	<img id="icoIndent" src="data:image/png;base64,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" alt="&#x21F6;: Indent" onclick="Indente();"  style="color:black; width:24px; height: 24px;" class="fleche"/><div><div>Indent</div></div>
 <!--	<img id="icoResize" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABWElEQVR42u2XIUjEYBiGd8KKqO3QbBBMgvWaFoPh8iFr3rXrBsUy1LszLMqJSbQaNC94xQWTTBaGDFaG6Jr183t/dnBjisPd/v/CPnh4+creB/ZvYxoRKaUSmB0BnjWmybRLpomulADPpmmaB2EYPkdRRGWCDnShc1Jgz/f9d/t8QMONdUIGQUCjux7dHq0ixX79cEz7PR2J/d+gC52TAm3XdelpZ4s+d7dFYn+9aRA9NpBiP7lfocuXeST2QqAzJeA4Dn1cDSEgEvuXewEBpNhHb2cQQGIvQlbAtm3yPI/iOBaZYy9CVsCyLJJIVoDkzs8ChmGkmMpkr/u3QEmTTyDJMsoRuQSmKvHLdZUewkqgElAuoPQxnN0XUUfBq7iDwOhMV8HHqJt0a4vMIUkedCbd2gLTYk6ZPjMomX7S1UL3+BYsMXVmWRL1pFMfH8IaMyeZWvVvCL4BhCbDBZfU9WwAAAAASUVORK5CYII=" alt="&#x21F1;&#x21F2;: Resize" onclick="AdapterTaille(window.innerWidth,window.innerHeight); window.scrollTo(0,1);"  style="color:blue; width:24px; height: 24px; letter-spacing: -8px; text-align:center;" class="fleche"/> -->
 <!--	
-	<input onclick="document.getElementById('sortie').value='Execution en cours'; Evaluer()"  style="color:green;" value="&#x2714;" type="button" class="fleche" />
+	<input onclick="GEBID('sortie').value='Execution en cours'; Evaluer()"  style="color:green;" value="&#x2714;" type="button" class="fleche" />
 	<input onclick="Indente()"  style="color:black;" value="&#x21F6;" type="button" class="fleche" />
 	<input type="button" class="fleche" style="color: blue; letter-spacing: -8px; text-align:center;" value="&#x21F1;&#x21F2;" onclick="AdapterTaille(window.innerWidth,window.innerHeight); window.scrollTo(0,1);"/> -->
 	<img id="icoSave" src="data:image/png;base64,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" alt="Save" onclick="builtin_oldfilename=prompt('Nom du fichier à sauvegarder',builtin_oldfilename); writeFile(builtin_oldfilename,editor.getValue());" style="color:black; width:24px; height: 24px;" class="fleche"/><div><div>Save</div></div>
-	<img id="icoLoad" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAFY0lEQVRIx5WUS2xcVxnHf9+5594Zj8eTTDPj+NXGKY6V2A7GUtoCxVmQPkAVlkDQbrqoKJAFUiqBWGTDigU7WLCgIBZsKhYQlRQStQVEneIWlFC1KE5wkrp+27HnYc/b9/Gx8ExtJ0jQI13p09G53//7P84RgFuvf30oCkrnkr1fOrtdWUOjAI0iospMUKHXOid+Pn7yqLy9dHvSqa9djkoLl/ASnTI08WbEf1l/u3DWefxrL4cAVlXNzd+ffrdr9AcdblsmdBOuY+MexnWBQbsw9UOuTZ6/oqr9IjK3p48W5v7040rhznhp9Z1GozhDUPy75/Z8dXp04uXvtA7JrTee+24iffJnPae+ofCGgAdEQIBGIOZ5/eAPL0kYO0JP12G262WiRgFDRPxgltiBbuIHuvFS/UCFt375LLOVR175yhNDrx4aOX9BZv/6rVLv6Lmke/AaaKCgrQFBFNWEiP+khrXrYSR+JLYmjmcIg7xWN27bxtaaqRfntLw2jeNlBXssSGQesbn5Sfyuc/+wQWU16R5sU6UsIh4K8jE9BJEaeH+U1Q9esX45AFKqUUI0aqMtfZx4+hSZ4wM8+LnjIC7kJi2HTuuNd3/F3PrMo1bEAgURFVQVMQawgMsOls+tSz+iPfMifZ99EeMoxu0A2oA6UAMaaPgR6niwfBlz6LQU8ysa9fVgnfYB8MugISKGsJSjmp+nWliiVlwmqPm0H36BnlMvAbNNbuuAok2yoiASAiF4KWCBQq1dstlswwb1FajXWbt+mdz8h3jJY7Slh4ilRukcGsVNZHFTKeAqqgYRQRVE2LVLAI0AFzEOjc0bNOhCVX5tVSNqq9PklvIMPfuO7NAuNqmXm1OHqDot83c9ElBtRUIFLIihsTWLbw5TLNUvWe/AAH55nQeOPAPcUeXfIjjNsZrfbs8dZUBo5k1agSNScATHoVa8SZ0sA0cOYdXfpB6UUO8B4K4IVRSzy7xZ7FFkT8r2gKCiGMQ4bG/d0dAMykB/xrGIy3ZllVhqEKirRr6A+biL7N4K9pSyrwBQVXEcIdhifaMgiY4MnZ3ZwMZSAxpVruO1JSGsQBCqcP8Tc4+nuo/KDsCOfEGJXDEUcBatG3/balhlK/cvSR59Cvy6EviiyP6f72GwN0Syu4cggr/JRt5HbOKGiOQtGoao2liyF7ZXIArune3/WtKEICizWQrIfqrHAtjKzZ98GRN/U7QG2xUR3YmJ3i/L/zAZAQP+FoVN4eGefgBs1W8c9OtrODYOvt+kL/u0v1ctuQ9EETGKa6VSrRFKmkwmbQBs6FcCMRYbT2uUL4lx2rT14DXvkewxVlpSgyhiwBgR60F1Q4LCDOur7wdO/IxNpPp+CmBt5gx+8Sr4JfAbSmT3S6JNwYxFjAcYJaoIVPBLa7Kyshguzs0E86vbulI9Gi/oF23fwJnoRL/76sWLF43VqEGsvQsiXyQIFQ1ExOwMakQwDhARlpelvDlHvbzE9GyVD1ddWdtM0LDHnLbMM062/wQZL3ZhOJueeuqJx39z9uy3mZiYiKziYL0k+GUkigliINyEaIt8bpmFxflgcXVDl3JedDcYizXcJ6U91Us82/nPsdOfiXV3d782NtJ3XlWTIlJueXPlyhUZHx9Xm+h+2iP3Go31a7q5+Ge5WyjrzLIjs+sJtoIHsR1P20RmjIcee5iOMPr+8GBfeXj4xJy1zuv7YrqnOcD4+LgC2FSHd3thqYNf/Paq5PwxTPKktLd3LKc/fWT6C8NDtqd/8HsPZeQ9VRUR0U98PwB+N6mPhfm3vmklvPT5Rwdjh7v6/iIiG61DU1NTTiqVikZGRj4xwH8AiTZ+be0Tvg0AAAAASUVORK5CYII=" alt="Load" style="color:black; width:24px; height: 24px;" onclick="editor.setValue(readFile(prompt('Contenu du repertoire\n-----------------------\n'+directory()))); document.getElementById('lecode').value=editor.getValue();"  class="fleche"/><div><div>Load</div></div>
+	<img id="icoLoad" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAFY0lEQVRIx5WUS2xcVxnHf9+5594Zj8eTTDPj+NXGKY6V2A7GUtoCxVmQPkAVlkDQbrqoKJAFUiqBWGTDigU7WLCgIBZsKhYQlRQStQVEneIWlFC1KE5wkrp+27HnYc/b9/Gx8ExtJ0jQI13p09G53//7P84RgFuvf30oCkrnkr1fOrtdWUOjAI0iospMUKHXOid+Pn7yqLy9dHvSqa9djkoLl/ASnTI08WbEf1l/u3DWefxrL4cAVlXNzd+ffrdr9AcdblsmdBOuY+MexnWBQbsw9UOuTZ6/oqr9IjK3p48W5v7040rhznhp9Z1GozhDUPy75/Z8dXp04uXvtA7JrTee+24iffJnPae+ofCGgAdEQIBGIOZ5/eAPL0kYO0JP12G262WiRgFDRPxgltiBbuIHuvFS/UCFt375LLOVR175yhNDrx4aOX9BZv/6rVLv6Lmke/AaaKCgrQFBFNWEiP+khrXrYSR+JLYmjmcIg7xWN27bxtaaqRfntLw2jeNlBXssSGQesbn5Sfyuc/+wQWU16R5sU6UsIh4K8jE9BJEaeH+U1Q9esX45AFKqUUI0aqMtfZx4+hSZ4wM8+LnjIC7kJi2HTuuNd3/F3PrMo1bEAgURFVQVMQawgMsOls+tSz+iPfMifZ99EeMoxu0A2oA6UAMaaPgR6niwfBlz6LQU8ysa9fVgnfYB8MugISKGsJSjmp+nWliiVlwmqPm0H36BnlMvAbNNbuuAok2yoiASAiF4KWCBQq1dstlswwb1FajXWbt+mdz8h3jJY7Slh4ilRukcGsVNZHFTKeAqqgYRQRVE2LVLAI0AFzEOjc0bNOhCVX5tVSNqq9PklvIMPfuO7NAuNqmXm1OHqDot83c9ElBtRUIFLIihsTWLbw5TLNUvWe/AAH55nQeOPAPcUeXfIjjNsZrfbs8dZUBo5k1agSNScATHoVa8SZ0sA0cOYdXfpB6UUO8B4K4IVRSzy7xZ7FFkT8r2gKCiGMQ4bG/d0dAMykB/xrGIy3ZllVhqEKirRr6A+biL7N4K9pSyrwBQVXEcIdhifaMgiY4MnZ3ZwMZSAxpVruO1JSGsQBCqcP8Tc4+nuo/KDsCOfEGJXDEUcBatG3/balhlK/cvSR59Cvy6EviiyP6f72GwN0Syu4cggr/JRt5HbOKGiOQtGoao2liyF7ZXIArune3/WtKEICizWQrIfqrHAtjKzZ98GRN/U7QG2xUR3YmJ3i/L/zAZAQP+FoVN4eGefgBs1W8c9OtrODYOvt+kL/u0v1ctuQ9EETGKa6VSrRFKmkwmbQBs6FcCMRYbT2uUL4lx2rT14DXvkewxVlpSgyhiwBgR60F1Q4LCDOur7wdO/IxNpPp+CmBt5gx+8Sr4JfAbSmT3S6JNwYxFjAcYJaoIVPBLa7Kyshguzs0E86vbulI9Gi/oF23fwJnoRL/76sWLF43VqEGsvQsiXyQIFQ1ExOwMakQwDhARlpelvDlHvbzE9GyVD1ddWdtM0LDHnLbMM062/wQZL3ZhOJueeuqJx39z9uy3mZiYiKziYL0k+GUkigliINyEaIt8bpmFxflgcXVDl3JedDcYizXcJ6U91Us82/nPsdOfiXV3d782NtJ3XlWTIlJueXPlyhUZHx9Xm+h+2iP3Go31a7q5+Ge5WyjrzLIjs+sJtoIHsR1P20RmjIcee5iOMPr+8GBfeXj4xJy1zuv7YrqnOcD4+LgC2FSHd3thqYNf/Paq5PwxTPKktLd3LKc/fWT6C8NDtqd/8HsPZeQ9VRUR0U98PwB+N6mPhfm3vmklvPT5Rwdjh7v6/iIiG61DU1NTTiqVikZGRj4xwH8AiTZ+be0Tvg0AAAAASUVORK5CYII=" alt="Load" style="color:black; width:24px; height: 24px;" onclick="editor.setValue(readFile(prompt('Contenu du repertoire\n-----------------------\n'+directory()))); GEBID('lecode').value=editor.getValue();"  class="fleche"/><div><div>Load</div></div>
 	<img id="icoLock" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAFIElEQVR4XnWWTYhdZx3Gf8//fc+5d27SzCSd6dS2ZmBI8YNWrBWFunBR0k1BFNyo6M7uunAhVgU/QIS6aENBEVFXgq66EFxoJF0FY0JFK01RkoY0M0mbzMzN3Myd+3neRzKXCwHJAw/vjwPP84f/ORxebW5ulsiVpuOhm94tclWLSAZACGQQmrMAJMCzgxkDLo2a8cj5yEMIy7ZzpEqj/i7Nu+d11ANadQtSJUWAEkQSERxYdzmhA44DRpqxhG0Glu7sDMnHjhNCuTEevn1GHx7ccGd5DYb7QphI8+CMJaFk5uWS0Zxj9jyyFg4fcW6GbN9+X+0HH3XuXbvIwqVzdNYeh60NPCuY+YBBuV1IVcKNiASpLjQTDKEIrHlGqHeTI60Ftugz7BwlD3tdVRv/gdVHBAECFNIsZHKlfvdK6u11XRRdKVKWFh9cXSctPGBPjSJkidnwJG5/wN7WZVoPris7ZU92t0Vvy3QWoRSJsEMoZe11r3PtxqWf/e43p189d41RAX/3heOPf+Txz5x6bO0Tz6S6gwEijELULU93txhs76idsnNE0Az60O9BqqE0OAWKVMrUabe/88rHf3T6O7ZbnPnFkywsDfXM1y7Ae5/r/vrh95eOrKxijAJFAIW7X2PTvYVSRQapNFMY7YvpECjzF5cahZfWn3jN/kPy6z+4qMlo3bGJ//jTl/WF771ULR77JdP9H+IooGQlFCH+/QbOq5CysoQJC8bGBwOEwxSpOnS0G0dXe/zpJ0+q6a8z2d+XokPm5Mj+fv3nVy6zswGWIazqkPjvWZd33oFPHRcuziDIYIbIA6AgEihw038gckQp+zDtQ7PXgYBpVdeg0ow6UfZRqjEVXL0AF0/jFkRKAGQJqRJoIhgh2Ti00+01+9Xo7OKH9if9re29Zu/W5TLYvQU6nA5P3nwEytbu9sZo88qtlZWHV9q7G3D5nKksOkAARhnhqCRpMluRkJW4Q/Xi0z+/9Nu3T316cu5qr9/b2f3sfm+n4BKHlsrk61Cu7vT++pVX/7L+zxefep3bV05SI3LLGk6JJBmcEaQKiBFoiCWIzNrnnzuz/e2XRqvXfsWXfvwewDb36BuvCWB014dT9y23dFKpgqlRG5QEhhBSVIDGgpGIMYoxbG8cAmDti9xPPvWxBEB7oVa7gla6a0ULRRZgzVZUS6SpD8oVchhpAgAxEWD+X1AngFnxZP5ztKMVKEkwX1EdEGOQIALFBMcQADTkvmrfM2CacYAmhWgnUiUwZECpBtJYqGAJlICBAWBo7iO3WwC4DmsSiAAh1UEkAShLOFUSdZhK6IATtJcHAHru99xP8dXzDbNVNUwCSICsOkgZAc6SSK0EdYE64VqoTlDe/ZbPPvuyB9dr5WxCYABDY5g2eDy2Vp5d9vULz1FpPgBamagENrlRUtNZhFZPzkCV7MpouvmC1fomdeqSIhECDEUgg7C0gLvnl6QB1FFMkYpFK2jaRwmSstur3qif0KMLb1oVkBB1QO1G1ShRVcdIAQIkaAoUwzRg3KDxqIBAKSSgqrxbjnOzPqET7bbz8vIq/1p6nr9t7/H08T3qhSFU2VQRVIIUJgkCYZliKBZNMblAVYKJTdWYEbrZW+DvgzVWPvk87TxFN25c9/7IvPWPs4xvvEGnDSaQAAHccxoM4HttPGPKtGGvLPLYU1/moyfWcGmYXVtCMuEPtvbY7d3RLCXAAs1rxQxmLFlzngVIOeuh5SUvHa5pmiLb/h8Qv2S8gSe3MQAAAABJRU5ErkJggg==" alt="Lock" style="color:black; background-color: white; width:24px; height: 24px;" onclick="if (builtin_verrou>=0) {RetailleFenetre(builtin_verrou,'hidden',-1,1,1); builtin_verrou=-1; this.style.backgroundColor='white';  MontreFenetre(0);} else {if (fenetre_courante>0) {builtin_verrou=fenetre_courante; this.style.backgroundColor='red';}}"  class="fleche"/><div><div>[Un]-lock the current view</div></div>
 
 	</td>
@@ -7397,7 +7424,6 @@ z-index:100;
 	<input type="button" onclick="var textentryfilename=Saisie('Enter the filename'); if (textentryfilename!=null) writeFile(textentryfilename,getEntreetexte())" value="Save text entry" /><br>
 	<textarea id="MonTexte" style="border:0; width: 480px; height: 300px; background-color: rgb(200,200,255); z-index:1000;">Your text here</textarea></div>
 	<div style="visibility: hidden; overflow: scroll;" id="Aide">
-<!--
 <h2>Memento</h2>
 <dl>
 <dt><span>a=getString();</span><div><div>Function that reads a string on the standard input (prompt). French translation = Saisie</div></div> [or <span>getString([message]</span><div><div>Function that reads a string on the standard input, a optional message is printed.</div></div>) or <span>getInt([message])</span><div><div>Function that reads an integer on the standard input, same syntax as getString. French translation = SaisieEntier.</div></div> ou <span>getReal([message])</span><div><div>Function that reads a real number on the standard input, same syntax as getString. French translation = SaisieReel.</div></div>]</dt>
@@ -7590,7 +7616,7 @@ An execution trace is then constructed (evaluation of all the variables each tim
 ConstruitExemples();
 for(var i=0; i<20; i++) document.write('<br/>');
 </script>
--->
+<!--
 <h2>Petit m&eacute;mento</h2>
 <dl>
 <dt><span>a=Saisie();</span><div><div>Fonction permettant de saisir une chaîne de caractères</div></div> [ou <span>Saisie([message]</span><div><div>Fonction permettant de saisir une chaîne de caractères, un message optionnel peut être affiché au moment de la saisie</div></div>) ou <span>SaisieEntier([message])</span><div><div>Fonction permettant de saisir un nombre entier, sa syntaxe est la même que la fonction Saisie()</div></div> ou <span>SaisieReel([message])</span><div><div>Fonction permettant de saisir un nombre réel, sa syntaxe est la même que la fonction Saisie()</div></div>]</dt>
@@ -7780,7 +7806,7 @@ L'inspecteur de variables permet de suivre l'&eacute;volution des valeurs des va
 ConstruitExemples();
 for(var i=0; i<20; i++) document.write('<br/>');
 </script>
-
+-->
 
 <br/>
 <br/>
@@ -7886,7 +7912,7 @@ Navigate through windows
 <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
 </div>
     <script>
-      var editor = CodeMirror.fromTextArea(document.getElementById("lecode"), {
+      var editor = CodeMirror.fromTextArea(GEBID("lecode"), {
         lineNumbers: true,
         matchBrackets: true
       });
@@ -8851,20 +8877,20 @@ function Interprete_grounder(ch) {}
 </textarea>
 </div>
 <div id="GestionFichiers">
-<span class="bonglet" id="bonglet1" style="background-color: rgb(150,150,150);" onclick="builtin_ong.style.display='none'; builtin_bong.style.backgroundColor='rgb(255,255,255)'; builtin_ong=document.getElementById('onglet1'); builtin_bong=document.getElementById('bonglet1'); builtin_ong.style.display='block'; builtin_bong.style.backgroundColor='rgb(150,150,150)';">Internal FS</span><span class="bonglet" id="bonglet2" onclick="builtin_ong.style.display='none'; builtin_bong.style.backgroundColor='rgb(255,255,255)'; builtin_ong=document.getElementById('onglet2'); builtin_bong=document.getElementById('bonglet2'); builtin_ong.style.display='block'; builtin_bong.style.backgroundColor='rgb(150,150,150)';">Mail</span><span class="bonglet" id="bonglet3" onclick="builtin_ong.style.display='none'; builtin_bong.style.backgroundColor='rgb(255,255,255)'; builtin_ong=document.getElementById('onglet3'); builtin_bong=document.getElementById('bonglet3'); builtin_ong.style.display='block'; builtin_bong.style.backgroundColor='rgb(150,150,150)';">External FS</span><span class="bonglet" id="bonglet4" onclick="builtin_ong.style.display='none'; builtin_bong.style.backgroundColor='rgb(255,255,255)'; builtin_ong=document.getElementById('onglet4'); builtin_bong=document.getElementById('bonglet4'); builtin_ong.style.display='block'; builtin_bong.style.backgroundColor='rgb(150,150,150)';">Create App</span>
+<span class="bonglet" id="bonglet1" style="background-color: rgb(150,150,150);" onclick="builtin_ong.style.display='none'; builtin_bong.style.backgroundColor='rgb(255,255,255)'; builtin_ong=GEBID('onglet1'); builtin_bong=GEBID('bonglet1'); builtin_ong.style.display='block'; builtin_bong.style.backgroundColor='rgb(150,150,150)';">Internal FS</span><span class="bonglet" id="bonglet2" onclick="builtin_ong.style.display='none'; builtin_bong.style.backgroundColor='rgb(255,255,255)'; builtin_ong=GEBID('onglet2'); builtin_bong=GEBID('bonglet2'); builtin_ong.style.display='block'; builtin_bong.style.backgroundColor='rgb(150,150,150)';">Mail</span><span class="bonglet" id="bonglet3" onclick="builtin_ong.style.display='none'; builtin_bong.style.backgroundColor='rgb(255,255,255)'; builtin_ong=GEBID('onglet3'); builtin_bong=GEBID('bonglet3'); builtin_ong.style.display='block'; builtin_bong.style.backgroundColor='rgb(150,150,150)';">External FS</span><span class="bonglet" id="bonglet4" onclick="builtin_ong.style.display='none'; builtin_bong.style.backgroundColor='rgb(255,255,255)'; builtin_ong=GEBID('onglet4'); builtin_bong=GEBID('bonglet4'); builtin_ong.style.display='block'; builtin_bong.style.backgroundColor='rgb(150,150,150)';">Create App</span>
 <div id="onglet1">
 <h1>Internal Filesystem</h1>
 <div>
 <table>
 <tr>
 <td>
-<select id="internalFS" size="20" style="width: 300px;" ondblclick="if (document.getElementById('internalFS').value != '') {editor.setValue(readFile(document.getElementById('internalFS').value)); builtin_oldfilename=document.getElementById('internalFS').value; document.getElementById('lecode').value=editor.getValue(); MontreFenetre(-8);}"
-onchange="document.getElementById('filecontent').innerHTML='<pre>'+window.localStorage[document.getElementById('internalFS').value]+'</pre>'">
+<select id="internalFS" size="20" style="width: 300px;" ondblclick="if (GEBID('internalFS').value != '') {editor.setValue(readFile(GEBID('internalFS').value)); builtin_oldfilename=GEBID('internalFS').value; GEBID('lecode').value=editor.getValue(); MontreFenetre(-8);}"
+onchange="GEBID('filecontent').innerHTML='<pre>'+window.localStorage[GEBID('internalFS').value]+'</pre>'">
 </select></td><td style="vertical-align: top;">
-<input type="button" value="Load selected" onclick="editor.setValue(readFile(document.getElementById('internalFS').value)); document.getElementById('lecode').value=editor.getValue(); MontreFenetre(-8);" /><br/>
-<input type="button" value="Load as Text Entry" onclick="setEntreetexte(readFile(document.getElementById('internalFS').value));  MontreFenetre(-5);" /><br/>
-<input type="button" value="Remove selected" onclick="removeFile(document.getElementById('internalFS').value); UpdateFS();" /><br/>
-<input type="button" value="Rename selected" onclick="renameFile(document.getElementById('internalFS').value,prompt('Enter your filename with directories',document.getElementById('internalFS').value)); UpdateFS();" /><br/>
+<input type="button" value="Load selected" onclick="editor.setValue(readFile(GEBID('internalFS').value)); GEBID('lecode').value=editor.getValue(); MontreFenetre(-8);" /><br/>
+<input type="button" value="Load as Text Entry" onclick="setEntreetexte(readFile(GEBID('internalFS').value));  MontreFenetre(-5);" /><br/>
+<input type="button" value="Remove selected" onclick="removeFile(GEBID('internalFS').value); UpdateFS();" /><br/>
+<input type="button" value="Rename selected" onclick="renameFile(GEBID('internalFS').value,prompt('Enter your filename with directories',GEBID('internalFS').value)); UpdateFS();" /><br/>
 <input type="button" value="Save to" onclick="builtin_oldfilename=prompt('Enter your filename with directories',builtin_oldfilename); writeFile(prompt('Enter your filename with directories',builtin_oldfilename),editor.getValue()); UpdateFS();" /><br/><br/>
 <input type="button" value="Export Entire FS to Text Entry" onclick="var flag=false; var res=''; for(p in window.localStorage) {if (flag) res+='--------\n'; flag=true; res+=p+'\n--------\n'+window.localStorage[p]+'\n';} setEntreetexte(res);"/><br/>
 <input type="button" value="Export Entire FS to Dropbox" onclick="if (DropboxSync) exportAllFStoDropboxFS();"/>
@@ -8877,13 +8903,13 @@ onchange="document.getElementById('filecontent').innerHTML='<pre>'+window.localS
 <div id="onglet2" style="display: none;">
 <h1>Send by e-mail</h1>
 <div>
-<input type="text" value="your mail address" id="sendmail" /><input type="button" value="Send" onclick="if (document.getElementById('sendmail').value.indexOf('@')) {document.getElementById('lecode').value = editor.getValue();; window.open('mailto:'+document.getElementById('sendmail').value+'?subject=[AlgoScript%20project]&body='+window.encodeURIComponent(document.getElementById('lecode').value));} else alert('Error: Invalid mail address !');"/>
+<input type="text" value="your mail address" id="sendmail" /><input type="button" value="Send" onclick="if (GEBID('sendmail').value.indexOf('@')) {GEBID('lecode').value = editor.getValue();; window.open('mailto:'+GEBID('sendmail').value+'?subject=[AlgoScript%20project]&body='+window.encodeURIComponent(GEBID('lecode').value));} else alert('Error: Invalid mail address !');"/>
 <br /><br /></div>
 </div>
 <div id="onglet3" style="display: none;">
 <h1>Load from an external filesystem</h1>
 <div>
-<input type="file" id="ExternalFilename" /><input type="button" value="Load" onclick="readExternal(document.getElementById('ExternalFilename'),1); MontreFenetre(-8);"/><input type="button" value="Load in Text Entry" onclick="readExternal(document.getElementById('ExternalFilename'),2); MontreFenetre(-5);"/><input type="button" value="Data file to Internal FS" onclick="readDataToIFS(document.getElementById('ExternalFilename')); UpdateFS();"/><input type="button" value="Import as Library" onclick="readExternal(document.getElementById('ExternalFilename'),3); setTimeout('UpdateFS()',1000);"/>
+<input type="file" id="ExternalFilename" /><input type="button" value="Load" onclick="readExternal(GEBID('ExternalFilename'),1); MontreFenetre(-8);"/><input type="button" value="Load in Text Entry" onclick="readExternal(GEBID('ExternalFilename'),2); MontreFenetre(-5);"/><input type="button" value="Data file to Internal FS" onclick="readDataToIFS(GEBID('ExternalFilename')); UpdateFS();"/><input type="button" value="Import as Library" onclick="readExternal(GEBID('ExternalFilename'),3); setTimeout('UpdateFS()',1000);"/>
 <br /><br /></div>
 </div>
 <div id="onglet4" style="display: none; color:white;">
@@ -8898,8 +8924,8 @@ onchange="document.getElementById('filecontent').innerHTML='<pre>'+window.localS
 <h2>Files to be included</h2>
 <select id="internalFS_standalone" size="10" style="width: 300px;" multiple="multiple"></select>
 <br/><br/><br/>
-<input type="button" value="Create App" onclick="var style_standalone=1; if (document.getElementById('style_standalone2').checked) style_standalone=2; if (document.getElementById('style_standalone3').checked) style_standalone=3; if (document.getElementById('style_standalone4').checked) style_standalone=4; var options_standalone=document.getElementById('internalFS_standalone').options; var allselected=[]; var nbselected=0; for(var i=0; i<options_standalone.length; i++) if (options_standalone[i].selected) allselected[nbselected++]=options_standalone[i].value; var w=window.open(); w.document.write(createStandaloneApp(editor.getValue(),document.getElementById('name_standalone').value,style_standalone, allselected)); w.document.close();"/>
-<input type="button" value="Create only a standalone Library" onclick="var style_standalone=1; var options_standalone=document.getElementById('internalFS_standalone').options; var allselected=[]; var nbselected=0; for(var i=0; i<options_standalone.length; i++) if (options_standalone[i].selected) allselected[nbselected++]=options_standalone[i].value; var w=window.open(); w.document.open('text/plain'); w.document.write(createLibraryApp(editor.getValue(),document.getElementById('name_standalone').value,style_standalone, allselected)); w.document.close();"/><br /><br /></div>
+<input type="button" value="Create App" onclick="var style_standalone=1; if (GEBID('style_standalone2').checked) style_standalone=2; if (GEBID('style_standalone3').checked) style_standalone=3; if (GEBID('style_standalone4').checked) style_standalone=4; var options_standalone=GEBID('internalFS_standalone').options; var allselected=[]; var nbselected=0; for(var i=0; i<options_standalone.length; i++) if (options_standalone[i].selected) allselected[nbselected++]=options_standalone[i].value; var w=window.open(); w.document.write(createStandaloneApp(editor.getValue(),GEBID('name_standalone').value,style_standalone, allselected)); w.document.close();"/>
+<input type="button" value="Create only a standalone Library" onclick="var style_standalone=1; var options_standalone=GEBID('internalFS_standalone').options; var allselected=[]; var nbselected=0; for(var i=0; i<options_standalone.length; i++) if (options_standalone[i].selected) allselected[nbselected++]=options_standalone[i].value; var w=window.open(); w.document.open('text/plain'); w.document.write(createLibraryApp(editor.getValue(),GEBID('name_standalone').value,style_standalone, allselected)); w.document.close();"/><br /><br /></div>
 </div>
 <br />
 <br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
