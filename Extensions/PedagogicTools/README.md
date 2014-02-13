@@ -1,6 +1,6 @@
-OpenStreetMap extension
+Pedagogic tools extension
 =======================
-Several libraries allows to deal with OpenStreetMap data (leaflet, Mapbox,...). Here, we present how lealet can be used in AlgoScript.
+This extension adds two main pedagogic tools to the AlgoScript environment: a whiteboard (compatible with any TBI and tablet) and a slide viewer that comprise some algorithmic introductive courses in french.
 
 # Using extensions with AlgoScript (general presentation)
 Adding an extension to AlgoScript is quite simple. It suffises to add these lines to the local file AlgoScript.config. 
@@ -11,15 +11,13 @@ Adding an extension to AlgoScript is quite simple. It suffises to add these line
 	JSURL= url of the javascript code of the extension (0, 1 or several JSURL possible)
 	CSSURL=url of the CSS code of the extension (0, 1 or several JSURL possible)
 
-# Using Leaflet/OpenStreetMap with AlgoScript
+# Using Pedagogic tools with AlgoScript
 
-	[Openstreetmap extension]
-	TITLE=Extension pour OpenStreetMap (leaflet.js)
+	[Pedagogic Library]
+	TITLE=Extension for adding pedagogic tools to the environment
 	ENABLED=yes
-	JSURL=https://dl.dropboxusercontent.com/u/1961350/leaflet.js
-	CSSURL=https://dl.dropboxusercontent.com/u/1961350/leaflet.css
+	JSURL=https://dl.dropboxusercontent.com/u/1961350/Pedagogic-tools.js
+	CSSURL=https://dl.dropboxusercontent.com/u/1961350/rasterizeHTML.js
 
-# Example
-
-The presented example is derivated from the basic example of Leaflet library.
-The complete documentation of Leaflet API can be found [here](http://leafletjs.com "Leaflet.js") 
+# Remarks
+It uses the rasterizeHTML library to display the content of the algorithmic introductive exercices (these exercises must be saved in an HTML format in the file named Exercices_tous.txt of the internal FS ). 
