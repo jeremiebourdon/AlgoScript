@@ -1,0 +1,69 @@
+# Les listes :
+maListeDeMeubles = ['table','chaise','frigo']
+maListeDeMeubles.sort()  #Tri de la liste
+for unMeuble in maListeDeMeubles:
+   print 'longueur de la chaine ', unMeuble, '=', len(unMeuble)
+ 
+#les listes imbriquées:
+laListeDesNombresPairs = [ unNombre for unNombre in xrange(1000) if unNombre % 2 == 0]
+ 
+#Les dictionnaires :
+unAnnuaire = {'Laurent': 6389565, 'Paul': 6356785}
+for unNom, x in unAnnuaire.items():
+   print "le nom %s a pour numero de telephone %d" %(unNom, x)
+ 
+ 
+#Les tuples (n-uplet) : séquence constante
+Couleur = ('Rouge', 'Bleu', 'Vert')
+print Couleur[0], Couleur[1],  Couleur[2]
+ 
+PointDeReference = (100, 200)
+print " x0 = %d   y0 = %d "  %(PointDeReference[0],PointDeReference[1])
+
+class Fruit :
+    def __init__(self) :
+        pass
+ 
+class Pomme(Fruit):
+    """
+    Cette classe represente une pomme.
+    """
+    Mangeurs = ["Jacques", "Nicolas","Virgile"]
+ 
+    def __init__(self, couleur):
+        """
+        Pour construire une Pomme, donnez sa couleur.
+        """
+        Fruit.__init__(self)
+        self._couleur = couleur
+ 
+    def couleur(self):
+        """
+        Retourne la couleur de la Pomme.
+        """
+        return self._couleur
+ 
+    def comestible(self, mangeur):
+        """
+        Dit si la pomme est comestible ou non,
+        en fonction du mangeur.
+        """
+        if mangeur in self.Mangeurs:
+            print mangeur, "mange des pommes"
+        else:
+            print mangeur, "n'aime pas les pommes"
+ 
+petitePomme = Pomme("verte")
+petitePomme.comestible("Pierre")      # Pierre n'aime pas les pommes
+petitePomme.comestible("Nicolas")     # Nicolas mange des pommes
+
+
+# Le crible d'Eratosthène
+N, nombre = 1000, 2
+liste, liste[1] = range(N+1), 0
+
+while nombre**2 <= N:
+   liste[nombre*2 :: nombre] = [0]*len( liste[nombre*2 :: nombre] )
+   nombre += 1
+print "Premiers inferieurs a N : " ,(filter(None, liste))
+    

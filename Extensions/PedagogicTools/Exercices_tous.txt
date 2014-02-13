@@ -1,0 +1,303 @@
+-*-*-*-*-*-
+  <style>tr {height: 20px;}</style>
+<table width="80%" border="1">
+<tr>
+  <th width="33%" style="background-color: red;">Expression</th>
+  <th width="33%" style="background-color: red;">Type</th>
+  <th width="33%" style="background-color: red;">Valeur</th>
+</tr>
+<tr><td>3+7</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td>3*7</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td>'3'+'7'</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td>0</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td>'0'</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td>un</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td>'un'</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td>'un' + 'un'</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td>3.7</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td>'3.7'</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td>17/3</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td>17 div 3</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td>17 mod 3</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td>'2' + '‿' + '3'</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+</table>
+
+-*-*-*-*-*-
+<p>Construire l'historique d'exécution suivant</p>
+<table width="80%" border="1">
+<tr>
+  <th width="33%" style="background-color: red;">Instructions</th>
+  <th width="33%" style="background-color: red;">demi</th>
+  <th width="33%" style="background-color: red;">double</th>
+</tr>
+<tr><td>Avant exécution</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td>Après demi ← 6</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td>Après double ← demi * 2</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td>Après demi ← demi / 2</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td>Après double ← demi + demi</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+</table>
+
+-*-*-*-*-*-
+<table width="100%">
+<tr><td>1. Écrire la suite d'actions affectant à une variable l'année de naissance d'une personne puis calculant et affichant son âge au 31 décembre 2010.</td></tr>
+<tr><td>2. Modifier l'algorithme pour ne pas avoir d'âge négatif.</td></tr>
+<tr><td>3. Modifier l'algorithme de manière à calculer l'âge au 31 juillet 2010, puis au 14 juillet 2010.</td></tr>
+</table>
+
+-*-*-*-*-*-
+<table width="100%">
+<tr><td>Écrire la suite d’affectations calculant puis affichant la distance d à vol d’oiseau entre deux villes situées sur l’équateur. Les longitudes en degrés de ces deux villes sont d’abord stockées dans deux variables long1 et long2. On rappelle que la terre à un diamètre de 12756 km.</td></tr>
+</table>
+
+-*-*-*-*-*-
+<table width="100%">
+<tr><td>Écrire un algorithme demandant à l'utilisateur le prix unitaire hors taxe d'un article ainsi que la quantité désirée et affichant le prix total TTC de la commande.</td></tr>
+</table>
+
+-*-*-*-*-*-
+<table width="100%">
+<tr><td>Écrire un algorithme demandant à l'utilisateur une année du calendrier grégorien puis calculant un booléen exprimant si ce millésime est celui d'une année bissextile. L'algorithme doit ensuite afficher un message indiquant si cette année est bissextile.
+<br/>On rappelle qu'une année est bissextile si (et seulement si) son millésime est : -- soit divisible par 4 mais pas par 100 -- soit divisible par 400 Envisager une écriture avec des conditions simples, et une autre avec une condition complexe.</td></tr>
+</table>
+
+-*-*-*-*-*-
+<table width="100%">
+<tr><td>Écrire un algorithme qui demande la saisie de 3 nombres et qui les affiche dans l’ordre croissant.</td></tr>
+</table>
+
+
+-*-*-*-*-*-
+<table width="100%">
+<tr><td>Lors des essais pour un grand prix de formule 1, on chronomètre (plusieurs fois) le temps mis par une voiture pour effectuer un tour du circuit. Écrire un algorithme qui demande à l'utilisateur chacun des temps (en nombre entier de secondes pour simplifier) puis affiche le temps total (utiliser un cumul). Dans chacun des cas, vous préciserez le schéma de programmation se rapprochant le plus du travail demandé.
+<ol>
+<li>Écrire une première version en supposant que l'utilisateur donne un temps maximum de course et que l'algorithme s'arrête quand le temps cumulé est supérieur à ce nombre.</li>
+<li>Écrire une seconde version où on demande à l'utilisateur au préalable le nombre de tours (ajouter un compteur). L'algorithme doit s'arrêter au bout du nombre de tours prévu.</li>
+<li>Écrire une troisième version en supposant que l'utilisateur donne un temps nul pour arrêter l'algorithme, et qu'en plus l'algorithme affiche aussi le nombre de tours effectués et le temps moyen au tour.</li>
+</ol></td></tr>
+</table>
+
+-*-*-*-*-*-
+<table width="100%">
+<tr><td>On cherche à évaluer numériquement (et approximativement) un minimum de la fonction f : x ↦ sin(x)-ln(x). Pour la représenter, vous pouvez taper <t>plot(function f(x) {return Math.sin(x)-Math.log(x);},0.01,8);</t><br/>On va calculer la valeur de f(x) pour x variant de 0,1 en 0,1 à partir de 0,2. Au début, les valeurs sont de plus en plus petites, mais lorsque l'on dépasse l'abscisse d'un minimum, les valeurs remontent. Écrire un algorithme qui calcule successivement les valeurs de f(0,2), f(0,3), f(0,4), et ainsi de suite jusqu'à ce qu'une valeur soit plus grande que la précédente. L'algorithme doit alors afficher l'abscisse x correspondante.
+La valeur initiale 0.2 et le pas 0.1 seront demandés à l'utilisateur.</td></tr>
+</table>
+
+-*-*-*-*-*-
+<table width="100%">
+<tr><td>Écrire des fonctions effectuant les conversions de degré Celsius en Fahrenheit et réciproquement. On observe que l'eau gèle à 32°F et bout à 212°F.</td></tr>
+<tr><td>Écrire aussi une fonction donnant l'équivalent en cm d'une dimension en pieds et pouces.</td></tr>
+</table>
+
+-*-*-*-*-*-
+<table width="100%">
+<tr><td>Ecrire une fonction itérative qui calcule la factorielle d'un nombre.</td></tr>
+<tr><td>Ecrire une fonction qui calcule le coefficient binomial de deux nombres.</td></tr>
+<tr><td>Ecrire une fonction récursive qui calcule la factorielle d'un nombre.</td></tr>
+<tr><td>Ecrire une fonction récursive terminale qui calcule la factorielle d'un nombre.</td></tr>
+</table>
+-*-*-*-*-*-
+<h1>Annales de contrôle continu: CC no 1. Questions de cours</h1>
+<table width="100%">
+<tr><td>
+<dl>
+<dt>A] Lorsqu’on définit une fonction, les paramètres sont</dt>
+<dd>☐ 1) toujours des entiers</dd>
+<dd>☐ 2) à déclarer dans le corps de la fonction</dd>
+<dd>☐ 3) appelés paramètres formels</dd></dl>
+</td>
+<td>
+<dl>
+<dt>B] A ⇒ B est faux quand</dt>
+<dd>☐ 1) A ou B sont faux</dd>
+<dd>☐ 2) A est faux et B est vrai</dd>
+<dd>☐ 3) A est vrai et B est faux</dd></dl>
+</td></tr>
+<tr><td>
+<dl>
+<dt>C] Un accumulateur de produit est initialisé en général par</dt>
+<dd>☐ 1) 0</dd>
+<dd>☐ 2) un maillon</dd>
+<dd>☐ 3) 1</dd>
+<dd>☐ 4) ''</dd>
+</dl>
+</td>
+<td>
+<dl>
+<dt>D] Needleman-Wunsch fait référence à</dt>
+<dd>☐ 1) un cryptosystème</dd>
+<dd>☐ 2) un algorithme d’alignement de séquences</dd>
+<dd>☐ 3) un protocole d’échange de clés</dd>
+<dd>☐ 4) un héros de bande dessinée</dd>
+</dl>
+</td></tr>
+<tr><td>
+<dl>
+<dt>E] Diffie-Hellman fait référence à :</dt>
+<dd>☐ 1) un cryptosystème</dd>
+<dd>☐ 2) un héros de bande dessinée</dd>
+<dd>☐ 3) un algorithme d’alignement de séquences</dd>
+<dd>☐ 4) un protocole d’échange de clés</dd>
+</dl>
+</td>
+<td>
+<dl>
+<dt>F] Le symbole ∋ signifie</dt>
+<dd>☐ 1) quel que soit</dd>
+<dd>☐ 2) il existe</dd>
+<dd>☐ 3) implique</dd>
+<dd>☐ 4) appartient</dd>
+<dd>☐ 5) n'est pas un symbole de la logique des prédicats</dd>
+</dl>
+</td></tr>
+</table>
+
+-*-*-*-*-*-
+<h1>Annales de contrôle continu: CC no 1. Exercice 2</h1>
+
+Construire les historiques d'exécution des deux algorithmes suivants:
+
+<table width="100%">
+<tr><td>
+<pre>
+Algorithme Algo1
+Variables
+	nb1,nb2	entiers
+Début
+①	nb1 ← 5;
+②	nb2 ← 7;
+③	nb1 ← nb2 + nb1;
+④	nb2 ← nb1 - nb2;
+⑤	nb1 ← nb1 - nb2;
+Fin
+</pre>
+</td>
+<td>
+<pre>
+Algorithme Algo2
+Variables
+	nb1,nb2	entier
+Début
+⑥	nb1 ← 1; nb2 ← 10;
+⑦	tant que nb1+nb2<16 faire
+⑧		nb1 ← 2*nb1;
+⑨		nb2 ← nb2 - 1;
+	fin tant que
+Fin
+</pre>
+</td>
+</tr>
+<tr>
+<td>
+<table border="1" width="80%">
+<tr><th colspan=3>Algo1</th></tr>
+<tr>
+<th width="33%">Instructions</th>
+<th width="33%">nb1</th>
+<th width="33%">nb2</th>
+</tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+</table>
+</td>
+<td>
+<table border="1" width="80%">
+<tr><th colspan=3>Algo2</th></tr>
+<tr>
+<th width="33%">Instructions</th>
+<th width="33%">nb1</th>
+<th width="33%">nb2</th>
+</tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+</table>
+</td>
+</tr>
+
+</tr>
+</table>
+
+-*-*-*-*-*-
+<h1>Annales de contrôle continu: CC no 1. Exercice 3</h1>
+Ecrire un algorithme qui demande à l’utilisateur de saisir une température en degrés celcius et affiche ‘il gèle’ si la température est inférieure à 0 degrés et ‘alerte canicule’ si la température est supérieure strictement à 30 degrés.
+
+-*-*-*-*-*-
+<h1>Annales de contrôle continu: CC no 1. Exercice 4</h1>
+
+<h3>Question 1 : rebonds</h3>
+On considère le problème suivant : on lance une balle d'une hauteur initiale saisie par l’utilisateur. On suppose qu'à chaque rebond, la balle perd 10 % de sa hauteur (la hauteur est donc multipliée par 0.9 à chaque rebond). On cherche à connaître le nombre de rebonds nécessaire pour que la hauteur de la balle soit inférieure ou égale à 10 cm. Écrire un algorithme permettant de résoudre ce problème.
+
+<h3>Question 2 : somme</h3>
+Ecrire un algorithme qui demande à l’utilisateur de saisir un entier n, puis affiche la somme des n premiers nombres impairs.
+
+<h3>Question 3 : Chargement d’un sac</h3>
+On souhaite remplir un sac de 100 litres avec des objets «informes». Ecrire un algorithme qui demande à l’utilisateur de saisir successivement le volume en litre des objets qu’il souhaite stocker dans le sac. La saisie doit s’arrêter lorsque la capacité maximale du sac est atteinte, si cela ne tombe pas juste, il faut enlever le dernier élément. L’algorithme doit ensuite afficher le nombre de litres total stocké dans le sac ainsi que le nombre d’objets stockés.
+
+-*-*-*-*-*-
+<h1>Annales de contrôle continu: CC no 1. Exercice 4, Question 1</h1>
+On considère le problème suivant : on lance une balle d'une hauteur initiale saisie par l’utilisateur. On suppose qu'à chaque rebond, la balle perd 10 % de sa hauteur (la hauteur est donc multipliée par 0.9 à chaque rebond). On cherche à connaître le nombre de rebonds nécessaire pour que la hauteur de la balle soit inférieure ou égale à 10 cm. Écrire un algorithme permettant de résoudre ce problème.
+
+-*-*-*-*-*-
+<h1>Annales de contrôle continu: CC no 1. Exercice 4, Question 2</h1>
+Ecrire un algorithme qui demande à l’utilisateur de saisir un entier n, puis affiche la somme des n premiers nombres impairs.
+
+-*-*-*-*-*-
+<h1>Annales de contrôle continu: CC no 1. Exercice 4, Question 3</h1>
+On souhaite remplir un sac de 100 litres avec des objets «informes». Ecrire un algorithme qui demande à l’utilisateur de saisir successivement le volume en litre des objets qu’il souhaite stocker dans le sac. La saisie doit s’arrêter lorsque la capacité maximale du sac est atteinte, si cela ne tombe pas juste, il faut enlever le dernier élément. L’algorithme doit ensuite afficher le nombre de litres total stocké dans le sac ainsi que le nombre d’objets stockés.
+
+-*-*-*-*-*-
+<h1>Annales de contrôle continu: CC no 1. Exercice 5</h1>
+
+<h3>Question 1 : périmètres</h3>
+Ecrire les fonctions permettant de calculer respectivement le périmètre d’un carré de côté x, le périmètre d’un rectangle de côtés long, larg et d’un disque de rayon r.
+
+<h3>Question 2 : Utilisation</h3>
+<table width="80%"><tr>
+<td valing="top">Ecrire un algorithme qui utilise les fonctions précédentes pour calculer la quantité d’encre utilisée pour dessiner la figure ci-dessous (on demande bien sûr de calculer les périmètres des figures dessinées).</td>
+<td width="200"><img src="https://dl.dropboxusercontent.com/u/1961350/figureExo4CC.png" width="200"/></td>
+</tr></table>
+
+<h3>Question 3 : Logarithme</h3>
+Une méthode de calcul du logarithme népérien consiste à utiliser la formule suivante:<br/>
+<img src="https://dl.dropboxusercontent.com/u/1961350/figureExo5CC-2.png" width="300"/><br/>
+Ecrire un algorithme qui demande la saisie d’un réèl x et un entier positif N et qui calcule une valeur approchée de ln(x) en calculant la série précédente jusqu’au N-ème terme.
+
+
+-*-*-*-*-*-
+<h1>Annales de contrôle continu: CC no 1. Exercice 5, Question 1</h1>
+Ecrire les fonctions permettant de calculer respectivement le périmètre d’un carré de côté x, le périmètre d’un rectangle de côtés long, larg et d’un disque de rayon r.
+
+-*-*-*-*-*-
+<h1>Annales de contrôle continu: CC no 1. Exercice 5, Question 2</h1>
+<table width="80%"><tr>
+<td valing="top">Ecrire un algorithme qui utilise les fonctions précédentes pour calculer la quantité d’encre utilisée pour dessiner la figure ci-dessous (on demande bien sûr de calculer les périmètres des figures dessinées).</td>
+<td width="200"><img src="https://dl.dropboxusercontent.com/u/1961350/figureExo4CC.png" width="200"/></td>
+</tr></table>
+
+-*-*-*-*-*-
+<h1>Annales de contrôle continu: CC no 1. Exercice 5, Question 3</h1>
+Une méthode de calcul du logarithme népérien consiste à utiliser la formule suivante:<br/>
+<img src="https://dl.dropboxusercontent.com/u/1961350/figureExo5CC-2.png" width="300"/><br/>
+Ecrire un algorithme qui demande la saisie d’un réèl x et un entier positif N et qui calcule une valeur approchée de ln(x) en calculant la série précédente jusqu’au N-ème terme.
+
