@@ -18,7 +18,7 @@ The environment implementes an automatic trace inspector.
 ## Local filesystem for storing sources
 The HTML5 local filesystem is used to store several source and data files. Tools for browsing the filesystem and to add external files to this local filesystem are available.
 
-## Sound management
+## Audio management
 Highlevel functions allow to deal with sounds (edition of wav files, sound synthesis,...).
 
 ## Standalone applications creation
@@ -29,8 +29,8 @@ One of the most interesting feature of the environment consists in the construct
 The local filesystem can be automaticaly synchronized by using a Dropbox(TM) datastore (require to have a free Dropbox account). Export of all the local filesystem as regular files in a dedicated Dropbox folder. By enabling this functionality, the local filesystem is always synchronized, whatever the computer/smartphone/tablet is used.
 
 ## Utilization of external libraries
-Many powerfull javascript libraries are available accross the internet (for managing webgl 3D, data visualization, OpenStreetMap managment,....). AlgoScript integrates a simple mechanism allowing the use of these external libraries, allowing to design some very powerfull applications.
+Many powerfull javascript libraries are available accross the internet (for managing webgl 3D, data visualization, OpenStreetMap managment,....). AlgoScript integrates a simple mechanism allowing the use of these external libraries, thus opening the road to design some very powerfull applications. Several example are provided in this repository.
 
 ## Answer Set Programming
-Thanks to the javascript compiled versions of clasp provided by Adam Smith (via Emscripten), an ASP grounder and solver is now available. Examples on how Javascript/ASP can be used to solve both n-queens and Sudoku problems in ASP and pretty-print their solutions using javascript. Notice that the trick used to combine compiled softwares and javascript opens many pedagogic perspectives. 
+Thanks to the javascript compiled versions of clasp provided by Adam Smith (via Emscripten), an ASP grounder and solver is now available. Examples on how Javascript/ASP can be used to solve both n-queens and Sudoku problems in ASP and pretty-print their solutions using javascript are provided. Notice that the trick used to combine compiled softwares and javascript opens many pedagogic perspectives. 
 
