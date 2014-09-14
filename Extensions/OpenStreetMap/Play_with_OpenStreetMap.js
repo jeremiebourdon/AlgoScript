@@ -23,7 +23,7 @@ if (typeof(document.getElementById('weboutput')._leaflet) == 'undefined') {
 // A ce stade, une carte est prête, elle est centrée sur la FST de Nantes avec un niveau de zoom 7 (en gros, on voit toute la France)
 
 // Pour qu'elle s'affiche, il faut préciser les images qui seront utilisées (ajout d'un tileLayer, ici celui de cloudmate).
-L.tileLayer('http://{s}.tile.cloudmade.com/BC9A493B41014CAABB98F0471D759707/997/256/{z}/{x}/{y}.png', {
+L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   maxZoom: 18,
   attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>'
 }).addTo(map);
