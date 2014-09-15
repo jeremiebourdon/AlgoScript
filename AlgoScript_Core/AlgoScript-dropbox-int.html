@@ -31,6 +31,9 @@ function getQuerystring(key, default_)
     return qs[1];
 }
 
+var mybaseurl='https://dl.dropboxusercontent.com/u/1961350/';
+
+
 var defaultEnvironmentLanguage = 'french';
 var defaultDropbox = 'ask';
 var evalligne=17;
@@ -94,6 +97,13 @@ initialcontent+='% ENABLED=yes or no or ask : Extension is enabled\n';
 initialcontent+='% JSURL= url of the javascript code of the extension (0, 1 or several JSURL possible)\n';
 initialcontent+='% CSSURL=url of the CSS code of the extension (0, 1 or several JSURL possible)\n';
 initialcontent+='\n';
+initialcontent+='[Jappix tool]\n';
+initialcontent+='TITLE=Extension for adding a chat tool to the environment\n';
+initialcontent+='ENABLED=no\n';
+initialcontent+='JSURL=http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js\n';
+initialcontent+='JSURL=https://dl.dropboxusercontent.com/u/1961350/jappix-static.js\n';
+initialcontent+='JSURL=https://dl.dropboxusercontent.com/u/1961350/Chat-jappix.js\n';
+initialcontent+='\n';
 initialcontent+='[Openstreetmap extension]\n';
 initialcontent+='TITLE=Extension pour OpenStreetMap (leaflet.js)\n';
 initialcontent+='ENABLED=no\n';
@@ -129,20 +139,93 @@ initialcontent+='JSURL=https://dl.dropboxusercontent.com/u/1961350/jquery-2.0.3.
 initialcontent+='JSURL=https://dl.dropboxusercontent.com/u/1961350/arbor.js\n';
 initialcontent+='JSURL=https://dl.dropboxusercontent.com/u/1961350/arbor-tween.js\n';
 initialcontent+='\n';
-initialcontent+='[Processing extension]';
-initialcontent+='TITLE=Extension Processing 1.4.1 (processing.js)';
-initialcontent+='ENABLED=no';
-initialcontent+='JSURL=https://dl.dropboxusercontent.com/u/1961350/processing-1.4.1.min.js';
-initialcontent+='JSURL=https://dl.dropboxusercontent.com/u/1961350/Processing_post.js';
+initialcontent+='[Processing extension]\n';
+initialcontent+='TITLE=Extension Processing 1.4.1 (processing.js)\n';
+initialcontent+='ENABLED=no\n';
+initialcontent+='JSURL=https://dl.dropboxusercontent.com/u/1961350/processing-1.4.1.min.js\n';
+initialcontent+='JSURL=https://dl.dropboxusercontent.com/u/1961350/Processing_post.js\n';
 initialcontent+='\n';
-initialcontent+='[Dracula extension]';
-initialcontent+='TITLE=Extension Dracula for drawing graphs';
-initialcontent+='ENABLED=no';
-initialcontent+='JSURL=https://dl.dropboxusercontent.com/u/1961350/Dracula/raphael-min.js';
-initialcontent+='JSURL=https://dl.dropboxusercontent.com/u/1961350/Dracula/dracula_graffle.js';
-initialcontent+='JSURL=https://dl.dropboxusercontent.com/u/1961350/Dracula/jquery-1.4.2.min.js';
-initialcontent+='JSURL=https://dl.dropboxusercontent.com/u/1961350/Dracula/dracula_graph.js';
-initialcontent+='JSURL=https://dl.dropboxusercontent.com/u/1961350/Dracula/dracula_algorithms.js';
+initialcontent+='[Dracula extension]\n';
+initialcontent+='TITLE=Extension Dracula for drawing graphs\n';
+initialcontent+='ENABLED=no\n';
+initialcontent+='JSURL=https://dl.dropboxusercontent.com/u/1961350/Dracula/raphael-min.js\n';
+initialcontent+='JSURL=https://dl.dropboxusercontent.com/u/1961350/Dracula/dracula_graffle.js\n';
+initialcontent+='JSURL=https://dl.dropboxusercontent.com/u/1961350/Dracula/jquery-1.4.2.min.js\n';
+initialcontent+='JSURL=https://dl.dropboxusercontent.com/u/1961350/Dracula/dracula_graph.js\n';
+initialcontent+='JSURL=https://dl.dropboxusercontent.com/u/1961350/Dracula/dracula_algorithms.js\n';
+initialcontent+='\n';
+
+initialcontent+='[Common Lisp extension]\n';
+initialcontent+='TITLE=Extension Common Lisp (Javasthcript.js)\n';
+initialcontent+='ENABLED=no\n';
+initialcontent+='JSURL=https://dl.dropboxusercontent.com/u/1961350/javathcript.js\n';
+initialcontent+='JSURL=https://dl.dropboxusercontent.com/u/1961350/javathcript_post.js\n';
+initialcontent+='\n';
+
+initialcontent+='[Python extension]\n';
+initialcontent+='TITLE=Extension Python (skulpt.js)\n';
+initialcontent+='ENABLED=no\n';
+initialcontent+='JSURL=http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js\n';
+initialcontent+='JSURL=https://dl.dropboxusercontent.com/u/1961350/skulpt.min.js\n';
+initialcontent+='JSURL=https://dl.dropboxusercontent.com/u/1961350/skulpt-stdlib.js\n';
+initialcontent+='JSURL=https://dl.dropboxusercontent.com/u/1961350/skulpt_post.js\n';
+initialcontent+='\n';
+
+initialcontent+='[Parallel extension]\n';
+initialcontent+='TITLE=Extension Parallel pour le calcul parallèle multi-coeurs\n';
+initialcontent+='ENABLED=no\n';
+initialcontent+='JSURL=https://dl.dropboxusercontent.com/u/1961350/parallel.js\n';
+initialcontent+='\n';
+
+initialcontent+='[PeerJS extension]\n';
+initialcontent+='TITLE=Extension PeerJS pour les communications pair à pair (nécessite une clé)\n';
+initialcontent+='ENABLED=no\n';
+initialcontent+='JSURL=https://dl.dropboxusercontent.com/u/1961350/peer.min.js\n';
+initialcontent+='\n';
+
+initialcontent+='[Audiolet extension]\n';
+initialcontent+='TITLE=Extension Audiolet pour la synthèse audio\n';
+initialcontent+='ENABLED=no\n';
+initialcontent+='JSURL=https://dl.dropboxusercontent.com/u/1961350/Audiolet.min.js\n';
+initialcontent+='\n';
+
+initialcontent+='[Music Partition extension]\n';
+initialcontent+='TITLE=Extension VexFlow for drawing music partitions\n';
+initialcontent+='ENABLED=no\n';
+initialcontent+='JSURL=https://dl.dropboxusercontent.com/u/1961350/vexflow-min.js\n';
+initialcontent+='JSURL=https://dl.dropboxusercontent.com/u/1961350/raphael-min.js\n';
+initialcontent+='JSURL=https://dl.dropboxusercontent.com/u/1961350/Dracula/jquery-1.4.2.min.js\n';
+initialcontent+='\n';
+
+initialcontent+='[Speech synthesis extension]\n';
+initialcontent+='TITLE=Extension mespeak\n';
+initialcontent+='ENABLED=no\n';
+initialcontent+='JSURL=https://dl.dropboxusercontent.com/u/1961350/mespeak.js\n';
+initialcontent+='JSURL=https://dl.dropboxusercontent.com/u/1961350/mespeak_post.js\n';
+initialcontent+='\n';
+
+initialcontent+='[POS Tagging Library]\n';
+initialcontent+='TITLE=Extension jspos for POS tagging of english texts\n';
+initialcontent+='ENABLED=no\n';
+initialcontent+='JSURL=https://dl.dropboxusercontent.com/u/1961350/JSLIB/jspos/lexer.js\n';
+initialcontent+='JSURL=https://dl.dropboxusercontent.com/u/1961350/JSLIB/jspos/lexicon.js_\n';
+initialcontent+='JSURL=https://dl.dropboxusercontent.com/u/1961350/JSLIB/jspos/POSTagger.js\n';
+initialcontent+='\n';
+  
+initialcontent+='[Pedagogic Library]\n';
+initialcontent+='TITLE=Extension for adding pedagogic tools to the environment\n';
+initialcontent+='ENABLED=yes\n';
+initialcontent+='JSURL=https://dl.dropboxusercontent.com/u/1961350/Pedagogic-tools.js\n';
+initialcontent+='JSURL=https://dl.dropboxusercontent.com/u/1961350/rasterizeHTML.js\n';
+initialcontent+='\n';
+
+initialcontent+='[RecordRTC Library]\n';
+initialcontent+='TITLE=Extension for allowing screen recording\n';
+initialcontent+='ENABLED=no\n';
+initialcontent+='JSURL=https://dl.dropboxusercontent.com/u/1961350/WebRTC-screenshot.js\n';
+initialcontent+='JSURL=https://dl.dropboxusercontent.com/u/1961350/WebRTC-RecordRTC.js\n';
+initialcontent+='\n';
+
 	writeFile('AlgoScript.config',initialcontent);
 	alert('Creating AlgoScript.config');
 }
@@ -3122,7 +3205,7 @@ z-index:100;
     
     </style>
     </head>
-    <body onload="Init(); InitGraphic(); GEBID('titre_onglet').selectedIndex=0; var builtin_oldfilename=''; fenetre_courante=0; MontreFenetre(0); AdapterTaille(window.innerWidth,window.innerHeight); window.onresize=function () {AdapterTaille(window.innerWidth,window.innerHeight);}; /*setTimeout('GEBID(\'divtuto\').style.visibility=\'hidden\';',2000);*/ readAllFS(GEBID('Libraries').value); window.onerror=fonctionerreur; GEBID('sortie').value=''; GEBID('MonTexte').value='Votre texte ici'; GEBID('MonTexte').disabled=false; builtin_ong=GEBID('onglet1'); builtin_bong=GEBID('bonglet1'); builtin_oldfilename=''; EnvironmentLanguage=getQuerystring('lang'); if (EnvironmentLanguage == '') EnvironmentLanguage=defaultEnvironmentLanguage; if (EnvironmentLanguage == 'french') {GEBID('Mementofrench').style.display='block'; GEBID('Mementoenglish').style.display='none';} else {GEBID('Mementofrench').style.display='none'; GEBID('Mementoenglish').style.display='block';}; if (getQuerystring('dropbox') == 'off' || defaultDropbox == false) Dropboxsync=false; else if (getQuerystring('dropbox') == 'on' || defaultDropbox == true) Dropboxsync=true; else Dropboxsync=confirm('Do you want to synchronize the internal filesystem with Dropbox ?'); if (Dropboxsync) InitDropbox(); if (MustCreateAlgoScriptConfigflag) MustCreateAlgoScriptConfig();/* InitImages();*/ var toload=getQuerystring('load'); if (toload != '') {editor.setValue(readFile(toload)); builtin_oldfilename=toload; GEBID('lecode').value=editor.getValue();}; if (getQuerystring('theme') == 'erlang') {editor.setOption('theme','default erlang-dark'); var y = document.getElementsByClassName('CodeMirror'); y[0].style.backgroundColor='#002240'; y[0].style.color='white';}">
+    <body onload="Init(); InitGraphic(); GEBID('titre_onglet').selectedIndex=0; var builtin_oldfilename=''; fenetre_courante=0; MontreFenetre(0); AdapterTaille(window.innerWidth,window.innerHeight); window.onresize=function () {AdapterTaille(window.innerWidth,window.innerHeight);}; /*setTimeout('GEBID(\'divtuto\').style.visibility=\'hidden\';',2000);*/ readAllFS(GEBID('Libraries').value); window.onerror=fonctionerreur; GEBID('sortie').value=''; GEBID('MonTexte').value='Votre texte ici'; GEBID('MonTexte').disabled=false; builtin_ong=GEBID('onglet1'); builtin_bong=GEBID('bonglet1'); builtin_oldfilename=''; EnvironmentLanguage=getQuerystring('lang'); if (EnvironmentLanguage == '') EnvironmentLanguage=defaultEnvironmentLanguage; if (EnvironmentLanguage == 'french') {GEBID('Mementofrench').style.display='block'; GEBID('Mementoenglish').style.display='none';} else {GEBID('Mementofrench').style.display='none'; GEBID('Mementoenglish').style.display='block';}; if (window.location.href.substr(0,mybaseurl.length) == mybaseurl && navigator.onLine) {if (getQuerystring('dropbox') == 'off' || defaultDropbox == false) Dropboxsync=false; else if (getQuerystring('dropbox') == 'on' || defaultDropbox == true) Dropboxsync=true; else Dropboxsync=confirm('Do you want to synchronize the internal filesystem with Dropbox ?');} else {Dropboxsync=false;}; if (Dropboxsync) {InitDropbox(); document.title='[Synchronized] '+document.title;} if (MustCreateAlgoScriptConfigflag) MustCreateAlgoScriptConfig();/* InitImages();*/ var toload=getQuerystring('load'); if (toload != '') {editor.setValue(readFile(toload)); builtin_oldfilename=toload; GEBID('lecode').value=editor.getValue();}; if (getQuerystring('theme') == 'erlang') {editor.setOption('theme','default erlang-dark'); var y = document.getElementsByClassName('CodeMirror'); y[0].style.backgroundColor='#002240'; y[0].style.color='white';}">
         <form name="f" id="f" action="javascript:void(0)" method="post">
 	<textarea id="lecode" style="border: 0;">// Javascript code here
 </textarea>
@@ -4717,7 +4800,7 @@ Loop(-1);
 <div>
 <table>
 <tr>
-<td>
+<td style="vertical-align: top;">
 <select id="internalFS" size="20" style="width: 300px;" ondblclick="if (GEBID('internalFS').value != '') {editor.setValue(readFile(GEBID('internalFS').value)); builtin_oldfilename=GEBID('internalFS').value; GEBID('lecode').value=editor.getValue(); MontreFenetre(-8);}"
 onchange="GEBID('filecontent').innerHTML='<pre>'+window.localStorage[GEBID('internalFS').value]+'</pre>'">
 </select></td><td style="vertical-align: top;">
