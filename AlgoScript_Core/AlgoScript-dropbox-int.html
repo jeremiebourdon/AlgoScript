@@ -3638,11 +3638,11 @@ loop:   for (;;) {
 
         if (!eqnull && option.eqeqeq)
             warning("Expected '{a}' and instead saw '{b}'.", this, '===', '==');
-        else if (isPoorRelation(left))
+/*        else if (isPoorRelation(left))
             warning("Use '{a}' to compare with '{b}'.", this, '===', left.value);
         else if (isPoorRelation(right))
             warning("Use '{a}' to compare with '{b}'.", this, '===', right.value);
-
+*/
         return this;
     });
     relation('===');
@@ -3653,13 +3653,13 @@ loop:   for (;;) {
         if (!eqnull && option.eqeqeq) {
             warning("Expected '{a}' and instead saw '{b}'.",
                     this, '!==', '!=');
-        } else if (isPoorRelation(left)) {
+        }/* else if (isPoorRelation(left)) {
             warning("Use '{a}' to compare with '{b}'.",
                     this, '!==', left.value);
         } else if (isPoorRelation(right)) {
             warning("Use '{a}' to compare with '{b}'.",
                     this, '!==', right.value);
-        }
+        }*/
         return this;
     });
     relation('!==');
@@ -5804,11 +5804,11 @@ function readAllFS(str) {
 }
 
 function ls() {
- for(p in window.localStorage) Ecrire(p);
+ for(var p in window.localStorage) if (SousChaine(p,0,Longueur('dropbox-auth')) != 'dropbox-auth' && typeof(window.localStorage[p]) == 'string') Ecrire(p);
 }
 
 function directory() {
- var res=''; for(p in window.localStorage) if (SousChaine(p,0,Longueur('dropbox-auth')) != 'dropbox-auth') res+=p+'\n'; return res;
+ var res=''; for(var p in window.localStorage) if (SousChaine(p,0,Longueur('dropbox-auth')) != 'dropbox-auth' && typeof(window.localStorage[p]) == 'string') res+=p+'\n'; return res;
 }
 
 function readFile(filename) {
@@ -7475,6 +7475,37 @@ var ExecutionTime=chronometre;
 
 var getTextEntry=getEntreetexte;
 var setTextEntry=setEntreetexte;
+
+
+var isInFullScreenMode = false;
+
+function launchIntoFullscreen(element) {
+  if(element.requestFullscreen) {
+    element.requestFullscreen();
+  } else if(element.mozRequestFullScreen) {
+    element.mozRequestFullScreen();
+  } else if(element.webkitRequestFullscreen) {
+    element.webkitRequestFullscreen();
+  } else if(element.msRequestFullscreen) {
+    element.msRequestFullscreen();
+  }
+}
+
+function enterFullscreen() {
+  isInFullScreenMode = true;
+  launchIntoFullscreen(document.documentElement);
+}
+function exitFullscreen() {
+  isInFullScreenMode = false;
+  if(document.exitFullscreen) {
+    document.exitFullscreen();
+  } else if(document.mozCancelFullScreen) {
+    document.mozCancelFullScreen();
+  } else if(document.webkitExitFullscreen) {
+    document.webkitExitFullscreen();
+  }
+}
+
 //       -->
 
     </script>
@@ -8022,11 +8053,11 @@ z-index:100;
 	<option value="GestionFichiers">File manager</option>
 	</select><div><div>Fen&ecirc;tre&nbsp;visible</div></div></td>
 	<td align="right"><label style="vertical-align: middle; font-style: italic; font-size: 0.7em; font-family: helvetica, sans-serif, arial; color: blue">Inspect&nbsp;<input class="other" type="text" id="builtin_inspector" style="color: blue; background-image: none; background-color: white; width: 80px;" value=""/><div><div>Variables&nbsp;à&nbsp;inspecter</div></div></label>
-	<img id="icoLeft" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAFbklEQVR4XoWWbWhcxxWGn5k7d+/X7upKkVpJtqQlTeK2ckiM21LSpAqllJi2VIGWkoTAKhBsXNxa6EdJi6FqQKENqdxAmxIokmnaUhOKTNvgxk0V4aqOiymJK5zUkWXVlhTbsqJdaT+k/bi349sLYkkdn+Fh5s993zNnz3BW8GHxND6Cfk2fJhMhAcF8zJRmgiFy3CT+v8FwJDza6rZlv9T1EN2pHnb4HycMQ01AQMi/197mUvESr107wUrl+jiCQQ5+0Eh+UJx+z/QuPtm7L/vcfT/lwc4v4MsWZq9d4N3lWc4v612fk6HPfa0P8PTdz/B4ZiDrKvciz9P/4TcYJtud7hn73u5DGEJxeXWR9Y116mGdAL3CG4REZ8JoeZZLd3MXdao8f+EnLJYXBjjAeOMN4sxviD+lxTcqm5y/Nsvaxhq1sKapUwvqlMpl8qt5CoUiNfQSNVYreWaWz7FeKbL/joNsc7eP8TP6Gw2G8XVZIvFNLX5pdYFKvbIlrvfCegFVknx15x66nU5yKzmq2qAqa5TZ5N38HGvVAnvvOIBjuGP8HH/LQDD66I7HfSUUi/n30CWJCaK9qDNuMXwOP/FjHnngGzzz2A9JKo9yfYOqoU1UBHOFeUIJX9ne7wOjAArdiq1OW/b+js9z4foc1Xo1Eq3FJqVCidtkMyOP/gDP9ogDx7XJyQKGCSEhAPpLzhfnuLdtNyeuHs/mXnh/UCHo163IZn1T13ydrcyDWNxn5DEtbm2Jv/zWMU5dOUO9A8gLhCAOUFLR6raw67ZPMXnl1X6FoE/3OSvF9wn+JxxnXozFhxvEj5z5LU8c/RaGKZElAykEUp+Fq8+ujN6KsSRpsl2APoUgox9R1Nt1As1WWRoyj8m0dDG57w8gBAIAweX8As++fpil2lWEKykFRT7p7QDIRAZRf6OJ94WlRZ77zkijeEzf7ffTGBCE4Ns++44fwGxO4Jg2lmnGBpLoWvED4l9XzvHGxdOUqmVuFWFI9F1NO4DESzgkbIukcrBUAgQoBPMhYUbLMzl7kvOrF8A3ePgXjzA59Aq+00Qc5DfWePEfYygpkcLQSIQQgODozO9obm9C2gaecnDMBMC84FnGhnq/mz079w4nZichISII4N6WnUzu/2ODydGzv+epPx/C9R1czyahhUxDYXkJlKuiJumw2qlUKrz09pFxhWDq5OW/ZZtEG0ihAQwgKXmzco4vvvg1Xtt7jCa7iXoQ0t/7MGDwo+kRmjt9nISFpUyUoQCoBwE9yS5OL54GmJIIJmbKb+ImHFqTLZEJxg1AapOZ6jvs+eXXWSnlqdVDarWAh+76Mp/u/AxWYJKyXZrcJL6m2UuxLdWOb6c5tfR3gAkBwChju5zPZltlO68vTFM1a+BKjISMfiyrorjH7uU333wJ10yxtrnO0Kv7UV3g+2k8y8E2TQyh6DJ7mP7PG4y9dWScvQxIAASDM5V/5kzTYGf7J0ASIYSIMFKKWebYc2QPh0+NcuCVJyla63hJFzdhk3JcfC/NnemPYUqDo+dezgGDWwPnILkqlYHp0l/pSH+UXe33YBomAEKgEShtUusI+NPyMcptJdLbUijDwFQqas/bvQwplWR4aoRitTjAXnKN8+DbTOSD1YHp9b/QkWrjwe2fo9VuaZxOSmA2JZCWQQgRrvToUhnCimTo+PeZW53X4kzcfCbrYWHKxNjd/m6/J30ntbDK8uZ1NsIynmWTtF1Sms5UOz2p7fhOmjPvneFXZ3+dK1SKkfgth348LEZdM5m9K91Lm/MRutLd2GYCx7SwExZXy0tc31jm5OWTrJRXxoHBuCzc2iCGF+K/LdAHZCIEAPMxU8BEo3Bj/BetLUN6Xm6xxwAAAABJRU5ErkJggg==" alt="Left" style="color:black; width:24px; height: 24px;" onclick="MontreFenetre(-1);"  class="fleche"/>
+	<img id="icoFS" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABsAAAAbCAMAAAC6CgRnAAACTFBMVEVMaXGkrMMBVKADZrD///8BYasAAI3///8BesXN2u3///8Acr7MzMzMzM8Aj9no6Ojs7Ovw7+8GYqwYaLH08/OXpsQAAIQmbbQTkdoAW793ia/z8/MDdsH///8Bf8kMe8ULUpsAVacAAIEAbr2gudwghc0KVp8AT6WiqsBypdljndeHrNj///1ph7jS3u5MaaADarTKzMympqpef7SNnsGVor4Ag84YcLmYq8kditIAAof///8oWZyhqb+Yr9GqwdkAjtkAdsAAbrjl5eUNkdqgv+QUeMEZgsoYYKj///8AYq8AdMMaitIAfMkoc7oLcr0gdb4AXrcCUZsAWbMAU64MYqwAW6osjNIATal4oNDR1uDN2eoAS50ASaXDxcZXcaWzxuDX4vCOqc8AOJXX2twAH4iRn78ANZ4AS5aauN6DlruMoseMmrvR0tQAYsXh6fSTtd0AcMz///6cttjK2u8Kb7nL0vD//v4DbrgCXacne8IAbL57oM+qv90+g8QAAACOrNNLiMaRsNbT2OLV1d/09PTQ0tTx8fEAAADW19fHztvm5ub9/f3///6lsswZUZje3t4aUZjl5eUAAJNie6xpfap+kLXy8vLx9vZme6nx8fi70OsAetJuhK/p6enZ2dkAAJTr7u4AfdIkk9r///+tyer8/Pz19/kTbLX////7+/sAh9QAZbvw8O/6+vfo6ez9/v4BWaMOc70Aecnk5+sEcr0AitXh5Ojc3+QcXqQAgtL5///29vUVUJjq6+vy+/8XXKOttMaxt8ggU5jz9F7fAAAAqXRSTlMA/f7+0f7+Af4QAv55efmCgoL+/oL9/f75/v7+/gT+/v7+/f79/v7+/v7+/v7+/vz+eS3++/v+/vz+/tL+/vwL+f7+gfn6/v7+A/7+/v7+/v7+/v7+/v7+/v7+/v7+Yvv+/vv+Nf3+/v7+/vv7gv7++/7g+/7+Ecv+/v7+/v7+C/v++/4YRo5eBZT+7pnt/v51/ur+/v7+eTf+Jfv9/vNl/kv8+cf3kv7+xmTkKAAAAiBJREFUeF5t0lVXG0EYgOHJppE2AiQkIW7EPbgVaYO7uxSKtUChSN3d3d1n44LX+8e6m2V7TtM+MxfffO85e7UAADn4B7ndAUDx4va/LRZjewaWnnx4V7Dtj/hYsHRtBDAAeDQHN78l2oTXz2PfW4Lv33K5Jdy03YQ0bgn28MC5c+A1nH+z4fWurHgJxLjx7Cm8CB5Cz6x5fmbIlN1Rm5eXV9uRbbbP2E2zB2AqSIWeaQsKP5qiumycLmqWQuvENN5SYLrYgqLWIV20QqFQVNTV9VhR64SYaAfFXYM96PEappLJZCqVNekB+6BFfIZoviO+E8e0rPJSmUxWWs462nUa25yCKSAZ7mxqbND6liOsZRwrEvFpGxqb9hCtpX4hJ2eh7BChDH/Ut2y1VpHT+clJis+i1n0wGSTB3E4Rn1rNp5L41VS+qHOr9bUZ2tvUNB6NRuNhR81rN/D6iCYYy7DlnrUZKg/jKtUZ3TdsGWOZMAnsCgleTcaCge51ZD0cDn9HkCuBYFBwNzMUb/RJvzQo6EX0CILo9b2jMal0lL4fxRqaRX++5l+9N1zYrFKpmguHB7DXg3h7GaDQfz2WSBzjN7/gbo87JJL7hflZ6C3gfhEbEAo1mvy9pHyNRih0rH0dAWAKDf4sohiNRSSjkWL8sRq6DAC4NHXH/zmR/+qFk/Ff0N3P5rg4bDZ+8eNycfrdWMHv/5B7eRUjUZWcAcBv6ufcrcdAZs8AAAAASUVORK5CYII=" alt="FullScreen" style="color:black; width:24px; height: 24px;" onclick="if (isInFullScreenMode) exitFullscreen(); else enterFullscreen(); AdapterTaille(window.innerWidth,window.innerHeight);"  class="fleche"/>
+	
+<!--	<img id="icoLeft" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAFbklEQVR4XoWWbWhcxxWGn5k7d+/X7upKkVpJtqQlTeK2ckiM21LSpAqllJi2VIGWkoTAKhBsXNxa6EdJi6FqQKENqdxAmxIokmnaUhOKTNvgxk0V4aqOiymJK5zUkWXVlhTbsqJdaT+k/bi349sLYkkdn+Fh5s993zNnz3BW8GHxND6Cfk2fJhMhAcF8zJRmgiFy3CT+v8FwJDza6rZlv9T1EN2pHnb4HycMQ01AQMi/197mUvESr107wUrl+jiCQQ5+0Eh+UJx+z/QuPtm7L/vcfT/lwc4v4MsWZq9d4N3lWc4v612fk6HPfa0P8PTdz/B4ZiDrKvciz9P/4TcYJtud7hn73u5DGEJxeXWR9Y116mGdAL3CG4REZ8JoeZZLd3MXdao8f+EnLJYXBjjAeOMN4sxviD+lxTcqm5y/Nsvaxhq1sKapUwvqlMpl8qt5CoUiNfQSNVYreWaWz7FeKbL/joNsc7eP8TP6Gw2G8XVZIvFNLX5pdYFKvbIlrvfCegFVknx15x66nU5yKzmq2qAqa5TZ5N38HGvVAnvvOIBjuGP8HH/LQDD66I7HfSUUi/n30CWJCaK9qDNuMXwOP/FjHnngGzzz2A9JKo9yfYOqoU1UBHOFeUIJX9ne7wOjAArdiq1OW/b+js9z4foc1Xo1Eq3FJqVCidtkMyOP/gDP9ogDx7XJyQKGCSEhAPpLzhfnuLdtNyeuHs/mXnh/UCHo163IZn1T13ydrcyDWNxn5DEtbm2Jv/zWMU5dOUO9A8gLhCAOUFLR6raw67ZPMXnl1X6FoE/3OSvF9wn+JxxnXozFhxvEj5z5LU8c/RaGKZElAykEUp+Fq8+ujN6KsSRpsl2APoUgox9R1Nt1As1WWRoyj8m0dDG57w8gBAIAweX8As++fpil2lWEKykFRT7p7QDIRAZRf6OJ94WlRZ77zkijeEzf7ffTGBCE4Ns++44fwGxO4Jg2lmnGBpLoWvED4l9XzvHGxdOUqmVuFWFI9F1NO4DESzgkbIukcrBUAgQoBPMhYUbLMzl7kvOrF8A3ePgXjzA59Aq+00Qc5DfWePEfYygpkcLQSIQQgODozO9obm9C2gaecnDMBMC84FnGhnq/mz079w4nZichISII4N6WnUzu/2ODydGzv+epPx/C9R1czyahhUxDYXkJlKuiJumw2qlUKrz09pFxhWDq5OW/ZZtEG0ihAQwgKXmzco4vvvg1Xtt7jCa7iXoQ0t/7MGDwo+kRmjt9nISFpUyUoQCoBwE9yS5OL54GmJIIJmbKb+ImHFqTLZEJxg1AapOZ6jvs+eXXWSnlqdVDarWAh+76Mp/u/AxWYJKyXZrcJL6m2UuxLdWOb6c5tfR3gAkBwChju5zPZltlO68vTFM1a+BKjISMfiyrorjH7uU333wJ10yxtrnO0Kv7UV3g+2k8y8E2TQyh6DJ7mP7PG4y9dWScvQxIAASDM5V/5kzTYGf7J0ASIYSIMFKKWebYc2QPh0+NcuCVJyla63hJFzdhk3JcfC/NnemPYUqDo+dezgGDWwPnILkqlYHp0l/pSH+UXe33YBomAEKgEShtUusI+NPyMcptJdLbUijDwFQqas/bvQwplWR4aoRitTjAXnKN8+DbTOSD1YHp9b/QkWrjwe2fo9VuaZxOSmA2JZCWQQgRrvToUhnCimTo+PeZW53X4kzcfCbrYWHKxNjd/m6/J30ntbDK8uZ1NsIynmWTtF1Sms5UOz2p7fhOmjPvneFXZ3+dK1SKkfgth348LEZdM5m9K91Lm/MRutLd2GYCx7SwExZXy0tc31jm5OWTrJRXxoHBuCzc2iCGF+K/LdAHZCIEAPMxU8BEo3Bj/BetLUN6Xm6xxwAAAABJRU5ErkJggg==" alt="Left" style="color:black; width:24px; height: 24px;" onclick="MontreFenetre(-1);"  class="fleche"/>
 	<img id="icoLeft" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAFmklEQVR4XpWWa2wcVxmGnzlz2dmZ3fXYu7Zcrx2vU0JCE9RtE6hUKpFeKBdREVSJIkpJoiAigtI4lYra8iN2VcqtwaXQBKGiGghtfyBcEVEBaZs4baBRabKhBcVp4qwT4viyTnedXdu7s7PDzFEdoaIo4T16debX857vO590hivqMbJ8lz4eZ4jvsZ8fBP4hQ/yIPp4gyxWkcDk9yoaYEduRbb0xs6L5IyTNFF32Enx8zlTyFKrTjMwe51gpl694lX62M3h1Af1kUXj2i9fenb2z6zMYIsLFapm52hzlYG/4PlYkSkSLYBs2VX+BV6f28ceJvTkUNnI/ucsFSHib1bZ/6/XbnbTdyXS5wPTFAq7n4tEI4NKyiuALIQQpO0kqlmKiOs4z+Z8XZ2qFW9lK7oMBEp5J9Ox/aM13HBqCsQtjzLsLeBLqyb26UJVg1dQuhfgKGKrO0mQGhM/OE98vzrhByLdkCAIJxwn6PbRp5TckfLRw+n24J+16dQrnpkl4MZq8OIXxaWq41IWHK+qU/Tn+OXMc1/f4Ws8mx1KtIXbhXKqAR+kLer7jru51HJ88Qc2rUZdwacqzZT7esZptn98CwL63X2Xglaex03EQyCrARxUq17etYv/kPl6e+FM/W+gTAEHft63ruZvx2fP/A68rgRt1Wp0ki/rUR29j2x1bKE6+h6vWqeseruaxIGqcqoxxa/pOolp0G7txBI+xIRhFp+pVmSlfwPsAPFy+Aa+ffINytcKiPr3qdh64bStn82cZLY0xuTDFTO0CI6V3Kbolssk1DrBOQ+GTN7auoThfeh/ckBNTKc/h1mt4osGCv8BrkyPc9Yt7GPr6b3GiTQB89ro7KMwX2Ly3F7VdB6EAPjW/hq3HCNlhQGa5s4LRQp4GcjFbKNEWTXHTqjVU6vOMV87zse7VoMLw6CG+sPJzLOq+1V9GVQVbX3oQrd3AF1DxKixzlgJkwgAnnO16w710+lKxyDObfoZt2lyNvpL9EucvTvCTo7tQW3V0TSWi6wCOrMD3fRqEbnD6vTGGTx2U8P9HPS3dWLqJbkawNZOIZhCyNQQ5H39tWMXI1LscGDsEeoONg99k/S33ggKKoiACh7tjNrGy/Tr+WycKJ3jyb0/R0uGAoWCrUUzDAMhpKBTPVMY4WzzHgdHXQVcgpTL4r+cZHHkBoQl0VQ0yNVJWC7/76gtU3QaLOnnhJA/8uRdriYmIqIQHvSbSzqxbBCiGAcMHzx1cp5RNEAoIQAcSKoqpoGoamqfRXE6w557n6GlezlzNAwjaeYodw98m3m1hWAaKAl6jQafdwVvjfwcYFii8mJs9QlM0QSrWIkOkVeQuhEDU4L4bNpJxljNfa0gfD9rZ99pDxDM2zc0JHCsWOE463k4q2syx6RzAiwoAAzz7Cev2DdQ1Do0fBlMBS6AaAkPTicxp3Nuznt6bHwbgTOkUT7z5CE0ZiyYngR0JL1WXd5TWuhgtjLHz8MAgm9koAFDoz1UPF5usGKvCCxRIK4SXK1DjGn8Z3cvuN3fyy6NP8fhfH8Ts1LHjloQnojbNdoJliQ9haVF+886eItCPxAD0kq9Q3v5O9QjXtmRYkVyGlJwgELqg1uby0uTveXnmD6idQvZcUzVZYdSIkLG7Sdsd7Hn7eaYq09vZTP5SgNT9DJ5xTw8enXuD5UHALemb5GkWpWgKWouOkYzIQAWkDUWnU1+Cozbz40M/5ZXRA2FrBi//ZD5Nb5PePHBD8mZazCQT81OU6kU8pY6qKcRNi9ZYC+2xVrriHYHT5Eun+fU/ngumKh+e/MkrP/q7yAID11hda5cmPkza7iIeiWHqBqYRIapHUESDc3P/5sjEW+Qmjx0AQnju6v8qAHbLoPUorI3piWzCSMixvejOUqoWc0AI/pUEX0b/AfE4VpRFbkl6AAAAAElFTkSuQmCC" alt="right" style="color:black; width:24px; height: 24px;" onclick="MontreFenetre(1);"  class="fleche"/>
-<!--	<input onclick="MontreFenetre(-1);" class="fleche" value="&#x21E6;" type="button"/>	
-	<input onclick="MontreFenetre(1);" class="fleche" value="&#x21E8;" type="button"/> -->
-	</td></tr></table>
+-->	</td></tr></table>
 	</div>
 	<textarea disabled="disabled" style="visibility: hidden; border:0;" id="sortie"></textarea>
 	<canvas style="visibility: hidden;" id="mycanvas" width="480" height="300"></canvas>
@@ -8498,23 +8529,22 @@ Lock/unlock a window and split the screen in two parts.
 Name of the current window
 </td>
 </tr>
+<!--
 <tr>
 <th>
 <img id="MemLeft" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAFbklEQVR4XoWWbWhcxxWGn5k7d+/X7upKkVpJtqQlTeK2ckiM21LSpAqllJi2VIGWkoTAKhBsXNxa6EdJi6FqQKENqdxAmxIokmnaUhOKTNvgxk0V4aqOiymJK5zUkWXVlhTbsqJdaT+k/bi349sLYkkdn+Fh5s993zNnz3BW8GHxND6Cfk2fJhMhAcF8zJRmgiFy3CT+v8FwJDza6rZlv9T1EN2pHnb4HycMQ01AQMi/197mUvESr107wUrl+jiCQQ5+0Eh+UJx+z/QuPtm7L/vcfT/lwc4v4MsWZq9d4N3lWc4v612fk6HPfa0P8PTdz/B4ZiDrKvciz9P/4TcYJtud7hn73u5DGEJxeXWR9Y116mGdAL3CG4REZ8JoeZZLd3MXdao8f+EnLJYXBjjAeOMN4sxviD+lxTcqm5y/Nsvaxhq1sKapUwvqlMpl8qt5CoUiNfQSNVYreWaWz7FeKbL/joNsc7eP8TP6Gw2G8XVZIvFNLX5pdYFKvbIlrvfCegFVknx15x66nU5yKzmq2qAqa5TZ5N38HGvVAnvvOIBjuGP8HH/LQDD66I7HfSUUi/n30CWJCaK9qDNuMXwOP/FjHnngGzzz2A9JKo9yfYOqoU1UBHOFeUIJX9ne7wOjAArdiq1OW/b+js9z4foc1Xo1Eq3FJqVCidtkMyOP/gDP9ogDx7XJyQKGCSEhAPpLzhfnuLdtNyeuHs/mXnh/UCHo163IZn1T13ydrcyDWNxn5DEtbm2Jv/zWMU5dOUO9A8gLhCAOUFLR6raw67ZPMXnl1X6FoE/3OSvF9wn+JxxnXozFhxvEj5z5LU8c/RaGKZElAykEUp+Fq8+ujN6KsSRpsl2APoUgox9R1Nt1As1WWRoyj8m0dDG57w8gBAIAweX8As++fpil2lWEKykFRT7p7QDIRAZRf6OJ94WlRZ77zkijeEzf7ffTGBCE4Ns++44fwGxO4Jg2lmnGBpLoWvED4l9XzvHGxdOUqmVuFWFI9F1NO4DESzgkbIukcrBUAgQoBPMhYUbLMzl7kvOrF8A3ePgXjzA59Aq+00Qc5DfWePEfYygpkcLQSIQQgODozO9obm9C2gaecnDMBMC84FnGhnq/mz079w4nZichISII4N6WnUzu/2ODydGzv+epPx/C9R1czyahhUxDYXkJlKuiJumw2qlUKrz09pFxhWDq5OW/ZZtEG0ihAQwgKXmzco4vvvg1Xtt7jCa7iXoQ0t/7MGDwo+kRmjt9nISFpUyUoQCoBwE9yS5OL54GmJIIJmbKb+ImHFqTLZEJxg1AapOZ6jvs+eXXWSnlqdVDarWAh+76Mp/u/AxWYJKyXZrcJL6m2UuxLdWOb6c5tfR3gAkBwChju5zPZltlO68vTFM1a+BKjISMfiyrorjH7uU333wJ10yxtrnO0Kv7UV3g+2k8y8E2TQyh6DJ7mP7PG4y9dWScvQxIAASDM5V/5kzTYGf7J0ASIYSIMFKKWebYc2QPh0+NcuCVJyla63hJFzdhk3JcfC/NnemPYUqDo+dezgGDWwPnILkqlYHp0l/pSH+UXe33YBomAEKgEShtUusI+NPyMcptJdLbUijDwFQqas/bvQwplWR4aoRitTjAXnKN8+DbTOSD1YHp9b/QkWrjwe2fo9VuaZxOSmA2JZCWQQgRrvToUhnCimTo+PeZW53X4kzcfCbrYWHKxNjd/m6/J30ntbDK8uZ1NsIynmWTtF1Sms5UOz2p7fhOmjPvneFXZ3+dK1SKkfgth348LEZdM5m9K91Lm/MRutLd2GYCx7SwExZXy0tc31jm5OWTrJRXxoHBuCzc2iCGF+K/LdAHZCIEAPMxU8BEo3Bj/BetLUN6Xm6xxwAAAABJRU5ErkJggg==" alt="Left" style="color:black; width:24px; height: 24px;"  class="fleche"/>
-<img id="MemRight" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAFmklEQVR4XpWWa2wcVxmGnzlz2dmZ3fXYu7Zcrx2vU0JCE9RtE6hUKpFeKBdREVSJIkpJoiAigtI4lYra8iN2VcqtwaXQBKGiGghtfyBcEVEBaZs4baBRabKhBcVp4qwT4viyTnedXdu7s7PDzFEdoaIo4T16debX857vO590hivqMbJ8lz4eZ4jvsZ8fBP4hQ/yIPp4gyxWkcDk9yoaYEduRbb0xs6L5IyTNFF32Enx8zlTyFKrTjMwe51gpl694lX62M3h1Af1kUXj2i9fenb2z6zMYIsLFapm52hzlYG/4PlYkSkSLYBs2VX+BV6f28ceJvTkUNnI/ucsFSHib1bZ/6/XbnbTdyXS5wPTFAq7n4tEI4NKyiuALIQQpO0kqlmKiOs4z+Z8XZ2qFW9lK7oMBEp5J9Ox/aM13HBqCsQtjzLsLeBLqyb26UJVg1dQuhfgKGKrO0mQGhM/OE98vzrhByLdkCAIJxwn6PbRp5TckfLRw+n24J+16dQrnpkl4MZq8OIXxaWq41IWHK+qU/Tn+OXMc1/f4Ws8mx1KtIXbhXKqAR+kLer7jru51HJ88Qc2rUZdwacqzZT7esZptn98CwL63X2Xglaex03EQyCrARxUq17etYv/kPl6e+FM/W+gTAEHft63ruZvx2fP/A68rgRt1Wp0ki/rUR29j2x1bKE6+h6vWqeseruaxIGqcqoxxa/pOolp0G7txBI+xIRhFp+pVmSlfwPsAPFy+Aa+ffINytcKiPr3qdh64bStn82cZLY0xuTDFTO0CI6V3Kbolssk1DrBOQ+GTN7auoThfeh/ckBNTKc/h1mt4osGCv8BrkyPc9Yt7GPr6b3GiTQB89ro7KMwX2Ly3F7VdB6EAPjW/hq3HCNlhQGa5s4LRQp4GcjFbKNEWTXHTqjVU6vOMV87zse7VoMLw6CG+sPJzLOq+1V9GVQVbX3oQrd3AF1DxKixzlgJkwgAnnO16w710+lKxyDObfoZt2lyNvpL9EucvTvCTo7tQW3V0TSWi6wCOrMD3fRqEbnD6vTGGTx2U8P9HPS3dWLqJbkawNZOIZhCyNQQ5H39tWMXI1LscGDsEeoONg99k/S33ggKKoiACh7tjNrGy/Tr+WycKJ3jyb0/R0uGAoWCrUUzDAMhpKBTPVMY4WzzHgdHXQVcgpTL4r+cZHHkBoQl0VQ0yNVJWC7/76gtU3QaLOnnhJA/8uRdriYmIqIQHvSbSzqxbBCiGAcMHzx1cp5RNEAoIQAcSKoqpoGoamqfRXE6w557n6GlezlzNAwjaeYodw98m3m1hWAaKAl6jQafdwVvjfwcYFii8mJs9QlM0QSrWIkOkVeQuhEDU4L4bNpJxljNfa0gfD9rZ99pDxDM2zc0JHCsWOE463k4q2syx6RzAiwoAAzz7Cev2DdQ1Do0fBlMBS6AaAkPTicxp3Nuznt6bHwbgTOkUT7z5CE0ZiyYngR0JL1WXd5TWuhgtjLHz8MAgm9koAFDoz1UPF5usGKvCCxRIK4SXK1DjGn8Z3cvuN3fyy6NP8fhfH8Ts1LHjloQnojbNdoJliQ9haVF+886eItCPxAD0kq9Q3v5O9QjXtmRYkVyGlJwgELqg1uby0uTveXnmD6idQvZcUzVZYdSIkLG7Sdsd7Hn7eaYq09vZTP5SgNT9DJ5xTw8enXuD5UHALemb5GkWpWgKWouOkYzIQAWkDUWnU1+Cozbz40M/5ZXRA2FrBi//ZD5Nb5PePHBD8mZazCQT81OU6kU8pY6qKcRNi9ZYC+2xVrriHYHT5Eun+fU/ngumKh+e/MkrP/q7yAID11hda5cmPkza7iIeiWHqBqYRIapHUESDc3P/5sjEW+Qmjx0AQnju6v8qAHbLoPUorI3piWzCSMixvejOUqoWc0AI/pUEX0b/AfE4VpRFbkl6AAAAAElFTkSuQmCC" alt="Right" style="color:black; width:24px; height: 24px;"  class="fleche"/><!--
-<input class="fleche" value="&#8678;" type="button"/>	
-<input class="fleche" value="&#8680;" type="button"/>
--->
+<img id="MemRight" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAFmklEQVR4XpWWa2wcVxmGnzlz2dmZ3fXYu7Zcrx2vU0JCE9RtE6hUKpFeKBdREVSJIkpJoiAigtI4lYra8iN2VcqtwaXQBKGiGghtfyBcEVEBaZs4baBRabKhBcVp4qwT4viyTnedXdu7s7PDzFEdoaIo4T16debX857vO590hivqMbJ8lz4eZ4jvsZ8fBP4hQ/yIPp4gyxWkcDk9yoaYEduRbb0xs6L5IyTNFF32Enx8zlTyFKrTjMwe51gpl694lX62M3h1Af1kUXj2i9fenb2z6zMYIsLFapm52hzlYG/4PlYkSkSLYBs2VX+BV6f28ceJvTkUNnI/ucsFSHib1bZ/6/XbnbTdyXS5wPTFAq7n4tEI4NKyiuALIQQpO0kqlmKiOs4z+Z8XZ2qFW9lK7oMBEp5J9Ox/aM13HBqCsQtjzLsLeBLqyb26UJVg1dQuhfgKGKrO0mQGhM/OE98vzrhByLdkCAIJxwn6PbRp5TckfLRw+n24J+16dQrnpkl4MZq8OIXxaWq41IWHK+qU/Tn+OXMc1/f4Ws8mx1KtIXbhXKqAR+kLer7jru51HJ88Qc2rUZdwacqzZT7esZptn98CwL63X2Xglaex03EQyCrARxUq17etYv/kPl6e+FM/W+gTAEHft63ruZvx2fP/A68rgRt1Wp0ki/rUR29j2x1bKE6+h6vWqeseruaxIGqcqoxxa/pOolp0G7txBI+xIRhFp+pVmSlfwPsAPFy+Aa+ffINytcKiPr3qdh64bStn82cZLY0xuTDFTO0CI6V3Kbolssk1DrBOQ+GTN7auoThfeh/ckBNTKc/h1mt4osGCv8BrkyPc9Yt7GPr6b3GiTQB89ro7KMwX2Ly3F7VdB6EAPjW/hq3HCNlhQGa5s4LRQp4GcjFbKNEWTXHTqjVU6vOMV87zse7VoMLw6CG+sPJzLOq+1V9GVQVbX3oQrd3AF1DxKixzlgJkwgAnnO16w710+lKxyDObfoZt2lyNvpL9EucvTvCTo7tQW3V0TSWi6wCOrMD3fRqEbnD6vTGGTx2U8P9HPS3dWLqJbkawNZOIZhCyNQQ5H39tWMXI1LscGDsEeoONg99k/S33ggKKoiACh7tjNrGy/Tr+WycKJ3jyb0/R0uGAoWCrUUzDAMhpKBTPVMY4WzzHgdHXQVcgpTL4r+cZHHkBoQl0VQ0yNVJWC7/76gtU3QaLOnnhJA/8uRdriYmIqIQHvSbSzqxbBCiGAcMHzx1cp5RNEAoIQAcSKoqpoGoamqfRXE6w557n6GlezlzNAwjaeYodw98m3m1hWAaKAl6jQafdwVvjfwcYFii8mJs9QlM0QSrWIkOkVeQuhEDU4L4bNpJxljNfa0gfD9rZ99pDxDM2zc0JHCsWOE463k4q2syx6RzAiwoAAzz7Cev2DdQ1Do0fBlMBS6AaAkPTicxp3Nuznt6bHwbgTOkUT7z5CE0ZiyYngR0JL1WXd5TWuhgtjLHz8MAgm9koAFDoz1UPF5usGKvCCxRIK4SXK1DjGn8Z3cvuN3fyy6NP8fhfH8Ts1LHjloQnojbNdoJliQ9haVF+886eItCPxAD0kq9Q3v5O9QjXtmRYkVyGlJwgELqg1uby0uTveXnmD6idQvZcUzVZYdSIkLG7Sdsd7Hn7eaYq09vZTP5SgNT9DJ5xTw8enXuD5UHALemb5GkWpWgKWouOkYzIQAWkDUWnU1+Cozbz40M/5ZXRA2FrBi//ZD5Nb5PePHBD8mZazCQT81OU6kU8pY6qKcRNi9ZYC+2xVrriHYHT5Eun+fU/ngumKh+e/MkrP/q7yAID11hda5cmPkza7iIeiWHqBqYRIapHUESDc3P/5sjEW+Qmjx0AQnju6v8qAHbLoPUorI3piWzCSMixvejOUqoWc0AI/pUEX0b/AfE4VpRFbkl6AAAAAElFTkSuQmCC" alt="Right" style="color:black; width:24px; height: 24px;"  class="fleche"/>
 </th>
 <td>
 Navigate through windows
 </td>
 </tr>
+-->
 </table>
 </div>
 	</form>
-<div style="visibility: hidden;" id="weboutput"><iframe id="frameweboutput"></iframe></div>
-<div style="visibility: hidden;" id="credits">
+<div style="visibility: hidden; overflow: auto;" id="weboutput"><iframe id="frameweboutput"></iframe></div>
+<div style="visibility: hidden; overflow: auto;" id="credits">
 <h1>Developer</h1>
 <ul>
 <li>J&eacute;r&eacute;mie Bourdon</li>
@@ -10830,7 +10860,7 @@ Ecrire(Puissance(2, -5));
 
 </textarea>
 </div>
-<div id="GestionFichiers">
+<div id="GestionFichiers" style="height: 100%; overflow: scroll;">
 <span class="bonglet" id="bonglet1" style="background-color: rgb(150,150,150);" onclick="builtin_ong.style.display='none'; builtin_bong.style.backgroundColor='rgb(255,255,255)'; builtin_ong=GEBID('onglet1'); builtin_bong=GEBID('bonglet1'); builtin_ong.style.display='block'; builtin_bong.style.backgroundColor='rgb(150,150,150)';">Internal FS</span><span class="bonglet" id="bonglet2" onclick="builtin_ong.style.display='none'; builtin_bong.style.backgroundColor='rgb(255,255,255)'; builtin_ong=GEBID('onglet2'); builtin_bong=GEBID('bonglet2'); builtin_ong.style.display='block'; builtin_bong.style.backgroundColor='rgb(150,150,150)';">Mail</span><span class="bonglet" id="bonglet3" onclick="builtin_ong.style.display='none'; builtin_bong.style.backgroundColor='rgb(255,255,255)'; builtin_ong=GEBID('onglet3'); builtin_bong=GEBID('bonglet3'); builtin_ong.style.display='block'; builtin_bong.style.backgroundColor='rgb(150,150,150)';">External FS</span><span class="bonglet" id="bonglet4" onclick="builtin_ong.style.display='none'; builtin_bong.style.backgroundColor='rgb(255,255,255)'; builtin_ong=GEBID('onglet4'); builtin_bong=GEBID('bonglet4'); builtin_ong.style.display='block'; builtin_bong.style.backgroundColor='rgb(150,150,150)';">Create App</span>
 <div id="onglet1">
 <h1>Internal Filesystem</h1>
@@ -10852,34 +10882,71 @@ onchange="GEBID('filecontent').innerHTML='<pre>'+window.localStorage[GEBID('inte
 <td>
 <div id="filecontent" style="background-color: rgb(100,100,100); color: yellow; font-family: fixed; font-size: 0.8em; width:600px; height:300px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;"></div>
 </td>
-</tr></table></div>
+</tr></table>
+<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+<br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+<br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+<br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+<br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+<br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+<br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+<br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+<br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+<br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+</div>
 </div>
 <div id="onglet2" style="display: none;">
 <h1>Send by e-mail</h1>
 <div>
 <input type="text" value="your mail address" id="sendmail" /><input type="button" value="Send" onclick="if (GEBID('sendmail').value.indexOf('@')) {GEBID('lecode').value = editor.getValue();; window.open('mailto:'+GEBID('sendmail').value+'?subject=[AlgoScript%20project]&body='+window.encodeURIComponent(GEBID('lecode').value));} else alert('Error: Invalid mail address !');"/>
-<br /><br /></div>
+<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br /><br />
+<br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+<br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+<br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+<br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+<br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+<br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+<br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+<br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+<br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+</div>
 </div>
 <div id="onglet3" style="display: none;">
 <h1>Load from an external filesystem</h1>
 <div>
 <input type="file" id="ExternalFilename" /><input type="button" value="Load" onclick="readExternal(GEBID('ExternalFilename'),1); MontreFenetre(-8);"/><input type="button" value="Load in Text Entry" onclick="readExternal(GEBID('ExternalFilename'),2); MontreFenetre(-5);"/><input type="button" value="Data file to Internal FS" onclick="readDataToIFS(GEBID('ExternalFilename')); UpdateFS();"/><input type="button" value="Import as Library" onclick="readExternal(GEBID('ExternalFilename'),3); setTimeout('UpdateFS()',1000);"/>
-<br /><br /></div>
+<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br /><br />
+<br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+<br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+<br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+<br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+<br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+<br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+<br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+<br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+<br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+</div>
 </div>
 <div id="onglet4" style="display: none; color:white;">
 <h1>Create a standalone application</h1>
 <div>
+<table>
+<tr><td colspan="2">
+<input type="button" value="Create App" onclick="var style_standalone=1; if (GEBID('style_standalone2').checked) style_standalone=2; if (GEBID('style_standalone3').checked) style_standalone=3; if (GEBID('style_standalone4').checked) style_standalone=4; var options_standalone=GEBID('internalFS_standalone').options; var allselected=[]; var nbselected=0; for(var i=0; i<options_standalone.length; i++) if (options_standalone[i].selected) allselected[nbselected++]=options_standalone[i].value; var w=window.open(); w.document.write(createStandaloneApp(editor.getValue(),GEBID('name_standalone').value,style_standalone, allselected)); w.document.close();"/>
+<input type="button" value="Create only a standalone Library" onclick="var style_standalone=1; var options_standalone=GEBID('internalFS_standalone').options; var allselected=[]; var nbselected=0; for(var i=0; i<options_standalone.length; i++) if (options_standalone[i].selected) allselected[nbselected++]=options_standalone[i].value; var w=window.open(); w.document.open('text/plain'); w.document.write(createLibraryApp(editor.getValue(),GEBID('name_standalone').value,style_standalone, allselected)); w.document.close();"/><br /><br /></div>
+</td></tr>
+<tr><td style="width: 50%; vertical-align: top; text-align: left;">
 <h2>Application title</h2><input type="text" id="name_standalone" value="Standalone application"/><br/>
 <h2>Application style</h2>
 <input type="radio" id="style_standalone1" name="style_standalone" checked>Text only<br/>
 <input type="radio" id="style_standalone2" name="style_standalone">Text + Graphics<br/>
 <input type="radio" id="style_standalone3" name="style_standalone">Graphics only<br/>
 <input type="radio" id="style_standalone4" name="style_standalone">HTML output div only<br/>
+</td><td  style="width: 50%; vertical-align: top; text-align: left;">
 <h2>Files to be included</h2>
 <select id="internalFS_standalone" size="10" style="width: 300px;" multiple="multiple"></select>
-<br/><br/><br/>
-<input type="button" value="Create App" onclick="var style_standalone=1; if (GEBID('style_standalone2').checked) style_standalone=2; if (GEBID('style_standalone3').checked) style_standalone=3; if (GEBID('style_standalone4').checked) style_standalone=4; var options_standalone=GEBID('internalFS_standalone').options; var allselected=[]; var nbselected=0; for(var i=0; i<options_standalone.length; i++) if (options_standalone[i].selected) allselected[nbselected++]=options_standalone[i].value; var w=window.open(); w.document.write(createStandaloneApp(editor.getValue(),GEBID('name_standalone').value,style_standalone, allselected)); w.document.close();"/>
-<input type="button" value="Create only a standalone Library" onclick="var style_standalone=1; var options_standalone=GEBID('internalFS_standalone').options; var allselected=[]; var nbselected=0; for(var i=0; i<options_standalone.length; i++) if (options_standalone[i].selected) allselected[nbselected++]=options_standalone[i].value; var w=window.open(); w.document.open('text/plain'); w.document.write(createLibraryApp(editor.getValue(),GEBID('name_standalone').value,style_standalone, allselected)); w.document.close();"/><br /><br /></div>
+</td></tr>
+</table>
 </div>
 <br />
 <br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
