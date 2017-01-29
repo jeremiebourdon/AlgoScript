@@ -4,7 +4,11 @@
   <meta charset="utf-8">
 <script type="text/javascript" id="globalevalfunction">
 //<!--
+
 var globaleval = function(script) {
+  window.MouseClick=function (x,y) {};
+  window.MouseMove=function (x,y) {};
+  window.Keypressed=function (x) {};
   if (window.execScript) {
     return window.execScript(script);
   } else if (navigator.userAgent.indexOf('KHTML') != -1) { //safari, konqueror..
@@ -29,14 +33,116 @@ function getQuerystring(key, default_)
     return qs[1];
 }
 
-var mybaseurl='https://dl.dropboxusercontent.com/u/1961350/';
+
+/*
+
+// Tentative (succès) d'authentification
+
+(function(window){
+  window.utils = {
+    parseQueryString: function(str) {
+      var ret = Object.create(null);
+
+      if (typeof str !== 'string') {
+        return ret;
+      }
+
+      str = str.trim().replace(/^(\?|#|&)/, '');
+
+      if (!str) {
+        return ret;
+      }
+
+      str.split('&').forEach(function (param) {
+        var parts = param.replace(/\+/g, ' ').split('=');
+        // Firefox (pre 40) decodes `%3D` to `=`
+        // https://github.com/sindresorhus/query-string/pull/37
+        var key = parts.shift();
+        var val = parts.length > 0 ? parts.join('=') : undefined;
+
+        key = decodeURIComponent(key);
+        val = val === undefined ? null : decodeURIComponent(val);
+
+        if (ret[key] === undefined) {
+          ret[key] = val;
+        } else if (Array.isArray(ret[key])) {
+          ret[key].push(val);
+        } else {
+          ret[key] = [ret[key], val];
+        }
+      });
+
+      return ret;
+    }
+  };
+})(window);
+
+
+var CLIENT_ID = '9i1w6khg9467g15';
+
+// Parses the url and gets the access token if it is in the urls hash
+
+
+function getAccessTokenFromUrl() {
+  return utils.parseQueryString(window.location.hash).access_token;
+}
+
+// If the user was just redirected from authenticating, the urls hash will
+// contain the access token.
+
+
+function isAuthenticated() {
+  return !!getAccessTokenFromUrl();
+}
+
+// Render a list of items to #files
+
+
+function renderItems(items) {
+  items.forEach(function(item) {
+    Ecrire(item.name);
+  });
+}
+
+// This example keeps both the authenticate and non-authenticated setions
+// in the DOM and uses this function to show/hide the correct section.
+
+
+if (isAuthenticated()) {
+  // Create an instance of Dropbox with the access token and use it to
+  // fetch and render the files in the users root directory.
+  var dbx = new Dropbox({
+    accessToken: getAccessTokenFromUrl()
+  });
+  dbx.filesListFolder({
+    path: ''
+  }).then(function(response) {
+    renderItems(response.entries);
+  }).catch (function(error) {
+    console.log(error);
+  });
+} else {
+
+  // Set the login anchors href using dbx.getAuthenticationUrl()
+  var dbx = new Dropbox({
+    clientId: CLIENT_ID
+  });
+  var authUrl = dbx.getAuthenticationUrl(window.location);
+  window.location = authUrl;
+}
+*/
+
+
+
+var mybaseurl='https://algoscript.info/';
+var mybaseurl='';
 
 
 var defaultEnvironmentLanguage = 'french';
-var defaultDropbox = 'ask';
+var defaultDropbox = 'off';
 var DropboxAppID=getQuerystring('dropboxid', '9i1w6khg9467g15');
 var evalligne=17;
-var builtin_nbprompt=0; 
+var builtin_nbprompt=0;
 
 var ConfigurationFile,MustCreateAlgoScriptConfigflag=false;
 if (typeof(window.localStorage['AlgoScript.config']) != 'undefined')
@@ -45,6 +151,7 @@ else {
    ConfigurationFile = '';
    MustCreateAlgoScriptConfigflag=true;
 }
+if (getQuerystring('noext', 'no') == 'yes') ConfigurationFile = '';
 var ConfigTable = ConfigurationFile.split('\n');
 var AllExtensions = [];
 var nbextensions = -1;
@@ -78,7 +185,10 @@ for (var i = 0; i < (AllExtensions.length); i++) {
   var enabled = (AllExtensions[i]['ENABLED'][0].search(/yes/i) >= 0);
   if ((AllExtensions[i]['NAME'] == 'Jappix tool') && (getQuerystring('chat') == 'on')) {
   enabled = true;
-} 
+}
+if ((AllExtensions[i]['NAME'] == 'Python extension') && (getQuerystring('python') == 'on')) {
+enabled = true;
+}
   if (AllExtensions[i]['ENABLED'][0].search(/ask/i) >= 0) enabled = confirm('Do you want to enable\n' + AllExtensions[i]['TITLE'][0] + ' ?');
   if (enabled) {
     if (typeof(AllExtensions[i]['JSURL']) != 'undefined') {
@@ -106,138 +216,146 @@ initialcontent+='\n';
 initialcontent+='[Openstreetmap extension]\n';
 initialcontent+='TITLE=Extension pour OpenStreetMap (leaflet.js)\n';
 initialcontent+='ENABLED=no\n';
-initialcontent+='JSURL=https://dl.dropboxusercontent.com/u/1961350/leaflet.js\n';
-initialcontent+='CSSURL=https://dl.dropboxusercontent.com/u/1961350/leaflet.css\n';
+initialcontent+='JSURL=https://algoscript.info/leaflet.js\n';
+initialcontent+='CSSURL=https://algoscript.info/leaflet.css\n';
 initialcontent+='\n';
 initialcontent+='[WebGL extension]\n';
 initialcontent+='TITLE=Extension pour WebGL (three.js)\n';
 initialcontent+='ENABLED=no\n';
-initialcontent+='JSURL=https://dl.dropboxusercontent.com/u/1961350/three.min.js\n';
+initialcontent+='JSURL=https://algoscript.info/three.min.js\n';
 initialcontent+='\n';
 initialcontent+='[Protovis extension]\n';
 initialcontent+='TITLE=Extension Protovis pour la visualisation de données http://mbostock.github.io/protovis/\n';
 initialcontent+='ENABLED=no\n';
-initialcontent+='JSURL=https://dl.dropboxusercontent.com/u/1961350/protovis.min.js\n';
+initialcontent+='JSURL=https://algoscript.info/protovis.min.js\n';
 initialcontent+='\n';
 initialcontent+='[Sylvester extension]\n';
 initialcontent+='TITLE=Extension Sylvester pour le calcul algébrique http://sylvester.jcoglan.com\n';
 initialcontent+='ENABLED=no\n';
-initialcontent+='JSURL=https://dl.dropboxusercontent.com/u/1961350/sylvester.js\n';
+initialcontent+='JSURL=https://algoscript.info/sylvester.js\n';
 initialcontent+='\n';
 initialcontent+='[RSA extension]\n';
 initialcontent+='TITLE=Extension Calcul de RSA par Dave Shapiro http://www.ohdave.com/\n';
 initialcontent+='ENABLED=no\n';
-initialcontent+='JSURL=https://dl.dropboxusercontent.com/u/1961350/BigInt.js\n';
-initialcontent+='JSURL=https://dl.dropboxusercontent.com/u/1961350/Barrett.js\n';
-initialcontent+='JSURL=https://dl.dropboxusercontent.com/u/1961350/RSA.js\n';
+initialcontent+='JSURL=https://algoscript.info/BigInt.js\n';
+initialcontent+='JSURL=https://algoscript.info/Barrett.js\n';
+initialcontent+='JSURL=https://algoscript.info/RSA.js\n';
 initialcontent+='\n';
 initialcontent+='[Arbor extension]\n';
 initialcontent+='TITLE=Extension pour la visualisation de graphes (arbor.js)\n';
 initialcontent+='ENABLED=no\n';
-initialcontent+='JSURL=https://dl.dropboxusercontent.com/u/1961350/jquery-2.0.3.min.js\n';
-initialcontent+='JSURL=https://dl.dropboxusercontent.com/u/1961350/arbor.js\n';
-initialcontent+='JSURL=https://dl.dropboxusercontent.com/u/1961350/arbor-tween.js\n';
+initialcontent+='JSURL=https://algoscript.info/jquery-2.0.3.min.js\n';
+initialcontent+='JSURL=https://algoscript.info/arbor.js\n';
+initialcontent+='JSURL=https://algoscript.info/arbor-tween.js\n';
 initialcontent+='\n';
 initialcontent+='[Processing extension]\n';
 initialcontent+='TITLE=Extension Processing 1.4.1 (processing.js)\n';
 initialcontent+='ENABLED=no\n';
-initialcontent+='JSURL=https://dl.dropboxusercontent.com/u/1961350/processing-1.4.1.min.js\n';
-initialcontent+='JSURL=https://dl.dropboxusercontent.com/u/1961350/Processing_post.js\n';
+initialcontent+='JSURL=https://algoscript.info/processing-1.4.1.min.js\n';
+initialcontent+='JSURL=https://algoscript.info/Processing_post.js\n';
 initialcontent+='\n';
 initialcontent+='[Dracula extension]\n';
 initialcontent+='TITLE=Extension Dracula for drawing graphs\n';
 initialcontent+='ENABLED=no\n';
-initialcontent+='JSURL=https://dl.dropboxusercontent.com/u/1961350/Dracula/raphael-min.js\n';
-initialcontent+='JSURL=https://dl.dropboxusercontent.com/u/1961350/Dracula/dracula_graffle.js\n';
-initialcontent+='JSURL=https://dl.dropboxusercontent.com/u/1961350/Dracula/jquery-1.4.2.min.js\n';
-initialcontent+='JSURL=https://dl.dropboxusercontent.com/u/1961350/Dracula/dracula_graph.js\n';
-initialcontent+='JSURL=https://dl.dropboxusercontent.com/u/1961350/Dracula/dracula_algorithms.js\n';
+initialcontent+='JSURL=https://algoscript.info/Dracula/raphael-min.js\n';
+initialcontent+='JSURL=https://algoscript.info/Dracula/dracula_graffle.js\n';
+initialcontent+='JSURL=https://algoscript.info/Dracula/jquery-1.4.2.min.js\n';
+initialcontent+='JSURL=https://algoscript.info/Dracula/dracula_graph.js\n';
+initialcontent+='JSURL=https://algoscript.info/Dracula/dracula_algorithms.js\n';
 initialcontent+='\n';
 
 initialcontent+='[Common Lisp extension]\n';
 initialcontent+='TITLE=Extension Common Lisp (Javasthcript.js)\n';
 initialcontent+='ENABLED=no\n';
-initialcontent+='JSURL=https://dl.dropboxusercontent.com/u/1961350/javathcript.js\n';
-initialcontent+='JSURL=https://dl.dropboxusercontent.com/u/1961350/javathcript_post.js\n';
+initialcontent+='JSURL=https://algoscript.info/javathcript.js\n';
+initialcontent+='JSURL=https://algoscript.info/javathcript_post.js\n';
 initialcontent+='\n';
 
 initialcontent+='[Python extension]\n';
 initialcontent+='TITLE=Extension Python (skulpt.js)\n';
 initialcontent+='ENABLED=no\n';
-initialcontent+='JSURL=http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js\n';
-initialcontent+='JSURL=https://dl.dropboxusercontent.com/u/1961350/skulpt.min.js\n';
-initialcontent+='JSURL=https://dl.dropboxusercontent.com/u/1961350/skulpt-stdlib.js\n';
-initialcontent+='JSURL=https://dl.dropboxusercontent.com/u/1961350/skulpt_post.js\n';
+initialcontent+='JSURL=https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js\n';
+initialcontent+='JSURL=https://algoscript.info/skulpt.js\n';
+initialcontent+='JSURL=https://algoscript.info/skulpt.min.js\n';
+initialcontent+='JSURL=https://algoscript.info/skulpt-stdlib.js\n';
+initialcontent+='JSURL=https://algoscript.info/skulpt_post.js\n';
 initialcontent+='\n';
 
 initialcontent+='[Parallel extension]\n';
 initialcontent+='TITLE=Extension Parallel pour le calcul parallèle multi-coeurs\n';
 initialcontent+='ENABLED=no\n';
-initialcontent+='JSURL=https://dl.dropboxusercontent.com/u/1961350/parallel.js\n';
+initialcontent+='JSURL=https://algoscript.info/parallel.js\n';
 initialcontent+='\n';
 
 initialcontent+='[PeerJS extension]\n';
 initialcontent+='TITLE=Extension PeerJS pour les communications pair à pair (nécessite une clé)\n';
 initialcontent+='ENABLED=no\n';
-initialcontent+='JSURL=https://dl.dropboxusercontent.com/u/1961350/peer.min.js\n';
+initialcontent+='JSURL=https://algoscript.info/peer.min.js\n';
 initialcontent+='\n';
 
 initialcontent+='[Audiolet extension]\n';
 initialcontent+='TITLE=Extension Audiolet pour la synthèse audio\n';
 initialcontent+='ENABLED=no\n';
-initialcontent+='JSURL=https://dl.dropboxusercontent.com/u/1961350/Audiolet.min.js\n';
+initialcontent+='JSURL=https://algoscript.info/Audiolet.min.js\n';
 initialcontent+='\n';
 
 initialcontent+='[Music Partition extension]\n';
 initialcontent+='TITLE=Extension VexFlow for drawing music partitions\n';
 initialcontent+='ENABLED=no\n';
-initialcontent+='JSURL=https://dl.dropboxusercontent.com/u/1961350/vexflow-min.js\n';
-initialcontent+='JSURL=https://dl.dropboxusercontent.com/u/1961350/raphael-min.js\n';
-initialcontent+='JSURL=https://dl.dropboxusercontent.com/u/1961350/Dracula/jquery-1.4.2.min.js\n';
+initialcontent+='JSURL=https://algoscript.info/vexflow-min.js\n';
+initialcontent+='JSURL=https://algoscript.info/raphael-min.js\n';
+initialcontent+='JSURL=https://algoscript.info/Dracula/jquery-1.4.2.min.js\n';
 initialcontent+='\n';
 
 initialcontent+='[Speech synthesis extension]\n';
 initialcontent+='TITLE=Extension mespeak\n';
 initialcontent+='ENABLED=no\n';
-initialcontent+='JSURL=https://dl.dropboxusercontent.com/u/1961350/mespeak.js\n';
-initialcontent+='JSURL=https://dl.dropboxusercontent.com/u/1961350/mespeak_post.js\n';
+initialcontent+='JSURL=https://algoscript.info/mespeak.js\n';
+initialcontent+='JSURL=https://algoscript.info/mespeak_post.js\n';
 initialcontent+='\n';
 
 initialcontent+='[POS Tagging Library]\n';
 initialcontent+='TITLE=Extension jspos for POS tagging of english texts\n';
 initialcontent+='ENABLED=no\n';
-initialcontent+='JSURL=https://dl.dropboxusercontent.com/u/1961350/JSLIB/jspos/lexer.js\n';
-initialcontent+='JSURL=https://dl.dropboxusercontent.com/u/1961350/JSLIB/jspos/lexicon.js_\n';
-initialcontent+='JSURL=https://dl.dropboxusercontent.com/u/1961350/JSLIB/jspos/POSTagger.js\n';
+initialcontent+='JSURL=https://algoscript.info/JSLIB/jspos/lexer.js\n';
+initialcontent+='JSURL=https://algoscript.info/JSLIB/jspos/lexicon.js_\n';
+initialcontent+='JSURL=https://algoscript.info/JSLIB/jspos/POSTagger.js\n';
 initialcontent+='\n';
-  
+
 initialcontent+='[Pedagogic Library]\n';
 initialcontent+='TITLE=Extension for adding pedagogic tools to the environment\n';
 initialcontent+='ENABLED=no\n';
-initialcontent+='JSURL=https://dl.dropboxusercontent.com/u/1961350/Pedagogic-tools.js\n';
-initialcontent+='JSURL=https://dl.dropboxusercontent.com/u/1961350/rasterizeHTML.js\n';
+initialcontent+='JSURL=https://algoscript.info/Pedagogic-tools.js\n';
+initialcontent+='JSURL=https://algoscript.info/rasterizeHTML.js\n';
 initialcontent+='\n';
 
 initialcontent+='[RecordRTC Library]\n';
 initialcontent+='TITLE=Extension for allowing screen recording\n';
 initialcontent+='ENABLED=no\n';
-initialcontent+='JSURL=https://dl.dropboxusercontent.com/u/1961350/WebRTC-screenshot.js\n';
-initialcontent+='JSURL=https://dl.dropboxusercontent.com/u/1961350/WebRTC-RecordRTC.js\n';
+initialcontent+='JSURL=https://algoscript.info/WebRTC-screenshot.js\n';
+initialcontent+='JSURL=https://algoscript.info/WebRTC-RecordRTC.js\n';
 initialcontent+='\n';
 
 
 initialcontent+='[ChemDoodleWeb]\n';
 initialcontent+='TITLE=Extension for Molecular Biology\n';
 initialcontent+='ENABLED=no\n';
-initialcontent+='CSSURL=https://dl.dropboxusercontent.com/u/1961350/ChemDoodleWeb.css\n';
-initialcontent+='JSURL=https://dl.dropboxusercontent.com/u/1961350/ChemDoodleWeb.js\n';
+initialcontent+='CSSURL=https://algoscript.info/ChemDoodleWeb.css\n';
+initialcontent+='JSURL=https://algoscript.info/ChemDoodleWeb.js\n';
 initialcontent+='\n';
 
 initialcontent+='[Blockly]\n';
 initialcontent+='TITLE=Extension for Visual code edition\n';
 initialcontent+='ENABLED=yes\n';
-initialcontent+='JSURL=https://dl.dropboxusercontent.com/u/1961350/blockly.js\n';
-initialcontent+='JSURL=https://dl.dropboxusercontent.com/u/1961350/blockly_post.js\n';
+initialcontent+='JSURL=https://algoscript.info/blockly.js\n';
+initialcontent+='JSURL=https://algoscript.info/blockly_post.js\n';
+initialcontent+='\n';
+
+initialcontent+='[Clingo]\n';
+initialcontent+='TITLE=Extension for Answer Set Programming\n';
+initialcontent+='ENABLED=no\n';
+initialcontent+='JSURL=https://algoscript.info/clingo_post.js\n';
+initialcontent+='JSURL=https://algoscript.info/clingo.js\n';
 initialcontent+='\n';
 
 
@@ -249,6 +367,28 @@ if (getQuerystring('dropbox') != 'off' && window.location.toString().substr(0,my
 	document.write('<script src="https://www.dropbox.com/static/api/dropbox-datastores-1.0-latest.js" type="text/javascript" id="dropbox library"></script>');
 } else {
 	defaultDropbox = false;
+}
+
+function ChangeNewStyle_old() {
+
+document.getElementById('icoExec').src='data:image/png;base64,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';
+document.getElementById('icoIndent').src='data:image/png;base64,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';
+document.getElementById('icoSave').src='data:image/png;base64,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';
+document.getElementById('icoLoad').src='data:image/png;base64,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';
+
+document.getElementById('icoLoad').onclick=function () {MontreFenetre(8-fenetre_courante);};
+document.getElementById('icoLock').src='data:image/png;base64,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';
+var iconeLock='data:image/png;base64,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';
+var iconeUnLock=document.getElementById('icoLock').src;
+document.getElementById('icoLock').onclick=function () {if (builtin_verrou>=0) {RetailleFenetre(builtin_verrou,'hidden',-1,1,1); builtin_verrou=-1; this.src=iconeUnLock;  MontreFenetre(0);} else {if (fenetre_courante>0) {builtin_verrou=fenetre_courante; this.src=iconeLock;}}};
+document.getElementById('icoLock').style.backgroundColor='transparent';
+document.getElementById('icoFS').src='data:image/png;base64,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';
+document.getElementById('icoFS').onclick=function () {if (isInFullScreenMode) {exitFullscreen();this.src='data:image/png;base64,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';} else {enterFullscreen(); this.src='data:image/png;base64,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';
+                                                                                                                                        } AdapterTaille(window.innerWidth,window.innerHeight);};
+if (document.getElementById('icoSlides') != null) {
+  document.getElementById('icoSlides').src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgBAMAAACBVGfHAAAAKlBMVEUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAKE86IAAAADXRSTlMAQNCwgCBw7+C/r38QwipBTAAAAFJJREFUKM9jYJC6iwQuMTCw3EUBDAyy1wIYEAAoYOvAgCpwNwBd4AC6QAK6QDWaoch23kQXuDsqgCaghC7AgEXAFl1AFl2ABSXuQUAYIdAI5AIAJNA763ktS2sAAAAASUVORK5CYII=';
+  document.getElementById('icoWB').src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAAM1BMVEUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACjBUbJAAAAEHRSTlMA0PAQMGAgn1DgwI9Ar6Bw3kocvwAAAK5JREFUOMu1kdsOAyEIRAVxdS9tz/9/bYvb9AndpMnOgyTOgQwhpSRMJNeAC1Io//8byCJzYGMOVHQJgXyWAhZmEDUvB5QwZKVPNmUPtyiwITkLz3BNU8rH3ByKgLNxUdCcIuBxNpp60AB4eT7X4iUAoM1v0drlsW4FlIHWL3CsA/+Yje26AyhQZv4OsI/9Slcd2PmBNmhKzaEvqHlIUyQihNX6Fp2IAMn97cN+wBsAjRAhRifO6gAAAABJRU5ErkJggg==';
+}
 }
 
 function ChangeNewStyle() {
@@ -267,10 +407,470 @@ document.getElementById('icoLock').style.backgroundColor='transparent';
 document.getElementById('icoFS').src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgBAMAAACBVGfHAAAAGFBMVEUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABWNxwqAAAAB3RSTlMAMPDvQODfr75drwAAAHxJREFUKM+d0MEJgDAQRNEJWICiDXiyBK960AoEG7CCgG77ErMwTA6CLrnk8QNJsJrMgV3hghXzAjWAUAL0SKwL6EMGBm0GBmMGBpaBgcLUmsI8mjUOnL/QmMWO8Ky+EkiXFEiXFPCA4AHBA4IHBACB4P//5S2D7k8sCtsNuKvQI/Z6BpUAAAAASUVORK5CYII=';
 document.getElementById('icoFS').onclick=function () {if (isInFullScreenMode) {exitFullscreen();this.src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgBAMAAACBVGfHAAAAGFBMVEUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABWNxwqAAAAB3RSTlMAMPDvQODfr75drwAAAHxJREFUKM+d0MEJgDAQRNEJWICiDXiyBK960AoEG7CCgG77ErMwTA6CLrnk8QNJsJrMgV3hghXzAjWAUAL0SKwL6EMGBm0GBmMGBpaBgcLUmsI8mjUOnL/QmMWO8Ky+EkiXFEiXFPCA4AHBA4IHBACB4P//5S2D7k8sCtsNuKvQI/Z6BpUAAAAASUVORK5CYII=';} else {enterFullscreen(); this.src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgBAMAAACBVGfHAAAAGFBMVEUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABWNxwqAAAAB3RSTlMAMPDvQODfr75drwAAAHdJREFUKM+dz7EJhUAURNEn/AJW/A0YWYKpBlqBYANWsKDTvmMgeA0EnWg5zD6YGIUsMRO20C0PUEr5fwW/6h8hp4pQFy3gKABcILhAcIHgFFdIJyAf4bxGCH7JieCZBM8keCbABQFcIHSVCH0rlW+2NELWGAjTDkxj0CPexFNFAAAAAElFTkSuQmCC';
                                                                                                                                         } AdapterTaille(window.innerWidth,window.innerHeight);};
-document.getElementById('icoSlides').src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgBAMAAACBVGfHAAAAKlBMVEUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAKE86IAAAADXRSTlMAQNCwgCBw7+C/r38QwipBTAAAAFJJREFUKM9jYJC6iwQuMTCw3EUBDAyy1wIYEAAoYOvAgCpwNwBd4AC6QAK6QDWaoch23kQXuDsqgCaghC7AgEXAFl1AFl2ABSXuQUAYIdAI5AIAJNA763ktS2sAAAAASUVORK5CYII=';
-document.getElementById('icoWB').src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAAM1BMVEUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACjBUbJAAAAEHRSTlMA0PAQMGAgn1DgwI9Ar6Bw3kocvwAAAK5JREFUOMu1kdsOAyEIRAVxdS9tz/9/bYvb9AndpMnOgyTOgQwhpSRMJNeAC1Io//8byCJzYGMOVHQJgXyWAhZmEDUvB5QwZKVPNmUPtyiwITkLz3BNU8rH3ByKgLNxUdCcIuBxNpp60AB4eT7X4iUAoM1v0drlsW4FlIHWL3CsA/+Yje26AyhQZv4OsI/9Slcd2PmBNmhKzaEvqHlIUyQihNX6Fp2IAMn97cN+wBsAjRAhRifO6gAAAABJRU5ErkJggg==';
+if (document.getElementById('icoSlides') != null) {
+  document.getElementById('icoSlides').src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgBAMAAACBVGfHAAAAKlBMVEUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAKE86IAAAADXRSTlMAQNCwgCBw7+C/r38QwipBTAAAAFJJREFUKM9jYJC6iwQuMTCw3EUBDAyy1wIYEAAoYOvAgCpwNwBd4AC6QAK6QDWaoch23kQXuDsqgCaghC7AgEXAFl1AFl2ABSXuQUAYIdAI5AIAJNA763ktS2sAAAAASUVORK5CYII=';
+  document.getElementById('icoWB').src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAAM1BMVEUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACjBUbJAAAAEHRSTlMA0PAQMGAgn1DgwI9Ar6Bw3kocvwAAAK5JREFUOMu1kdsOAyEIRAVxdS9tz/9/bYvb9AndpMnOgyTOgQwhpSRMJNeAC1Io//8byCJzYGMOVHQJgXyWAhZmEDUvB5QwZKVPNmUPtyiwITkLz3BNU8rH3ByKgLNxUdCcIuBxNpp60AB4eT7X4iUAoM1v0drlsW4FlIHWL3CsA/+Yje26AyhQZv4OsI/9Slcd2PmBNmhKzaEvqHlIUyQihNX6Fp2IAMn97cN+wBsAjRAhRifO6gAAAABJRU5ErkJggg==';
+}
 
 }
+
+// Création d'applications
+
+function createStandaloneApp(ch,title,style,files,encryption) {
+	GEBID('AllScripts').innerHTML=(jsmin(GEBID('AllScripts').innerHTML));
+	var res='';
+	res+='<!doctype html>\n<html lang="fr">\n<head>\n  <meta charset="utf-8">\n<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, maximum-scale=1"/>\n';
+
+for (var i = 0; i < (AllExtensions.length); i++) {
+  var enabled = (AllExtensions[i]['ENABLED'][0].search(/yes/i) >= 0);
+  if (AllExtensions[i]['ENABLED'][0].search(/ask/i) >= 0) enabled = true; //confirm('Do you want to enable\n' + AllExtensions[i]['TITLE'][0] + ' ?');
+  if (enabled) {
+    if (typeof(AllExtensions[i]['JSURL']) != 'undefined') {
+      for(var j=0; j<AllExtensions[i]['JSURL'].length;j++) res+='<script src="'+AllExtensions[i]['JSURL'][j]+'"></script>\n';
+    }
+    if (typeof(AllExtensions[i]['CSSURL']) != 'undefined') {
+      for(var j=0; j<AllExtensions[i]['CSSURL'].length;j++) res+='<link rel="stylesheet" href="'+AllExtensions[i]['CSSURL'][j]+'" />\n';
+    }
+  }
+}
+	var UnMaskCodeF='UnMaskCode';
+	if (encryption == false) {UnMaskCodeF='';}
+
+	switch (style) {
+	case 1:
+	res+='<title>'+title+'</title>'+GEBID("AllScripts").outerHTML+GEBID("AllStyles").outerHTML+'</head><body onload=" Init(); InitGraphic(); AdapterTaille2(window.innerWidth,window.innerHeight); window.onresize=function () {AdapterTaille2(window.innerWidth,window.innerHeight);};GEBID(\'Libraries\').value='+UnMaskCodeF+'(GEBID(\'Libraries\').value); readAllFS(GEBID(\'Libraries\').value); GEBID(\'SourceCode\').value='+UnMaskCodeF+'(GEBID(\'SourceCode\').value); Viewport(0,0,window.innerWidth,window.innerHeight,1); setTimeout(function() {window.eval(GEBID(\'SourceCode\').value);}, 10);">';
+	res+='<div id="weboutput" style="visibility: hidden; top:0px; left: 0px; width:100%; height: 100%"></div><textarea style="visibility: visible; border:0; top:0px; left: 0px; width: 100%; height: 100%" id="sortie"></textarea><canvas style="visibility: hidden; top:0px; left: 0%; width: 100%; height: 100%" id="mycanvas" width="480" height="300"></canvas>';
+	break;
+	case 2:
+	res+='<title>'+title+'</title>'+GEBID("AllScripts").outerHTML+GEBID("AllStyles").outerHTML+'</head><body onload="Init(); InitGraphic(); AdapterTaille2(Math.floor(window.innerWidth/2),window.innerHeight); window.onresize=function () {AdapterTaille(Math.floor(window.innerWidth/2),window.innerHeight);};GEBID(\'Libraries\').value='+UnMaskCodeF+'(GEBID(\'Libraries\').value); readAllFS(GEBID(\'Libraries\').value); GEBID(\'SourceCode\').value='+UnMaskCodeF+'(GEBID(\'SourceCode\').value); Viewport(0,0,window.innerWidth,window.innerHeight,1); setTimeout(function() {window.eval(GEBID(\'SourceCode\').value);}, 10);">';
+	res+='<div id="weboutput" style="visibility: hidden; top:0px; left: 0px; width:100%; height: 100%"></div><textarea style="visibility: visible; border:0; top:0px; left: 0px; width: 50%; height: 100%" id="sortie"></textarea><canvas style="visibility: visible; top:0px; left: 50%; width: 50%; height: 100%" id="mycanvas" width="480" height="300"></canvas>';
+	break;
+	case 3:
+	res+='<title>'+title+'</title>'+GEBID("AllScripts").outerHTML+GEBID("AllStyles").outerHTML+'</head><body onload="Init(); InitGraphic(); AdapterTaille2(window.innerWidth,window.innerHeight); window.onresize=function () {AdapterTaille2(window.innerWidth,window.innerHeight);}; GEBID(\'Libraries\').value='+UnMaskCodeF+'(GEBID(\'Libraries\').value); readAllFS(GEBID(\'Libraries\').value); GEBID(\'SourceCode\').value='+UnMaskCodeF+'(GEBID(\'SourceCode\').value); Viewport(0,0,window.innerWidth,window.innerHeight,1); setTimeout(function() {window.eval(GEBID(\'SourceCode\').value);}, 10);">';
+	res+='<div id="weboutput" style="visibility: hidden; top:0px; left: 0px; width:100%; height: 100%"></div><canvas style="visibility: visible; top:0px; left: 0px; width: 100%; height: 100%" id="mycanvas" width="480" height="300"></canvas><textarea style="visibility: hidden; border:0; top:0px; left: 0px; width: 100%; height: 100%" id="sortie"></textarea>';
+	break;
+	case 4:
+	res+='<title>'+title+'</title>'+GEBID("AllScripts").outerHTML+GEBID("AllStyles").outerHTML+'</head><body onload="Init(); InitGraphic(); AdapterTaille2(window.innerWidth,window.innerHeight); window.onresize=function () {AdapterTaille2(window.innerWidth,window.innerHeight);}; GEBID(\'Libraries\').value='+UnMaskCodeF+'(GEBID(\'Libraries\').value); readAllFS(GEBID(\'Libraries\').value); GEBID(\'SourceCode\').value='+UnMaskCodeF+'(GEBID(\'SourceCode\').value); Viewport(0,0,window.innerWidth,window.innerHeight,1);  setTimeout(function() {window.eval(GEBID(\'SourceCode\').value);}, 10);">\n';
+	res+='<div id="weboutput" style="visibility: visible; position: absolute; background-color: white; top:0px; left: 0px; width:100%; height: 100%"></div><canvas style="visibility: hidden; top:0px; left: 0%; width: 100%; height: 100%" id="mycanvas" width="480" height="300"></canvas><textarea style="visibility: hidden; border:0; top:0px; left: 0px; width: 100%; height: 100%" id="sortie"></textarea>';
+	break;
+	}
+
+	res+='<textarea id="Libraries" style="display: none">\n';
+	var code='';
+	flag=false;
+	for(var i=0; i<Taille(files);i++) {
+		if (flag) res+='--------------------\n';
+		flag=true;
+		code+=files[i]+'\n';
+		code+='--------------------\n';
+		if (encryption == false) code+=readFile(files[i])+'\n'; else code+=jsmin(readFile(files[i]))+'\n';
+
+	}
+	if (encryption == false) res+=code; else res+=MaskCode(code);
+	res+='</textarea>';
+	ch="\n\nwindow.document.getElementsByTagName('div')[0].id= 'weboutput';\n"+ch;
+	if (encryption == false)
+		res+='<textarea id="SourceCode" style="display: none">'+(ch)+'</textarea></body></html>';
+	else
+		res+='<textarea id="SourceCode" style="display: none">'+MaskCode(jsmin(ch))+'</textarea></body></html>';
+	return res;
+}
+
+function createLibraryApp(ch,title,style,files) {
+	var res='';
+	flag=false;
+	for(var i=0; i<Taille(files);i++) {
+		if (flag) res+='--------------------\n';
+		flag=true;
+		res+=files[i]+'\n';
+		res+='--------------------\n';
+		res+=readFile(files[i])+'\n';
+	}
+
+	if (flag) res+='--------------------\n';
+	res+='Executable.js\n';
+	res+='--------------------\n';
+	res+=ch+'\n';
+	return res;
+}
+
+
+
+
+
+
+
+/*!
+jsmin.js - 2010-01-15
+Author: NanaLich (http://www.cnblogs.com/NanaLich)
+Another patched version for jsmin.js patched by Billy Hoffman,
+this version will try to keep CR LF pairs inside the important comments
+away from being changed into double LF pairs.
+
+jsmin.js - 2009-11-05
+Author: Billy Hoffman
+This is a patched version of jsmin.js created by Franck Marcia which
+supports important comments denoted with /*! ...
+Permission is hereby granted to use the Javascript version under the same
+conditions as the jsmin.js on which it is based.
+
+jsmin.js - 2006-08-31
+Author: Franck Marcia
+This work is an adaptation of jsminc.c published by Douglas Crockford.
+Permission is hereby granted to use the Javascript version under the same
+conditions as the jsmin.c on which it is based.
+
+jsmin.c
+2006-05-04
+
+Copyright (c) 2002 Douglas Crockford  (www.crockford.com)
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+The Software shall be used for Good, not Evil.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+Update:
+add level:
+1: minimal, keep linefeeds if single
+2: normal, the standard algorithm
+3: agressive, remove any linefeed and doesn't take care of potential
+missing semicolons (can be regressive)
+store stats
+jsmin.oldSize
+jsmin.newSize
+*/
+
+String.prototype.has = function(c) {
+  return this.indexOf(c) > -1;
+};
+
+function jsmin(comment, input, level) {
+
+  if(input === undefined) {
+    input = comment;
+    comment = '';
+    level = 2;
+  } else if(level === undefined || level < 1 || level > 3) {
+    level = 2;
+  }
+
+  if(comment.length > 0) {
+    comment += '\n';
+  }
+
+  var a = '',
+		b = '',
+		EOF = -1,
+		LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz',
+		DIGITS = '0123456789',
+		ALNUM = LETTERS + DIGITS + '_$\\',
+		theLookahead = EOF;
+
+
+  /* isAlphanum -- return true if the character is a letter, digit, underscore,
+  dollar sign, or non-ASCII character.
+  */
+
+  function isAlphanum(c) {
+    return c != EOF && (ALNUM.has(c) || c.charCodeAt(0) > 126);
+  }
+
+
+  /* getc(IC) -- return the next character. Watch out for lookahead. If the
+  character is a control character, translate it to a space or
+  linefeed.
+  */
+
+  var iChar = 0, lInput = input.length;
+  function getc() {
+
+    var c = theLookahead;
+    if(iChar == lInput) {
+      return EOF;
+    }
+    theLookahead = EOF;
+    if(c == EOF) {
+      c = input.charAt(iChar);
+      ++iChar;
+    }
+    if(c >= ' ' || c == '\n') {
+      return c;
+    }
+    if(c == '\r') {
+      return '\n';
+    }
+    return ' ';
+  }
+  function getcIC() {
+    var c = theLookahead;
+    if(iChar == lInput) {
+      return EOF;
+    }
+    theLookahead = EOF;
+    if(c == EOF) {
+      c = input.charAt(iChar);
+      ++iChar;
+    }
+    if(c >= ' ' || c == '\n' || c == '\r') {
+      return c;
+    }
+    return ' ';
+  }
+
+
+  /* peek -- get the next character without getting it.
+  */
+
+  function peek() {
+    theLookahead = getc();
+    return theLookahead;
+  }
+
+
+  /* next -- get the next character, excluding comments. peek() is used to see
+  if a '/' is followed by a '/' or '*'.
+  */
+
+  function next() {
+
+    var c = getc();
+    if(c == '/') {
+      switch(peek()) {
+        case '/':
+          for(; ; ) {
+            c = getc();
+            if(c <= '\n') {
+              return c;
+            }
+          }
+          break;
+        case '*':
+          //this is a comment. What kind?
+          getc();
+          if(peek() == '!') {
+            // kill the extra one
+            getc();
+            //important comment
+            var d = '/*!';
+            for(; ; ) {
+              c = getcIC(); // let it know it's inside an important comment
+              switch(c) {
+                case '*':
+                  if(peek() == '/') {
+                    getc();
+                    return d + '*/';
+                  }
+                  break;
+                case EOF:
+                  throw 'Error: Unterminated comment.';
+                default:
+                  //modern JS engines handle string concats much better than the
+                  //array+push+join hack.
+                  d += c;
+              }
+            }
+          } else {
+            //unimportant comment
+            for(; ; ) {
+              switch(getc()) {
+                case '*':
+                  if(peek() == '/') {
+                    getc();
+                    return ' ';
+                  }
+                  break;
+                case EOF:
+                  throw 'Error: Unterminated comment.';
+              }
+            }
+          }
+          break;
+        default:
+          return c;
+      }
+    }
+    return c;
+  }
+
+
+  /* action -- do something! What you do is determined by the argument:
+  1   Output A. Copy B to A. Get the next B.
+  2   Copy B to A. Get the next B. (Delete A).
+  3   Get the next B. (Delete B).
+  action treats a string as a single character. Wow!
+  action recognizes a regular expression if it is preceded by ( or , or =.
+  */
+
+  function action(d) {
+
+    var r = [];
+
+    if(d == 1) {
+      r.push(a);
+    }
+
+    if(d < 3) {
+      a = b;
+      if(a == '\'' || a == '"') {
+        for(; ; ) {
+          r.push(a);
+          a = getc();
+          if(a == b) {
+            break;
+          }
+          if(a <= '\n') {
+            throw 'Error: unterminated string literal: ' + a;
+          }
+          if(a == '\\') {
+            r.push(a);
+            a = getc();
+          }
+        }
+      }
+    }
+
+    b = next();
+
+    if(b == '/' && '(,=:[!&|'.has(a)) {
+      r.push(a);
+      r.push(b);
+      for(; ; ) {
+        a = getc();
+        if(a == '/') {
+          break;
+        } else if(a == '\\') {
+          r.push(a);
+          a = getc();
+        } else if(a <= '\n') {
+          throw 'Error: unterminated Regular Expression literal';
+        }
+        r.push(a);
+      }
+      b = next();
+    }
+
+    return r.join('');
+  }
+
+
+  /* m -- Copy the input to the output, deleting the characters which are
+  insignificant to JavaScript. Comments will be removed. Tabs will be
+  replaced with spaces. Carriage returns will be replaced with
+  linefeeds.
+  Most spaces and linefeeds will be removed.
+  */
+
+  function m() {
+
+    var r = [];
+    a = '\n';
+
+    r.push(action(3));
+
+    while(a != EOF) {
+      switch(a) {
+        case ' ':
+          if(isAlphanum(b)) {
+            r.push(action(1));
+          } else {
+            r.push(action(2));
+          }
+          break;
+        case '\n':
+          switch(b) {
+            case '{':
+            case '[':
+            case '(':
+            case '+':
+            case '-':
+              r.push(action(1));
+              break;
+            case ' ':
+              r.push(action(3));
+              break;
+            default:
+              if(isAlphanum(b)) {
+                r.push(action(1));
+              } else {
+                if(level == 1 && b != '\n') {
+                  r.push(action(1));
+                } else {
+                  r.push(action(2));
+                }
+              }
+          }
+          break;
+        default:
+          switch(b) {
+            case ' ':
+              if(isAlphanum(a)) {
+                r.push(action(1));
+                break;
+              }
+              r.push(action(3));
+              break;
+            case '\n':
+              if(level == 1 && a != '\n') {
+                r.push(action(1));
+              } else {
+                switch(a) {
+                  case '}':
+                  case ']':
+                  case ')':
+                  case '+':
+                  case '-':
+                  case '"':
+                  case '\'':
+                    if(level == 3) {
+                      r.push(action(3));
+                    } else {
+                      r.push(action(1));
+                    }
+                    break;
+                  default:
+                    if(isAlphanum(a)) {
+                      r.push(action(1));
+                    } else {
+                      r.push(action(3));
+                    }
+                }
+              }
+              break;
+            default:
+              r.push(action(1));
+              break;
+          }
+      }
+    }
+
+    return r.join('');
+  }
+
+  jsmin.oldSize = input.length;
+  ret = m(input);
+  jsmin.newSize = ret.length;
+
+  return comment + ret;
+
+}
+
+
 
 
 //-->
@@ -724,7 +1324,7 @@ span.CodeMirror-selectedtext { background: none; }
 .cm-s-erlang-dark .CodeMirror-activeline-background {background: #013461 !important;}
 .cm-s-erlang-dark .CodeMirror-matchingbracket {outline:1px solid grey; color:white !important;}
     </style>
-    
+
     <script type="text/javascript">
 
 // JSHINT
@@ -5320,6 +5920,8 @@ d||V()||(c.mode="OBJECT",s=!1);s&&l();n();p&&l();break;case "TK_BLOCK_COMMENT":s
 
 // Gestion Dropbox
 var client, taskTable, DropboxSync=false;
+var dircontent = [];
+var openeddir = 0;
 
 function InitDropbox() {
    var DROPBOXKEY = DropboxAppID;
@@ -5337,29 +5939,14 @@ function InitDropbox() {
     } else {
    }
   });
-
   if (client.isAuthenticated()) {
-    client.readdir('',{},function(error, filesystem) {
-      if (error) {
-        alert('Error opening default datastore: ' + error);
-      }
-
-      // AfficherTableau(filesystem);
-    });
-     client.getDatastoreManager().openDefaultDatastore(function(error, datastore) {
-      if (error) {
-        alert('Error opening default datastore: ' + error);
-      }
-
-      taskTable = datastore.getTable('Files_AlgoScripts');
-	  DropboxSync=true;
-      if (DropboxSync) {
-        var fichier = taskTable.query({});
-        for (var i = 0; i < Taille(fichier); i++) {
-          if (fichier[i].has('filename')) window.localStorage[fichier[i].get('filename')] = fichier[i].get('filecontents');
-        }
-      }
-    });
+  DropboxSync=true;
+  dircontent = [];
+  openeddir = 0;
+  ReadCompleteDir('');
+  waitUntilOk(function() {
+    SynchronizeWithDropbox(dircontent);
+  });
   }
 }
 
@@ -5381,7 +5968,7 @@ function lsDropboxFile() {
 
 function exportAllFStoDropboxFS() {
   for (p in window.localStorage) {
-    if (SousChaine(p,0,Longueur('dropbox-auth')) != 'dropbox-auth') 
+    if (SousChaine(p,0,Longueur('dropbox-auth')) != 'dropbox-auth')
 	    var xhr = client.writeFile(p, window.localStorage[p], null, function(error) {});
   }
 }
@@ -5392,7 +5979,7 @@ function readDropboxFile(myfilename) {
 	    return (fichier[0].get('filecontents'));
 	else return 'ERRORNOFILE';
 }
-
+/*
 function writeDropboxFile(myfilename, myfilecontents) {
 	var fichier=taskTable.query({filename: myfilename});
     try {
@@ -5402,26 +5989,39 @@ function writeDropboxFile(myfilename, myfilecontents) {
     } else {
 		taskTable.insert({filename: myfilename, filecontents: myfilecontents});
     }
-    } else Ecrire('ERROR : '+myfilename+' too big to be symchronized (Size='+Longueur(myfilecontents)+')');
+    } else Ecrire('ERROR : '+myfilename+' too big to be synchronized (Size='+Longueur(myfilecontents)+')');
     } catch (e) {alert('ERROR '+e);}
 }
+*/
+function writeDropboxFile(myfilename, myfilecontents) {
+	var xhr = client.writeFile(myfilename, myfilecontents, null, function(error) {});
+}
 
+/*
 function removeDropboxFile(myfilename) {
 	var fichier=taskTable.query({filename: myfilename});
     if (Taille(fichier)>0)
-	    fichier[0].deleteRecord();	
+	    fichier[0].deleteRecord();
 }
+*/
+
+function removeDropboxFile(myfilename) {
+	try {
+	  var xhr = client.remove(myfilename, function(error) {});
+	} catch (e) {alert('ERROR '+e);}
+}
+
 
 function lsDropbox() {
 	var fichier=taskTable.query({});
 	for(var i=0; i<Taille(fichier); i++) {
-		if (fichier[i].has('filename')) Ecrire(fichier[i].get('filename'));		
+		if (fichier[i].has('filename')) Ecrire(fichier[i].get('filename'));
 	}
 }
 
 function exportLibraryToDropbox() {
 	for(p in window.localStorage) {
-		if (SousChaine(p,0,Longueur('dropbox-auth')) != 'dropbox-auth') 
+		if (SousChaine(p,0,Longueur('dropbox-auth')) != 'dropbox-auth')
 			writeDropboxFile(p,readFile(p));
 	}
 }
@@ -5429,6 +6029,62 @@ function exportLibraryToDropbox() {
 
 
 
+function ReadCompleteDir(root) {
+  openeddir++;
+  client.readdir(root, {}, function(error, filesystem) {
+    if (error) {
+      alert('Error 1 opening default datastore: ' + error);
+    }
+
+    for (var p in filesystem) {
+      if (filesystem[p].name()[0] == '"') dircontent.push(((root != '') ? (root + '/') : '') + filesystem[p]);
+      else
+      ReadCompleteDir(((root != '') ? (root + '/') : '') + filesystem[p].name());
+    }
+    openeddir--;
+  });
+}
+
+function waitUntilOk(f) {
+  if (openeddir > 0) {
+    setTimeout(function() {
+      waitUntilOk(f);
+    }, 10);
+  } else f();
+}
+
+function ReadFromDropbox(filename, callback) {
+  client.readFile(filename, function(error, data) {
+    if (error) {
+      return alert(error); // Something went wrong.
+    }
+    callback(filename, data);
+  });
+}
+
+function SynchronizeWithDropbox(content) {
+  for (var i = 0; i < Taille(content); i++) {
+    if (content[i].substring(0, Longueur('__Conflicts/')) != '__Conflicts/') {
+      if (window.localStorage[content[i]] == undefined) {
+        ReadFromDropbox(content[i], function(n, d) {
+          window.localStorage[n] = d;
+        });
+      } else {
+        ReadFromDropbox(content[i], function(n, d) {
+          if (d != window.localStorage[n]) {
+            window.localStorage['__Conflicts/' + n] = window.localStorage[n];
+            window.localStorage[n] = d;
+          }
+        });
+      }
+    }
+  }
+  for(var p in window.localStorage) {
+  if (typeof(window.localStorage[p]) == 'string' && (p.substring(0,Longueur('__Conflicts/'))!='__Conflicts/') && (p.substring(0,Longueur('dropbox-auth:'))!='dropbox-auth:'))
+    if (dircontent.indexOf(p) < 0) writeDropboxFile(p, window.localStorage[p]);
+}
+
+}
 
 
 
@@ -5453,7 +6109,7 @@ function builtincapturetouch(e) {
 	} else {
 		y=maxviewport_y-y;
 	}
-	if (builtinclick) MouseClick(minviewport_x+e.changedTouches[0].clientX * Math.abs(maxviewport_x-minviewport_x) / size_canvas_x, 
+	if (builtinclick) MouseClick(minviewport_x+e.changedTouches[0].clientX * Math.abs(maxviewport_x-minviewport_x) / size_canvas_x,
 			   y);
 }
 
@@ -5464,7 +6120,7 @@ function builtinMouseDown(e) {
 	e.preventDefault();
 	builtinclick=true;
 	var decy=GEBID('mycanvas').style.top.replace('px','');
-        
+
 	if (typeof(e.changedTouches) != 'undefined') builtincapturemouse({layerX:e.changedTouches[0].clientX, layerY:(e.changedTouches[0].clientY-decy)});
 	else builtincapturemouse(e);
 }
@@ -5484,7 +6140,7 @@ function builtinMouseMoveEvent(e) {
 	} else {
 		y=maxviewport_y-y;
 	}
-	if (builtinclick) MouseMove(minviewport_x+e.layerX * Math.abs(maxviewport_x-minviewport_x) / size_canvas_x, 
+	if (builtinclick) MouseMove(minviewport_x+e.layerX * Math.abs(maxviewport_x-minviewport_x) / size_canvas_x,
 			   y);
 }
 
@@ -5499,7 +6155,7 @@ function builtincapturemouse(e) {
 	} else {
 		y=maxviewport_y-y;
 	}
-	MouseClick(minviewport_x+e.layerX * Math.abs(maxviewport_x-minviewport_x) / size_canvas_x, 
+	MouseClick(minviewport_x+e.layerX * Math.abs(maxviewport_x-minviewport_x) / size_canvas_x,
 			   y);
 }
 
@@ -5531,6 +6187,15 @@ function MouseClick(x,y) {
 function MouseMove(x,y) {
 }
 
+function plot(f, deb, fin) {
+  var nbpoints = 100;
+  var T = [];
+  for (var i = 0; i <= 100; i++) {
+    var x = deb + (fin - deb) / nbpoints * i;
+    T[i] = [x, f(x)];
+  }
+  AfficherCourbe(T, false, false, 'red', '-', 1);
+}
 
 // Gestion des sons
 // Reprise de la classe RIFFWAVE
@@ -5839,7 +6504,7 @@ function readFile(filename) {
 
 function removeFile(filename) {
  delete window.localStorage[filename];
-  if (DropboxSync) removeDropboxFile(filename)
+ if (DropboxSync) removeDropboxFile(filename)
 
 }
 
@@ -6083,10 +6748,46 @@ function CerclePlein(x0, y0, r, color) {
   EllipsePlein(x0,y0,r,r,color);
 }
 
-function DrawImage(imageurl,x,y,w,h) { 
+function DrawImage(imageurl,x,y,w,h) {
 	var monim=new Image();
 	monim.src=imageurl.replace(/^[\s\n]+/g,'').replace(/[\s\n]+$/g,'').replace(/\n/g,'');
-	ctx.drawImage(monim,ViewX(x), ViewY(y),ViewX(w), ViewY(h));
+    monim.onload = function() {
+      ctx.drawImage(this, ViewX(x), ViewY(y), ViewX(w), ViewY(h));
+    };
+}
+
+function Polygone() {
+  var args = Polygone.arguments;
+  if (args.length % 2 != 0 && args.length > 2) {
+    var color = args[args.length - 1];
+    ctx.strokeStyle = color;
+    ctx.beginPath();
+    ctx.moveTo(ViewX(args[0]), ViewY(args[1]));
+    for (var i = 0; i < args.length - 1; i += 2) {
+      ctx.lineTo(ViewX(args[i]), ViewY(args[i + 1]));
+    }
+    ctx.lineTo(ViewX(args[0]), ViewY(args[1]));
+
+    ctx.closePath();
+    ctx.stroke();
+  } else {alert('Wrong number of arguments in Polygone');}
+}
+
+function PolygonePlein() {
+  var args = PolygonePlein.arguments;
+  if (args.length % 2 != 0 && args.length > 2) {
+    var color = args[args.length - 1];
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.moveTo(ViewX(args[0]), ViewY(args[1]));
+    for (var i = 0; i < args.length - 1; i += 2) {
+      ctx.lineTo(ViewX(args[i]), ViewY(args[i + 1]));
+    }
+    ctx.lineTo(ViewX(args[0]), ViewY(args[1]));
+
+    ctx.closePath();
+    ctx.fill();
+  } else {alert('Wrong number of arguments in PolygonePlein');}
 }
 
 function Ellipse(x, y, w, h, color) {
@@ -6152,8 +6853,15 @@ function Point(x, y, color) {
 
 function Texte(x, y, ch, color) {
   ctx.fillStyle = color;
-  ctx.fillText(ch, ViewX(x), ViewY(y));
+  var ecart=ctx.measureText('oo').width;
+  var T=[];
+  ch=ch.toString();
+  if (typeof(ch) == 'string') T=ch.split('\n');
+  for(var i=0;i<T.length; i++) {
+    ctx.fillText(T[i], ViewX(x), ViewY(y)+i*ecart);
+  }
 }
+
 
 function setCanvasFont(_fontname, _fontsize, _extrastyle) {
 	ctx.font = _extrastyle+' '+_fontsize+' '+_fontname;
@@ -6518,6 +7226,195 @@ function Hasard(n) {
   return (Math.random() * n) >> 0;
 }
 
+function NormalizeAudio(T) {
+  var res=[]; res[Taille(T)-1]=0;
+  for(var i = 0; i<Taille(T); i++) {
+    res[i]=Math.floor(128+128*T[i]);
+  }
+  return res;
+}
+
+function NormaliserSon(T) {
+  return NormalizeAudio(T);
+}
+
+function flattenArray(channelBuffer, recordingLength) {
+  var result = new Float32Array(recordingLength);
+  var offset = 0;
+  for (var i = 0; i < channelBuffer.length; i++) {
+    var buffer = channelBuffer[i];
+    result.set(buffer, offset);
+    offset += buffer.length;
+  }
+  return result;
+}
+
+function interleave(leftChannel, rightChannel) {
+  var length = leftChannel.length + rightChannel.length;
+  var result = new Float32Array(length);
+  var inputIndex = 0;
+  for (var index = 0; index < length;) {
+    result[index++] = leftChannel[inputIndex];
+    result[index++] = rightChannel[inputIndex];
+    inputIndex++;
+  }
+  return result;
+}
+
+function writeUTFBytes(view, offset, string) {
+  for (var i = 0; i < string.length; i++) {
+    view.setUint8(offset + i, string.charCodeAt(i));
+  }
+}
+
+
+function CreerSon16bits(T, sampleRate) {
+  var blob = null;
+  // we flat the left and right channels down
+  // Float32Array[] => Float32Array
+  var leftBuffer = T;
+  var rightBuffer = T;
+  // we interleave both channels together
+  // [left[0],right[0],left[1],right[1],...]
+  var interleaved = interleave(leftBuffer, rightBuffer);
+  // we create our wav file
+  var buffer = new ArrayBuffer(44 + interleaved.length * 2);
+  var view = new DataView(buffer);
+  // RIFF chunk descriptor
+  writeUTFBytes(view, 0, 'RIFF');
+  view.setUint32(4, 44 + interleaved.length * 2, true);
+  writeUTFBytes(view, 8, 'WAVE');
+  // FMT sub-chunk
+  writeUTFBytes(view, 12, 'fmt ');
+  view.setUint32(16, 16, true); // chunkSize
+  view.setUint16(20, 1, true); // wFormatTag
+  view.setUint16(22, 2, true); // wChannels: stereo (2 channels)
+  view.setUint32(24, sampleRate, true); // dwSamplesPerSec
+  view.setUint32(28, sampleRate * 4, true); // dwAvgBytesPerSec
+  view.setUint16(32, 4, true); // wBlockAlign
+  view.setUint16(34, 16, true); // wBitsPerSample
+  // data sub-chunk
+  writeUTFBytes(view, 36, 'data');
+  view.setUint32(40, interleaved.length * 2, true);
+  // write the PCM samples
+  var index = 44;
+  var volume = 1;
+  for (var i = 0; i < interleaved.length; i++) {
+    view.setInt16(index, interleaved[i] * (0x7FFF * volume), true);
+    index += 2;
+  }
+  // our final blob
+  blob = new Blob([view], {
+    type: 'audio/wav'
+  });
+
+  var url = window.URL.createObjectURL(blob);
+  var audio = new Audio(url);
+  return audio;
+}
+
+
+// Gestion WebCam et micro
+function getImagePoint(T, x, y) {
+  return [T.data[4 * (640 * y + x)], T.data[4 * (640 * y + x) + 1], T.data[4 * (640 * y + x) + 2], T.data[4 * (640 * y + x) + 3]];
+}
+
+
+function setImagePoint(T, x, y, v) {
+  if (Taille(v) < 4) v[3] = 255;
+  T.data[4 * (640 * y + x)] = v[0];
+  T.data[4 * (640 * y + x) + 1] = v[1];
+  T.data[4 * (640 * y + x) + 2] = v[2];
+  T.data[4 * (640 * y + x) + 3] = v[3];
+}
+
+var ForWebcamvideo = document.createElement("video");
+ForWebcamvideo.setAttribute("width", 640);
+ForWebcamvideo.setAttribute("height", 480);
+
+var ForWebcamcanvas = document.createElement("canvas");
+ForWebcamcanvas.setAttribute("width", 640);
+ForWebcamcanvas.setAttribute("height", 480);
+var ForWebcamcontext = ForWebcamcanvas.getContext('2d');
+
+function ForWebcamProcess(f) {
+  if (ForWebcamvideo.paused || ForWebcamvideo.ended) {
+    return;
+  }
+  ForWebcamcontext.drawImage(ForWebcamvideo, 0, 0, 640, 480);
+  var frame = ForWebcamcontext.getImageData(0, 0, 640, 480);
+  f(frame);
+  setTimeout(function() {
+    ForWebcamProcess(f);
+  }, 0);
+}
+
+function StartWebcam(f) {
+  navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mediaDevices.GetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
+  navigator.getUserMedia({
+    video: true
+  }, function(stream) {
+    ForWebcamvideo.src = window.URL.createObjectURL(stream);
+    ForWebcamvideo.play();
+    ForWebcamProcess(f);
+  }, function(e) {
+    console.error(e);
+  });
+}
+
+function StopWebcam() {
+  ForWebcamvideo.pause();
+}
+
+
+
+var ForMicrorecorder = null;
+var ForMicromediaStream = null;
+var ForMicrosampleRate = 44100;
+var ForMicrocontext = null;
+
+function StartMicrophone(f) {
+  navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mediaDevices.GetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
+  navigator.getUserMedia({
+    audio: true
+  }, function(e) {
+    window.AudioContext = window.AudioContext || window.webkitAudioContext;
+    ForMicrocontext = new AudioContext();
+    ForMicromediaStream = ForMicrocontext.createMediaStreamSource(e);
+    var bufferSize = 2048;
+    var numberOfInputChannels = 2;
+    var numberOfOutputChannels = 2;
+    if (ForMicrocontext.createScriptProcessor) {
+      ForMicrorecorder = ForMicrocontext.createScriptProcessor(bufferSize, numberOfInputChannels, numberOfOutputChannels);
+    } else {
+      ForMicrorecorder = ForMicrocontext.createJavaScriptNode(bufferSize, numberOfInputChannels, numberOfOutputChannels);
+    }
+    ForMicrorecorder.onaudioprocess = function(e) {
+      f(e.inputBuffer.getChannelData(0));
+    };
+    ForMicromediaStream.connect(ForMicrorecorder);
+    ForMicrorecorder.connect(ForMicrocontext.destination);
+  }, function(e) {
+    console.error(e);
+  });
+}
+
+function StopMicrophone() {
+  ForMicrorecorder.disconnect(ForMicrocontext.destination);
+  ForMicromediaStream.disconnect(ForMicrorecorder);
+}
+
+/*
+// Exemple d'utilisation
+
+StartMicrophone(function (T) {T[0]=-1; T[1]=1; AfficherCourbe(T,false,false,'red','',1);});
+
+function MouseClick(x,y) {
+  StopMicrophone();
+}
+
+*/
+
 
 //-->
 //    <!--
@@ -6549,7 +7446,7 @@ function Init() {
   GEBID('mycanvas').onmouseup=builtinMouseUp;
   GEBID('mycanvas').onmousemove=builtinMouseMoveEvent;
 //  document.onkeypress=function (k) {/*for(p in k) Ecrire(p);*/ if (k['charCode'] == k['keyCode']) Keypressed(k['charCode']); else Keypressed(k['charCode']+1000*k['keyCode']);};
-document.onkeydown=function (k) {/*for(p in k) Ecrire(p);*/ if (!k) k=window.event; Keypressed(k['keyCode']);};
+document.onkeydown=function (k) {/*for(p in k) Ecrire(p);*/ if (!k) k=window.event; Keypressed(k['keyCode']); if (k['keyCode']>=37 && k['keyCode']<=40) k.preventDefault();};
 }
 
 
@@ -6670,9 +7567,9 @@ function Evaluer() {
   		writeFile('Sauvegardes/save'+(i+1)+'.js',readFile('Sauvegardes/save'+i+'.js'));
   	}
   }
-  writeFile('Sauvegardes/save0.js',tabcode);  
+  writeFile('Sauvegardes/save0.js',tabcode);
   // Fin
-  
+
   if (Variables_a_inspecter != '') {
     var ch = tabcode;
     tabcode = '';
@@ -6770,7 +7667,7 @@ function Evaluer_debug() {
   document.getElementById('lecode').value = editor.getValue();
   // Fin
   var tabcode = GEBID('lecode').value;
-  
+
   builtin_courant = '';
   document.getElementById('sortie').value = builtin_courant;
   globaleval(tabcode);
@@ -6845,7 +7742,7 @@ function unsetPrettyPrompt() {
 }
 
 function myPrompt(message) {
-  window.builtin_nbprompt++; 
+  window.builtin_nbprompt++;
   var r=0;
   if (enablePrettyPrompt && typeof(window.showModalDialog)=='function' && (window.builtin_nbprompt<11)
   && (! (navigator.userAgent.indexOf('Android')>0))
@@ -7023,7 +7920,7 @@ function HTMLoutput(ch) {
 var mouseX=0,mouseY=0,clearTimeoutEvent=0,FrameRate=1000;
 
 window.onmousemove=function(e) {
-  mouseX=e.layerX*(maxviewport_x - minviewport_x)/size_canvas_x+minviewport_x; 
+  mouseX=e.layerX*(maxviewport_x - minviewport_x)/size_canvas_x+minviewport_x;
   mouseY=e.layerY*(maxviewport_y - minviewport_y)/size_canvas_y+minviewport_y;
 };
 
@@ -7045,17 +7942,19 @@ var BeginningTime;
 function Loop(ms) {
   if (typeof(clearTimeoutEvent) != 'undefined') clearTimeout(clearTimeoutEvent);
   if (BeginningEvent) {setup(); BeginningTime=new Date(); BeginningEvent=false;}
-  
+
   draw();
-  
+
   if (ms>0) {
     var time=new Date();
     var ecoule=(time.getSeconds()-BeginningTime.getSeconds())*1000+(time.getMilliseconds()-BeginningTime.getMilliseconds());
   } else {ecoule=ms-1;}
-  if (ecoule<ms) {clearTimeoutEvent=setTimeout('Loop('+ms+')',1000/FrameRate);} else BeginningEvent=true; 
+  if (ecoule<ms) {clearTimeoutEvent=setTimeout('Loop('+ms+')',1000/FrameRate);} else BeginningEvent=true;
 }
 
-
+function noLoop() {
+    if (typeof(clearTimeoutEvent) != 'undefined') clearTimeout(clearTimeoutEvent);
+}
 
 var fenetre_courante;
 var builtin_fenetregraphique = 2;
@@ -7101,8 +8000,8 @@ function MontreFenetre(nb) {
 	    editor.getTextArea().style.visibility = 'hidden';
     	editor.getTextArea().style.zIndex = -1;
     }
-    
-    
+
+
     if (fenetre_courante == leselect.selectedIndex) {
       fenetre_courante += nb;
       leselect.selectedIndex = fenetre_courante;
@@ -7114,9 +8013,9 @@ function MontreFenetre(nb) {
 
 	if (builtin_verrou >=0) {
 		if (builtin_verrou == fenetre_courante) {
-			RetailleFenetre(builtin_verrou,'visible',100,1,1);		
+			RetailleFenetre(builtin_verrou,'visible',100,1,1);
 		} else {
-			RetailleFenetre(builtin_verrou,'visible',200,0.5,1);		
+			RetailleFenetre(builtin_verrou,'visible',200,0.5,1);
 		}
 	}
 
@@ -7315,77 +8214,6 @@ function fonctionerreur(e,f,l) {
 
 
 
-function createStandaloneApp(ch,title,style,files) {
-	var res='';
-	res+='<!doctype html>\n<html lang="fr">\n<head>\n  <meta charset="utf-8">\n<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, maximum-scale=1"/>\n';
-
-for (var i = 0; i < (AllExtensions.length); i++) {
-  var enabled = (AllExtensions[i]['ENABLED'][0].search(/yes/i) >= 0);
-  if (AllExtensions[i]['ENABLED'][0].search(/ask/i) >= 0) enabled = true; //confirm('Do you want to enable\n' + AllExtensions[i]['TITLE'][0] + ' ?');
-  if (enabled) {
-    if (typeof(AllExtensions[i]['JSURL']) != 'undefined') {
-      for(var j=0; j<AllExtensions[i]['JSURL'].length;j++) res+='<script src="'+AllExtensions[i]['JSURL'][j]+'"></script>\n';
-    }
-    if (typeof(AllExtensions[i]['CSSURL']) != 'undefined') {
-      for(var j=0; j<AllExtensions[i]['CSSURL'].length;j++) res+='<link rel="stylesheet" href="'+AllExtensions[i]['CSSURL'][j]+'" />\n';
-    }
-  }
-}
-	
-	switch (style) {
-	case 1:
-	res+='<title>'+title+'</title>'+GEBID("AllScripts").outerHTML+GEBID("AllStyles").outerHTML+'</head><body onload=" Init(); InitGraphic(); AdapterTaille2(window.innerWidth,window.innerHeight); window.onresize=function () {AdapterTaille2(window.innerWidth,window.innerHeight);};GEBID(\'Libraries\').value=UnMaskCode(GEBID(\'Libraries\').value); readAllFS(GEBID(\'Libraries\').value); GEBID(\'SourceCode\').value=UnMaskCode(GEBID(\'SourceCode\').value); Viewport(0,0,window.innerWidth,window.innerHeight,1); setTimeout(function() {window.eval(GEBID(\'SourceCode\').value);}, 10);">';
-	res+='<div id="weboutput" style="visibility: hidden; top:0px; left: 0px; width:100%; height: 100%"></div><textarea style="visibility: visible; border:0; top:0px; left: 0px; width: 100%; height: 100%" id="sortie"></textarea><canvas style="visibility: hidden; top:0px; left: 0%; width: 100%; height: 100%" id="mycanvas" width="480" height="300"></canvas>';
-	break;
-	case 2:
-	res+='<title>'+title+'</title>'+GEBID("AllScripts").outerHTML+GEBID("AllStyles").outerHTML+'</head><body onload="Init(); InitGraphic(); AdapterTaille2(Math.floor(window.innerWidth/2),window.innerHeight); window.onresize=function () {AdapterTaille(Math.floor(window.innerWidth/2),window.innerHeight);};GEBID(\'Libraries\').value=UnMaskCode(GEBID(\'Libraries\').value); readAllFS(GEBID(\'Libraries\').value); GEBID(\'SourceCode\').value=UnMaskCode(GEBID(\'SourceCode\').value); Viewport(0,0,window.innerWidth,window.innerHeight,1); setTimeout(function() {window.eval(GEBID(\'SourceCode\').value);}, 10);">';
-	res+='<div id="weboutput" style="visibility: hidden; top:0px; left: 0px; width:100%; height: 100%"></div><textarea style="visibility: visible; border:0; top:0px; left: 0px; width: 50%; height: 100%" id="sortie"></textarea><canvas style="visibility: visible; top:0px; left: 50%; width: 50%; height: 100%" id="mycanvas" width="480" height="300"></canvas>';
-	break;
-	case 3:
-	res+='<title>'+title+'</title>'+GEBID("AllScripts").outerHTML+GEBID("AllStyles").outerHTML+'</head><body onload="Init(); InitGraphic(); AdapterTaille2(window.innerWidth,window.innerHeight); window.onresize=function () {AdapterTaille2(window.innerWidth,window.innerHeight);}; GEBID(\'Libraries\').value=UnMaskCode(GEBID(\'Libraries\').value); readAllFS(GEBID(\'Libraries\').value); GEBID(\'SourceCode\').value=UnMaskCode(GEBID(\'SourceCode\').value); Viewport(0,0,window.innerWidth,window.innerHeight,1); setTimeout(function() {window.eval(GEBID(\'SourceCode\').value);}, 10);">';
-	res+='<div id="weboutput" style="visibility: hidden; top:0px; left: 0px; width:100%; height: 100%"></div><canvas style="visibility: visible; top:0px; left: 0px; width: 100%; height: 100%" id="mycanvas" width="480" height="300"></canvas><textarea style="visibility: hidden; border:0; top:0px; left: 0px; width: 100%; height: 100%" id="sortie"></textarea>';
-	break;
-	case 4:
-	res+='<title>'+title+'</title>'+GEBID("AllScripts").outerHTML+GEBID("AllStyles").outerHTML+'</head><body onload="Init(); InitGraphic(); AdapterTaille2(window.innerWidth,window.innerHeight); window.onresize=function () {AdapterTaille2(window.innerWidth,window.innerHeight);}; GEBID(\'Libraries\').value=UnMaskCode(GEBID(\'Libraries\').value); readAllFS(GEBID(\'Libraries\').value); GEBID(\'SourceCode\').value=UnMaskCode(GEBID(\'SourceCode\').value); Viewport(0,0,window.innerWidth,window.innerHeight,1);  setTimeout(function() {window.eval(GEBID(\'SourceCode\').value);}, 10);">\n';
-	res+='<div id="weboutput" style="visibility: visible; position: absolute; background-color: white; top:0px; left: 0px; width:100%; height: 100%"></div><canvas style="visibility: hidden; top:0px; left: 0%; width: 100%; height: 100%" id="mycanvas" width="480" height="300"></canvas><textarea style="visibility: hidden; border:0; top:0px; left: 0px; width: 100%; height: 100%" id="sortie"></textarea>';
-	break;
-	}
-	
-	res+='<textarea id="Libraries" style="display: none">\n';
-	var code='';
-	flag=false;
-	for(var i=0; i<Taille(files);i++) {
-		if (flag) res+='--------------------\n';
-		flag=true;
-		code+=files[i]+'\n';
-		code+='--------------------\n';
-		code+=readFile(files[i])+'\n';
-	}
-	res+=MaskCode(code);
-	res+='</textarea>';
-	ch="\n\nwindow.document.getElementsByTagName('div')[0].id= 'weboutput';\n"+ch;
-	res+='<textarea id="SourceCode" style="display: none">'+MaskCode(ch)+'</textarea></body></html>';
-	return res;
-}
-
-function createLibraryApp(ch,title,style,files) {
-	var res='';
-	flag=false;
-	for(var i=0; i<Taille(files);i++) {
-		if (flag) res+='--------------------\n';
-		flag=true;
-		res+=files[i]+'\n';
-		res+='--------------------\n';
-		res+=readFile(files[i])+'\n';
-	}
-		
-	if (flag) res+='--------------------\n';
-	res+='Executable.js\n';
-	res+='--------------------\n';
-	res+=ch+'\n';
-	return res;
-}
-
 
 // Gestion des assertions
 function GEBID(e) {
@@ -7463,6 +8291,8 @@ var Circle=Cercle;
 var FilledCircle=CerclePlein;
 var FilledEllipse=EllipsePlein;
 var Text=Texte;
+var Polygon=Polygone;
+var FilledPolygon=PolygonePlein;
 
 var LinearGradient=GradientLineaire;
 var Length=Longueur;
@@ -7486,6 +8316,7 @@ var SubTable=SousTableau;
 
 var LoadAudio=ChargerSon;
 var CreateAudio=CreerSon;
+var CreateAudio16bits=CreerSon16bits;
 var ImportAudio=ImportSon;
 
 var SaveAudio=SauverSon;
@@ -7538,7 +8369,7 @@ function exitFullscreen() {
     	height: 320px;
 		overflow: hidden;
     }
-    
+
     #sortie, #lecode, #mycanvas, #SaisieTexte, #weboutput, #Aide, #divtuto, #credits, #GestionFichiers {
 		-ms-transition: -ms-transform 1s ease;
 		-moz-transition: -moz-transform 1s ease;
@@ -7551,8 +8382,8 @@ function exitFullscreen() {
 		-webkit-transform-origin: bottom right;
 		-o-transform-origin: bottom right;
     }
-    
-    
+
+
 	#sortie {
 		position: absolute;
 		top: 30px;
@@ -7629,7 +8460,7 @@ z-index:100;
 		color: black;
 		font-style: italic;
 	}
-	
+
 	#bouton_fg {
 		background-color: rgb(230,230,230);
 		color: black;
@@ -7648,7 +8479,7 @@ z-index:100;
 }
 
 #boutons table {
-	width: 100%; 
+	width: 100%;
 	padding: 0; margin: 0;
 }
 
@@ -7672,7 +8503,7 @@ z-index:100;
 }
 
 #boutons input, #boutons select, #boutons option  {
-	padding: 0; 
+	padding: 0;
 	margin: 0;
 	border: 0;
 	height: 25px;
@@ -7730,7 +8561,7 @@ z-index:100;
 	border-color: black;
 	font-family: helvetica, sans-serif, arial;
 	font-size: 12px;
-	font-style: italic;	
+	font-style: italic;
 	display: inline;
 
 }
@@ -7756,7 +8587,7 @@ z-index:100;
 	border-color: black;
 	font-family: helvetica, sans-serif, arial;
 	font-size: 12px;
-	font-style: italic;	
+	font-style: italic;
 	display: inline;
 
 }
@@ -7775,7 +8606,7 @@ z-index:100;
 		visibility: hidden;
 		overflow: auto;
 	z-index: 30;
-	background-color: rgb(220,220,220);	
+	background-color: rgb(220,220,220);
 }
 
 #credits {
@@ -7787,9 +8618,9 @@ z-index:100;
 		visibility: hidden;
 		overflow: auto;
 	z-index: 30;
-	background-color: black; color: white;	
+	background-color: black; color: white;
 	font-family: helvetica, arial, sans-serif;
-	
+
 }
 
 #credits h1 {
@@ -7807,7 +8638,7 @@ z-index:100;
 }
 
 #divtuto input {
-	padding: 0; 
+	padding: 0;
 	margin: 0;
 	border: 0;
 	height: 25px;
@@ -7833,16 +8664,16 @@ z-index:100;
 
 .divfullscreen {
 	text-align: center;
-	vertical-align: middle; 
+	vertical-align: middle;
 	text-align: center;
 	font-size: 1.4em; color: green; font-weight: bold;
 	letter-spacing: -8px;
 	font-size: 25px;
-}	
+}
 
 .divfullscreen:hover {
 	background-color: rgb(220,220,220);
-}	
+}
 
 #weboutput {
 	padding: 0px;
@@ -7994,13 +8825,13 @@ z-index:100;
 	-webkit-transition: background-color 0.5s ease;
 	-o-transition: background-color 0.5s ease;
 	transition: background-color 0.5s ease;
-	padding-top: 25px; 
-	padding-left: 25px; 
-	padding-right: 25px; 
-	padding-bottom: 5px; 
+	padding-top: 25px;
+	padding-left: 25px;
+	padding-right: 25px;
+	padding-bottom: 5px;
 	vertical-align: middle;
 	font-size: 1.5em;
-	background-color: rgb(255,255,255); 
+	background-color: rgb(255,255,255);
 	color: black;
 }
 
@@ -8025,7 +8856,7 @@ z-index:100;
 	background-color: yellow;
 	font-family: helvetica, sans-serif, arial;
 	font-size: 12px;
-	font-style: italic;	
+	font-style: italic;
 }
 
 #Aide span:hover+div {
@@ -8041,19 +8872,19 @@ z-index:100;
 	display: block;
 
 }
-    
+
     </style>
     </head>
-    <body onload="Init(); InitGraphic(); GEBID('titre_onglet').selectedIndex=0; var builtin_oldfilename=''; fenetre_courante=0; MontreFenetre(0); AdapterTaille(window.innerWidth,window.innerHeight); window.onresize=function () {AdapterTaille(window.innerWidth,window.innerHeight);}; /*setTimeout('GEBID(\'divtuto\').style.visibility=\'hidden\';',2000);*/ readAllFS(GEBID('Libraries').value); window.onerror=fonctionerreur; GEBID('sortie').value=''; GEBID('MonTexte').value='Votre texte ici'; GEBID('MonTexte').disabled=false; builtin_ong=GEBID('onglet1'); builtin_bong=GEBID('bonglet1'); builtin_oldfilename=''; EnvironmentLanguage=getQuerystring('lang'); if (EnvironmentLanguage == '') EnvironmentLanguage=defaultEnvironmentLanguage; if (EnvironmentLanguage == 'french') {GEBID('Mementofrench').style.display='block'; GEBID('Mementoenglish').style.display='none';} else {GEBID('Mementofrench').style.display='none'; GEBID('Mementoenglish').style.display='block';}; if (window.location.href.substr(0,mybaseurl.length) == mybaseurl && navigator.onLine) {if (getQuerystring('dropbox') == 'off' || defaultDropbox == false) Dropboxsync=false; else if (getQuerystring('dropbox') == 'on' || defaultDropbox == true) Dropboxsync=true; else Dropboxsync=confirm('Do you want to synchronize the internal filesystem with Dropbox ?');} else {Dropboxsync=false;}; if (Dropboxsync) {InitDropbox(); document.title='[Synchronized] '+document.title;} if (MustCreateAlgoScriptConfigflag) MustCreateAlgoScriptConfig();/* InitImages();*/ var toload=getQuerystring('load'); if (toload != '') {editor.setValue(readFile(toload)); builtin_oldfilename=toload; GEBID('lecode').value=editor.getValue();}; if (getQuerystring('theme') == 'erlang') {editor.setOption('theme','default erlang-dark'); var y = document.getElementsByClassName('CodeMirror'); y[0].style.backgroundColor='#002240'; y[0].style.color='white';}; if (getQuerystring('newstyle') == 'on') ChangeNewStyle();">
+    <body onload="Init(); InitGraphic(); GEBID('titre_onglet').selectedIndex=0; var builtin_oldfilename=''; fenetre_courante=0; MontreFenetre(0); AdapterTaille(window.innerWidth,window.innerHeight); window.onresize=function () {AdapterTaille(window.innerWidth,window.innerHeight);}; /*setTimeout('GEBID(\'divtuto\').style.visibility=\'hidden\';',2000);*/ readAllFS(GEBID('Libraries').value); window.onerror=fonctionerreur; GEBID('sortie').value=''; GEBID('MonTexte').value='Votre texte ici'; GEBID('MonTexte').disabled=false; builtin_ong=GEBID('onglet1'); builtin_bong=GEBID('bonglet1'); builtin_oldfilename=''; EnvironmentLanguage=getQuerystring('lang'); if (EnvironmentLanguage == '') EnvironmentLanguage=defaultEnvironmentLanguage; if (EnvironmentLanguage == 'french') {GEBID('Mementofrench').style.display='block'; GEBID('Mementoenglish').style.display='none';} else {GEBID('Mementofrench').style.display='none'; GEBID('Mementoenglish').style.display='block';}; if (window.location.href.substr(0,mybaseurl.length) == mybaseurl && navigator.onLine) {if (getQuerystring('dropbox') == 'off' || (defaultDropbox == 'off' && getQuerystring('dropbox') != 'on')) Dropboxsync=false; else if (getQuerystring('dropbox') == 'on' || defaultDropbox == true) Dropboxsync=true; else Dropboxsync=confirm('Do you want to synchronize the internal filesystem with Dropbox ?');} else {Dropboxsync=false;}; if (Dropboxsync) {InitDropbox(); document.title='[Synchronized] '+document.title;} if (MustCreateAlgoScriptConfigflag) MustCreateAlgoScriptConfig();/* InitImages();*/ var toload=getQuerystring('load'); if (toload != '') {editor.setValue(readFile(toload)); builtin_oldfilename=toload; GEBID('lecode').value=editor.getValue();}; if (getQuerystring('theme') == 'erlang') {editor.setOption('theme','default erlang-dark'); var y = document.getElementsByClassName('CodeMirror'); y[0].style.backgroundColor='#002240'; y[0].style.color='white';}; if (getQuerystring('newstyle') == 'on') ChangeNewStyle();">
         <form name="f" id="f" action="javascript:void(0)" method="post">
-	<textarea id="lecode" style="border: 0;">// Javascript code here
+	<textarea id="lecode" style="border: 0;">// Your code here
 </textarea>
 	<div id="boutons">
 	<table><tr><td style="width: 33%; text-align: left; vertical-align: middle; margin: 0; border: 0; padding: 0;">
 	<img id="icoExec" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAFn0lEQVR4Xp2Qe4xcZRmHn/c7Z3ZuO9vZW3e73bSFtlto2i5aWRZK0UZbLTXUYEktW4iKQgy6a21qYiAE/wBNiFUk/qd4wVtTQzSYEAxFGosp1mgF6lrpZblIpXSuO9dz+V5nZmcbSBog/nKe8zsn53vPk7y8W4av+7Oz8uP/umHT58/et3Xq3C+2f+P8k5/c99/fbr7rzCOj257+7MC67y3iPWK4RBaNH+1Y+6mXJ1ePLTs1ccfQs7vvHPzm5FTvrfumej6xd6r3pi/cPfTl274y/uiWiYmZ0e1PHewb2bf2fQsWbzyxevHKRX+58dMLH578Uu+yzR+OM3plhKFFDukeQ2+fw4plETasj3HHrgUdd05dv2Ps5j3HBkcfui/Ws8l9V8HAtS9cNzySPrLzMz3rrlkfVYmJVhDK2mjbhCZUtNFAVUSHh13dvSPd8ZGdn7u/c+mtP3NT47FLCrpG/zbSvTj9xLatnd3pXoeSipRCGijNLgZIwW81sxYpWWmdaVIzwg3jMdmwbfuujoU3fVeilzvvEHQsf8pxksnHrt+Q6HHihkIoFAIYTigj8ZB6pUy+FlD0oRg0EQr2bYSGohWuWhtl+fjtd0l8zS3vEEh04PbLRjqvjqaMZn3RXCBk/FBH0q4u6ezgY4OdusJ4WswVNFsJKPmqJR8KoWjOGs2FQmNGCwE62pAkLpt6AGdh+qLATcT2DAw6ZOoiGa9BYMgGIqFFAoVQRZank7J1KCULqkVeeD0r03mf18oqGV8kExoyvpELnkjjYnjFyOUm+aGbAdzIij+t7uqLr6kq+DWIeoLrG2oFH89CREFEQSHmGrYs7WFswOeJMwUOZ1zKksKxDq4v1OtC4EFXj4PTu3mHnX3m565E4hs74kLeA+qiVA1+SeiKaCPMRVFEmX9PRyM6cWUfG/M1/fGJLH/MxAnrMU14Aj5Yg3Z0X/0B/2zQZTBmpa9IwaMpkbfqIrVA8AIEVNoSARFpMf+uDC+IyT3X9su3Pij0a1bOVwLJe1CsqziJwX4k2mewuW4L6lvwVVQFDSx4vqpVVFHmqgE6d2/3/Mf1Q0m+89Eu9UoXtBpALVDFcQ3ipFysV1ZF2v8R2oOh5eKzImIFRGFOIvMLE0XIlqr6g0P/FqQbtL1Qay0ahq76xVdtoBBYaLe1SmBgfjuqXIzOt0LVC/jV0dM8erxIsWMpJhqHoocNFFvLldBKwdjyiWN+TVHPghdC3WI9xQ8F1Sag0Grb7sAqTx4/y8RP/8oPZzqpDFyFcdOIr+CH2Lri5/9xGjTfEDx31Cvk3rQ1C7VQpRoolQDPl/aaQRW1bY6eOscXH3teH3pRyfSPapAaUhs4UAmVagv8imqQ+cMRoGi0dKjuvXnoJ/6sQjkQSr4w62Mbz1ZpWSwiJ9/IyVd/fUy+frjAmdQaCdLLqGpMvJq2zktzrjlTDqlls2Wb//1BwDcAYeZ3+yvnL7wVFkNah4tNQv7+SonXM2Xuffw4ux9/jedZhdc7QpkkpbqDV7ZQ8Bt4UPRbs/WCpXbmkd9gS8cBhHZM966dqXUP/DI5GBHpjkDKxTolrJSQ3n5MKg2uAwqECvUQKgFSDqDotUTehYDiy8+drJ+87RYIXwJwacfOPnuwNL1/BNl7f8KqmMCKSSYwiZRScoW6hxoBUAms4FmlFgpNwayvXi6U2Znp/9RP3f01CKdpR3h7nH7HLNgymVh174OJ/kTMTRkk7ihRR3ANGEBRQhX8lmBu53nV8szhf3qnJ/di888A/qUFAKbTSGTJeGR477djizdtiKYccWKCici8AA0V64FfVmqZc4XazMMHbPbA98GeBELeXyIJoldscQb3/Ch6xYGXEuuP5ZLXTNeTYy9W4uuefiOybP8R03Xjg0h0DOjk/4+4wAJgCbCqzVKgG3B5j/wPFVAowDGOz14AAAAASUVORK5CYII=" alt="&#x2714;: Run" onclick="GEBID('sortie').value='Execution en cours'; Evaluer();"  style="color:green; width:24px; height: 24px;" class="fleche"/><div><div>Execute</div></div>
 	<img id="icoIndent" src="data:image/png;base64,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" alt="&#x21F6;: Indent" onclick="Indente();"  style="color:black; width:24px; height: 24px;" class="fleche"/><div><div>Indent</div></div>
 <!--	<img id="icoResize" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABWElEQVR42u2XIUjEYBiGd8KKqO3QbBBMgvWaFoPh8iFr3rXrBsUy1LszLMqJSbQaNC94xQWTTBaGDFaG6Jr183t/dnBjisPd/v/CPnh4+creB/ZvYxoRKaUSmB0BnjWmybRLpomulADPpmmaB2EYPkdRRGWCDnShc1Jgz/f9d/t8QMONdUIGQUCjux7dHq0ixX79cEz7PR2J/d+gC52TAm3XdelpZ4s+d7dFYn+9aRA9NpBiP7lfocuXeST2QqAzJeA4Dn1cDSEgEvuXewEBpNhHb2cQQGIvQlbAtm3yPI/iOBaZYy9CVsCyLJJIVoDkzs8ChmGkmMpkr/u3QEmTTyDJMsoRuQSmKvHLdZUewkqgElAuoPQxnN0XUUfBq7iDwOhMV8HHqJt0a4vMIUkedCbd2gLTYk6ZPjMomX7S1UL3+BYsMXVmWRL1pFMfH8IaMyeZWvVvCL4BhCbDBZfU9WwAAAAASUVORK5CYII=" alt="&#x21F1;&#x21F2;: Resize" onclick="AdapterTaille(window.innerWidth,window.innerHeight); window.scrollTo(0,1);"  style="color:blue; width:24px; height: 24px; letter-spacing: -8px; text-align:center;" class="fleche"/> -->
-<!--	
+<!--
 	<input onclick="GEBID('sortie').value='Execution en cours'; Evaluer()"  style="color:green;" value="&#x2714;" type="button" class="fleche" />
 	<input onclick="Indente()"  style="color:black;" value="&#x21F6;" type="button" class="fleche" />
 	<input type="button" class="fleche" style="color: blue; letter-spacing: -8px; text-align:center;" value="&#x21F1;&#x21F2;" onclick="AdapterTaille(window.innerWidth,window.innerHeight); window.scrollTo(0,1);"/> -->
@@ -8076,7 +8907,7 @@ z-index:100;
 	</select><div><div>Fen&ecirc;tre&nbsp;visible</div></div></td>
 	<td style="width: 33%; text-align: right; vertical-align: middle; margin: 0; border: 0; padding: 0;"><label style="vertical-align: middle; font-style: italic; font-size: 0.7em; font-family: helvetica, sans-serif, arial; color: blue"><input class="other" type="text" id="builtin_inspector" style="background-image: url(data:image/png;base64,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); background-color: white; width: 80px; text-align: center; background-repeat: no-repeat; background-position: center center; border-radius:2em; color: black; text-shadow: 2px 2px 4px #000000; font-size:1.5em; font-weight: bold;" value=""/><div><div>Variables&nbsp;à&nbsp;inspecter</div></div></label>
 	<img id="icoFS" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABsAAAAbCAMAAAC6CgRnAAACTFBMVEVMaXGkrMMBVKADZrD///8BYasAAI3///8BesXN2u3///8Acr7MzMzMzM8Aj9no6Ojs7Ovw7+8GYqwYaLH08/OXpsQAAIQmbbQTkdoAW793ia/z8/MDdsH///8Bf8kMe8ULUpsAVacAAIEAbr2gudwghc0KVp8AT6WiqsBypdljndeHrNj///1ph7jS3u5MaaADarTKzMympqpef7SNnsGVor4Ag84YcLmYq8kditIAAof///8oWZyhqb+Yr9GqwdkAjtkAdsAAbrjl5eUNkdqgv+QUeMEZgsoYYKj///8AYq8AdMMaitIAfMkoc7oLcr0gdb4AXrcCUZsAWbMAU64MYqwAW6osjNIATal4oNDR1uDN2eoAS50ASaXDxcZXcaWzxuDX4vCOqc8AOJXX2twAH4iRn78ANZ4AS5aauN6DlruMoseMmrvR0tQAYsXh6fSTtd0AcMz///6cttjK2u8Kb7nL0vD//v4DbrgCXacne8IAbL57oM+qv90+g8QAAACOrNNLiMaRsNbT2OLV1d/09PTQ0tTx8fEAAADW19fHztvm5ub9/f3///6lsswZUZje3t4aUZjl5eUAAJNie6xpfap+kLXy8vLx9vZme6nx8fi70OsAetJuhK/p6enZ2dkAAJTr7u4AfdIkk9r///+tyer8/Pz19/kTbLX////7+/sAh9QAZbvw8O/6+vfo6ez9/v4BWaMOc70Aecnk5+sEcr0AitXh5Ojc3+QcXqQAgtL5///29vUVUJjq6+vy+/8XXKOttMaxt8ggU5jz9F7fAAAAqXRSTlMA/f7+0f7+Af4QAv55efmCgoL+/oL9/f75/v7+/gT+/v7+/f79/v7+/v7+/v7+/vz+eS3++/v+/vz+/tL+/vwL+f7+gfn6/v7+A/7+/v7+/v7+/v7+/v7+/v7+/v7+Yvv+/vv+Nf3+/v7+/vv7gv7++/7g+/7+Ecv+/v7+/v7+C/v++/4YRo5eBZT+7pnt/v51/ur+/v7+eTf+Jfv9/vNl/kv8+cf3kv7+xmTkKAAAAiBJREFUeF5t0lVXG0EYgOHJppE2AiQkIW7EPbgVaYO7uxSKtUChSN3d3d1n44LX+8e6m2V7TtM+MxfffO85e7UAADn4B7ndAUDx4va/LRZjewaWnnx4V7Dtj/hYsHRtBDAAeDQHN78l2oTXz2PfW4Lv33K5Jdy03YQ0bgn28MC5c+A1nH+z4fWurHgJxLjx7Cm8CB5Cz6x5fmbIlN1Rm5eXV9uRbbbP2E2zB2AqSIWeaQsKP5qiumycLmqWQuvENN5SYLrYgqLWIV20QqFQVNTV9VhR64SYaAfFXYM96PEappLJZCqVNekB+6BFfIZoviO+E8e0rPJSmUxWWs462nUa25yCKSAZ7mxqbND6liOsZRwrEvFpGxqb9hCtpX4hJ2eh7BChDH/Ut2y1VpHT+clJis+i1n0wGSTB3E4Rn1rNp5L41VS+qHOr9bUZ2tvUNB6NRuNhR81rN/D6iCYYy7DlnrUZKg/jKtUZ3TdsGWOZMAnsCgleTcaCge51ZD0cDn9HkCuBYFBwNzMUb/RJvzQo6EX0CILo9b2jMal0lL4fxRqaRX++5l+9N1zYrFKpmguHB7DXg3h7GaDQfz2WSBzjN7/gbo87JJL7hflZ6C3gfhEbEAo1mvy9pHyNRih0rH0dAWAKDf4sohiNRSSjkWL8sRq6DAC4NHXH/zmR/+qFk/Ff0N3P5rg4bDZ+8eNycfrdWMHv/5B7eRUjUZWcAcBv6ufcrcdAZs8AAAAASUVORK5CYII=" alt="FullScreen" style="color:black; width:24px; height: 24px;" onclick="if (isInFullScreenMode) exitFullscreen(); else enterFullscreen(); AdapterTaille(window.innerWidth,window.innerHeight);"  class="fleche"/>
-	
+
 <!--	<img id="icoLeft" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAFbklEQVR4XoWWbWhcxxWGn5k7d+/X7upKkVpJtqQlTeK2ckiM21LSpAqllJi2VIGWkoTAKhBsXNxa6EdJi6FqQKENqdxAmxIokmnaUhOKTNvgxk0V4aqOiymJK5zUkWXVlhTbsqJdaT+k/bi349sLYkkdn+Fh5s993zNnz3BW8GHxND6Cfk2fJhMhAcF8zJRmgiFy3CT+v8FwJDza6rZlv9T1EN2pHnb4HycMQ01AQMi/197mUvESr107wUrl+jiCQQ5+0Eh+UJx+z/QuPtm7L/vcfT/lwc4v4MsWZq9d4N3lWc4v612fk6HPfa0P8PTdz/B4ZiDrKvciz9P/4TcYJtud7hn73u5DGEJxeXWR9Y116mGdAL3CG4REZ8JoeZZLd3MXdao8f+EnLJYXBjjAeOMN4sxviD+lxTcqm5y/Nsvaxhq1sKapUwvqlMpl8qt5CoUiNfQSNVYreWaWz7FeKbL/joNsc7eP8TP6Gw2G8XVZIvFNLX5pdYFKvbIlrvfCegFVknx15x66nU5yKzmq2qAqa5TZ5N38HGvVAnvvOIBjuGP8HH/LQDD66I7HfSUUi/n30CWJCaK9qDNuMXwOP/FjHnngGzzz2A9JKo9yfYOqoU1UBHOFeUIJX9ne7wOjAArdiq1OW/b+js9z4foc1Xo1Eq3FJqVCidtkMyOP/gDP9ogDx7XJyQKGCSEhAPpLzhfnuLdtNyeuHs/mXnh/UCHo163IZn1T13ydrcyDWNxn5DEtbm2Jv/zWMU5dOUO9A8gLhCAOUFLR6raw67ZPMXnl1X6FoE/3OSvF9wn+JxxnXozFhxvEj5z5LU8c/RaGKZElAykEUp+Fq8+ujN6KsSRpsl2APoUgox9R1Nt1As1WWRoyj8m0dDG57w8gBAIAweX8As++fpil2lWEKykFRT7p7QDIRAZRf6OJ94WlRZ77zkijeEzf7ffTGBCE4Ns++44fwGxO4Jg2lmnGBpLoWvED4l9XzvHGxdOUqmVuFWFI9F1NO4DESzgkbIukcrBUAgQoBPMhYUbLMzl7kvOrF8A3ePgXjzA59Aq+00Qc5DfWePEfYygpkcLQSIQQgODozO9obm9C2gaecnDMBMC84FnGhnq/mz079w4nZichISII4N6WnUzu/2ODydGzv+epPx/C9R1czyahhUxDYXkJlKuiJumw2qlUKrz09pFxhWDq5OW/ZZtEG0ihAQwgKXmzco4vvvg1Xtt7jCa7iXoQ0t/7MGDwo+kRmjt9nISFpUyUoQCoBwE9yS5OL54GmJIIJmbKb+ImHFqTLZEJxg1AapOZ6jvs+eXXWSnlqdVDarWAh+76Mp/u/AxWYJKyXZrcJL6m2UuxLdWOb6c5tfR3gAkBwChju5zPZltlO68vTFM1a+BKjISMfiyrorjH7uU333wJ10yxtrnO0Kv7UV3g+2k8y8E2TQyh6DJ7mP7PG4y9dWScvQxIAASDM5V/5kzTYGf7J0ASIYSIMFKKWebYc2QPh0+NcuCVJyla63hJFzdhk3JcfC/NnemPYUqDo+dezgGDWwPnILkqlYHp0l/pSH+UXe33YBomAEKgEShtUusI+NPyMcptJdLbUijDwFQqas/bvQwplWR4aoRitTjAXnKN8+DbTOSD1YHp9b/QkWrjwe2fo9VuaZxOSmA2JZCWQQgRrvToUhnCimTo+PeZW53X4kzcfCbrYWHKxNjd/m6/J30ntbDK8uZ1NsIynmWTtF1Sms5UOz2p7fhOmjPvneFXZ3+dK1SKkfgth348LEZdM5m9K91Lm/MRutLd2GYCx7SwExZXy0tc31jm5OWTrJRXxoHBuCzc2iCGF+K/LdAHZCIEAPMxU8BEo3Bj/BetLUN6Xm6xxwAAAABJRU5ErkJggg==" alt="Left" style="color:black; width:24px; height: 24px;" onclick="MontreFenetre(-1);"  class="fleche"/>
 	<img id="icoLeft" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAFmklEQVR4XpWWa2wcVxmGnzlz2dmZ3fXYu7Zcrx2vU0JCE9RtE6hUKpFeKBdREVSJIkpJoiAigtI4lYra8iN2VcqtwaXQBKGiGghtfyBcEVEBaZs4baBRabKhBcVp4qwT4viyTnedXdu7s7PDzFEdoaIo4T16debX857vO590hivqMbJ8lz4eZ4jvsZ8fBP4hQ/yIPp4gyxWkcDk9yoaYEduRbb0xs6L5IyTNFF32Enx8zlTyFKrTjMwe51gpl694lX62M3h1Af1kUXj2i9fenb2z6zMYIsLFapm52hzlYG/4PlYkSkSLYBs2VX+BV6f28ceJvTkUNnI/ucsFSHib1bZ/6/XbnbTdyXS5wPTFAq7n4tEI4NKyiuALIQQpO0kqlmKiOs4z+Z8XZ2qFW9lK7oMBEp5J9Ox/aM13HBqCsQtjzLsLeBLqyb26UJVg1dQuhfgKGKrO0mQGhM/OE98vzrhByLdkCAIJxwn6PbRp5TckfLRw+n24J+16dQrnpkl4MZq8OIXxaWq41IWHK+qU/Tn+OXMc1/f4Ws8mx1KtIXbhXKqAR+kLer7jru51HJ88Qc2rUZdwacqzZT7esZptn98CwL63X2Xglaex03EQyCrARxUq17etYv/kPl6e+FM/W+gTAEHft63ruZvx2fP/A68rgRt1Wp0ki/rUR29j2x1bKE6+h6vWqeseruaxIGqcqoxxa/pOolp0G7txBI+xIRhFp+pVmSlfwPsAPFy+Aa+ffINytcKiPr3qdh64bStn82cZLY0xuTDFTO0CI6V3Kbolssk1DrBOQ+GTN7auoThfeh/ckBNTKc/h1mt4osGCv8BrkyPc9Yt7GPr6b3GiTQB89ro7KMwX2Ly3F7VdB6EAPjW/hq3HCNlhQGa5s4LRQp4GcjFbKNEWTXHTqjVU6vOMV87zse7VoMLw6CG+sPJzLOq+1V9GVQVbX3oQrd3AF1DxKixzlgJkwgAnnO16w710+lKxyDObfoZt2lyNvpL9EucvTvCTo7tQW3V0TSWi6wCOrMD3fRqEbnD6vTGGTx2U8P9HPS3dWLqJbkawNZOIZhCyNQQ5H39tWMXI1LscGDsEeoONg99k/S33ggKKoiACh7tjNrGy/Tr+WycKJ3jyb0/R0uGAoWCrUUzDAMhpKBTPVMY4WzzHgdHXQVcgpTL4r+cZHHkBoQl0VQ0yNVJWC7/76gtU3QaLOnnhJA/8uRdriYmIqIQHvSbSzqxbBCiGAcMHzx1cp5RNEAoIQAcSKoqpoGoamqfRXE6w557n6GlezlzNAwjaeYodw98m3m1hWAaKAl6jQafdwVvjfwcYFii8mJs9QlM0QSrWIkOkVeQuhEDU4L4bNpJxljNfa0gfD9rZ99pDxDM2zc0JHCsWOE463k4q2syx6RzAiwoAAzz7Cev2DdQ1Do0fBlMBS6AaAkPTicxp3Nuznt6bHwbgTOkUT7z5CE0ZiyYngR0JL1WXd5TWuhgtjLHz8MAgm9koAFDoz1UPF5usGKvCCxRIK4SXK1DjGn8Z3cvuN3fyy6NP8fhfH8Ts1LHjloQnojbNdoJliQ9haVF+886eItCPxAD0kq9Q3v5O9QjXtmRYkVyGlJwgELqg1uby0uTveXnmD6idQvZcUzVZYdSIkLG7Sdsd7Hn7eaYq09vZTP5SgNT9DJ5xTw8enXuD5UHALemb5GkWpWgKWouOkYzIQAWkDUWnU1+Cozbz40M/5ZXRA2FrBi//ZD5Nb5PePHBD8mZazCQT81OU6kU8pY6qKcRNi9ZYC+2xVrriHYHT5Eun+fU/ngumKh+e/MkrP/q7yAID11hda5cmPkza7iIeiWHqBqYRIapHUESDc3P/5sjEW+Qmjx0AQnju6v8qAHbLoPUorI3piWzCSMixvejOUqoWc0AI/pUEX0b/AfE4VpRFbkl6AAAAAElFTkSuQmCC" alt="right" style="color:black; width:24px; height: 24px;" onclick="MontreFenetre(1);"  class="fleche"/>
 -->	</td></tr></table>
@@ -8089,6 +8920,7 @@ z-index:100;
 	<div style="visibility: hidden; overflow: scroll;" id="Aide">
 <p><input type="button" value="English" onclick="GEBID('Mementoenglish').style.display='block';GEBID('Mementofrench').style.display='none';"/><input type="button" value="Français" onclick="GEBID('Mementoenglish').style.display='none';GEBID('Mementofrench').style.display='block';"/></p><div id="Mementoenglish" style="display:block">
 <h2>Memento</h2>
+<h3>The Algoscript Library</h3>
 <dl>
 <dt><span>a=getString();</span><div><div>Function that reads a string on the standard input (prompt). French translation = Saisie</div></div> [or <span>getString([message]</span><div><div>Function that reads a string on the standard input, a optional message is printed.</div></div>) or <span>getInt([message])</span><div><div>Function that reads an integer on the standard input, same syntax as getString. French translation = SaisieEntier.</div></div> ou <span>getReal([message])</span><div><div>Function that reads a real number on the standard input, same syntax as getString. French translation = SaisieReel.</div></div>]</dt>
 <dd>Allows to enter a string, an integer or a real number.</dd>
@@ -8102,24 +8934,26 @@ z-index:100;
 <dd>Debugging function that breaks the execution at a given point and prints the values of variables <tt>variable1</tt> and <tt>variable2</tt>.</dd>
 <dt><span>Help();</span><div><div>Print this manual</div></div></dt>
 <dd>Print this manual.</dd>
-<dt><span>InitializeGraphics();</span><div><div>Clear the graphic window and et put the turtle at its initial position.</div></div> <span>Viewport(minx,miny,maxx,maxy,dir);</span><div><div>Défini le système de coordonnées qui est utilisé lors des affichages graphiques. dir définit le sens d'affichage, minx et miny définit les coordonnées du coin supérieur (inférieur si dir=-1) gauche et maxx et maxy définit les coordonnées du coin inférieur (supérieur si dir=-1) droit.</div></div></dt>
+<dt><span>InitializeGraphics();</span><div><div>Clear the graphic window and et put the turtle at its initial position.</div></div> <span>Viewport(minx,miny,maxx,maxy,dir);</span><div><div>Defines the coordinate system.</div></div></dt>
 <dd>Initialize the graphic window.</dd>
 <dt><span>Turtle_go(l);</span><div><div>Go forward by l unities (depends on the coordinate system defined by viewport). A line is drawn is the turtle is down.</div></div> <span>Turtle_right(a);</span><div><div>Turn right the turtle by a given an angle in degrees.</div></div> <span>Turtle_left(a);</span><div><div>Turn left the turtle by a given angle in degrees.</div></div> <span>Turtle_up();</span><div><div>Disable the line drawing.</div></div> <span>Turtle_down();</span><div><div>Enable the line drawing.</div></div> <span>Turtle_move(x,y);</span><div><div>Put the turtle at a given position (default is position 0,0).</div></div> <span>Turtle_color(c);</span><div><div>Change the color of the line drawing.</div></div></dt>
 <dd>Usual manipulation functions for the LOGO turtle.</dd>
-<dt><span>Point(x,y,color);</span><div><div>Draw a point at coordinates x,y with the given color. The coordinate system is either the default one (expressed in pixels with an origine to the upper left corner), or provided by the Viewport function.<br/>Example: <pre>Point(100,200,'red');</pre></div></div> 
-<span>Line(x0,y0,x1,y1,color);</span><div><div>Draw a line joining the points at coordinates x0,y0 and x1,y1 using the given color. The coordinate system is either the default one (expressed in pixels with an origine to the upper left corner), or provided by the Viewport function.<br/>Example: <pre>Line(100,200,300,50,'red');</pre></div></div>  
-<span>Rectangle(x,y,l,h,color);</span><div><div>Draw (the border of) a rectangle whose upper left corner is at position x,y, having length l and height h with the given color. The coordinate system is either the default one (expressed in pixels with an origine to the upper left corner), or provided by the Viewport function.<br/>Example: <pre>Rectangle(100,200,150,50,'red');</pre></div></div> 
-<span>FilledRectangle(x,y,l,h,color);</span><div><div>Draw a rectangle whose upper left corner is at position x,y, having length l and height h with the given color. The coordinate system is either the default one (expressed in pixels with an origine to the upper left corner), or provided by the Viewport function.<br/>Exemple: <pre>FilledRectangle(100,200,150,50,'red');</pre></div></div> 
-<span>Circle(x,y,r,color);</span><div><div>Draw a circle whose center is at coordinate x,y, and diameter is r with the given color. The coordinate system is either the default one (expressed in pixels with an origine to the upper left corner), or provided by the Viewport function (in this latter case, the circle can appear as an ellipse).<br/>Example: <pre>Circle(100,200,50,'red');</pre></div></div> 
-<span>FilledCircle(x,y,r,color);</span><div><div>Draw a disk whose center is at coordinate x,y, and diameter is r with the given color. The coordinate system is either the default one (expressed in pixels with an origine to the upper left corner), or provided by the Viewport function (in this latter case, the disk can appear as an ellipse).<br/>Example: <pre>FilledCircle(100,200,50,'red');</pre></div></div> 
-<span>Ellipse(x,y,rx,ry,color);</span><div><div>Draw an ellipse whose center is at coordinate x,y, and horizontal and vertical diameters are rx and ry with the given color. The coordinate system is either the default one (expressed in pixels with an origine to the upper left corner), or provided by the Viewport function.<br/>Example: <pre>Ellipse(100,200,50,'red');</pre></div></div> 
-<span>FilledEllipse(x,y,rx,ry,color);</span><div><div>Draw a filled ellipse whose center is at coordinate x,y, and horizontal and vertical diameters are rx and ry with the given color. The coordinate system is either the default one (expressed in pixels with an origine to the upper left corner), or provided by the Viewport function.<br/>Example: <pre>FilledEllipse(100,200,50,'red');</pre></div></div> 
-<span>Text(x, y, ch, color);</span><div><div>Write the text ch on the graphical window at position x,y with the given color.<br/>Example: <pre>Text(100,200,'Hello world','red');</pre></div></div>  
+<dt><span>Point(x,y,color);</span><div><div>Draw a point at coordinates x,y with the given color. The coordinate system is either the default one (expressed in pixels with an origine to the upper left corner), or provided by the Viewport function.<br/>Example: <pre>Point(100,200,'red');</pre></div></div>
+<span>Line(x0,y0,x1,y1,color);</span><div><div>Draw a line joining the points at coordinates x0,y0 and x1,y1 using the given color. The coordinate system is either the default one (expressed in pixels with an origine to the upper left corner), or provided by the Viewport function.<br/>Example: <pre>Line(100,200,300,50,'red');</pre></div></div>
+<span>Rectangle(x,y,l,h,color);</span><div><div>Draw (the border of) a rectangle whose upper left corner is at position x,y, having length l and height h with the given color. The coordinate system is either the default one (expressed in pixels with an origine to the upper left corner), or provided by the Viewport function.<br/>Example: <pre>Rectangle(100,200,150,50,'red');</pre></div></div>
+<span>FilledRectangle(x,y,l,h,color);</span><div><div>Draw a rectangle whose upper left corner is at position x,y, having length l and height h with the given color. The coordinate system is either the default one (expressed in pixels with an origine to the upper left corner), or provided by the Viewport function.<br/>Exemple: <pre>FilledRectangle(100,200,150,50,'red');</pre></div></div>
+<span>Circle(x,y,r,color);</span><div><div>Draw a circle whose center is at coordinate x,y, and diameter is r with the given color. The coordinate system is either the default one (expressed in pixels with an origine to the upper left corner), or provided by the Viewport function (in this latter case, the circle can appear as an ellipse).<br/>Example: <pre>Circle(100,200,50,'red');</pre></div></div>
+<span>FilledCircle(x,y,r,color);</span><div><div>Draw a disk whose center is at coordinate x,y, and diameter is r with the given color. The coordinate system is either the default one (expressed in pixels with an origine to the upper left corner), or provided by the Viewport function (in this latter case, the disk can appear as an ellipse).<br/>Example: <pre>FilledCircle(100,200,50,'red');</pre></div></div>
+<span>Ellipse(x,y,rx,ry,color);</span><div><div>Draw an ellipse whose center is at coordinate x,y, and horizontal and vertical diameters are rx and ry with the given color. The coordinate system is either the default one (expressed in pixels with an origine to the upper left corner), or provided by the Viewport function.<br/>Example: <pre>Ellipse(100,200,50,'red');</pre></div></div>
+<span>FilledEllipse(x,y,rx,ry,color);</span><div><div>Draw a filled ellipse whose center is at coordinate x,y, and horizontal and vertical diameters are rx and ry with the given color. The coordinate system is either the default one (expressed in pixels with an origine to the upper left corner), or provided by the Viewport function.<br/>Example: <pre>FilledEllipse(100,200,50,'red');</pre></div></div>
+<span>Polygon(x1,y1,x2,y2,...,color);</span><div><div>Draw a polygon constructed by using a list of points. The coordinate system is either the default one (expressed in pixels with an origine to the upper left corner), or provided by the Viewport function.<br/>Example: <pre>Polygon(100,200,150,100,200,200,'blue'); // draws a triangle</pre></div></div>
+<span>FilledPolygon(x1,y1,x2,y2,...,color);</span><div><div>Draw a filled polygon constructed by using a list of points. The coordinate system is either the default one (expressed in pixels with an origine to the upper left corner), or provided by the Viewport function.<br/>Example: <pre>FilledPolygon(100,200,150,100,200,200,'blue'); // draw a filled triangle</pre></div></div>
+<span>Text(x, y, ch, color);</span><div><div>Write the text ch on the graphical window at position x,y with the given color.<br/>Example: <pre>Text(100,200,'Hello world','red');</pre></div></div>
 <span>setCanvasFont(fontname, fontsize, fontstyle);</span><div><div>Modify the default font. fontname is the name of the font family (eg. 'times', 'helvetica',...) that is installed of the system. fontsize is the size of the font expressed in pt (points) or px (pixels) (eg. '25pt'). fontstyle allows the change the style of the font (eg. 'bold', 'italic', 'bold italic').<br/>Example: <pre>
 setCanvasFont('helvetica', '25pt', 'bold');
 Text(100,100,'Hello world','blue');
 setCanvasFont('helvetica', '25px', 'bold italic');
-Text(100,200,'Hello world','red');</pre></div></div> 
+Text(100,200,'Hello world','red');</pre></div></div>
 <span>DrawImage(imageurl,x,y,w,h);</span><div><div>Draw an image on that graphical window. The image, given by its url, is drawn at position x,y, with length w and height h. The use of the function is quite complex, mainly due to some security processes developed by the browser in order to forbid unusual use of externel images (for instance, the use of external images require to disable the logo turtle functionality by adding the instruction turtleEnabled=false;). Here are two examples:<ul>
 <li>Use of an external image.
 <pre>
@@ -8135,7 +8969,7 @@ DrawImage(readFile('Data/image.png'),150,200,100,100);
 </pre>
 </li>
 </ul></pre></div></div>
-<span>rgb(cr,cv,cb); rgba(cr,cv,cb, opacité);</span><div><div>Define a color by providing its rgb components (three integers between 0 and 255), and for rgba by adding a transparency coefficient (real number between 0 and 1). These fonction can be used each time a color is required. <br/>Example: 
+<span>rgb(cr,cv,cb); rgba(cr,cv,cb, opacité);</span><div><div>Define a color by providing its rgb components (three integers between 0 and 255), and for rgba by adding a transparency coefficient (real number between 0 and 1). These fonction can be used each time a color is required. <br/>Example:
 <pre>
 FilledRectangle(200,200,300,50,rgb(255,0,255));
 
@@ -8149,13 +8983,13 @@ FilledRectangle(350,225,300,50,rgba(255,0,255,0.5));
 
 </pre></div></div>
 <span>LinearGradient(color1,color2,xd,yd,xf,yf);</span><div><div>Define a gradient of color between two colors (color1 and color2). Point xd,yd has color color1 and point xf,yf has color color2.<br/>Example: <pre>FilledCircle(200,200,100,LinearGradient('red','yellow',150,200,250,200));</pre></div></div>
-<span>ShadowOn(); ShadowOff();</span><div><div>Enable or disable the shadow effect.<br/>Example: 
+<span>ShadowOn(); ShadowOff();</span><div><div>Enable or disable the shadow effect.<br/>Example:
 <pre>
 ShadowOn();
 FilledRectangle(100,100,200,80,'red');
 ShadowOff();
 FilledRectangle(100,200,200,80,'red');
-</pre></div></div> 
+</pre></div></div>
 </dt>
 <dd>Usual functions for the graphical output.</dd>
 <dt>
@@ -8178,20 +9012,20 @@ FilledRectangle(100,200,200,80,'red');
 </ul>
 The element at index i is accessible for reading and writing by using T[i].
 </div></div>
-<span>Tableau(n,k); </span><div><div>Create an 2D array of size n x k. 
+<span>Tableau(n,k); </span><div><div>Create an 2D array of size n x k.
 The element at index (i,j) is accessible for reading and writing by using T[i][j].
-</div></div><span>Size(T); </span><div><div>Return the size of T.<br/>Example: 
+</div></div><span>Size(T); </span><div><div>Return the size of T.<br/>Example:
 <pre>var T=[3,4,5];
 Write(Size(T));</pre> prints 3.</div></div>
-<span>PrintTable(T); </span><div><div>Pretty print of the array on the standard text output.<br/>Example: 
+<span>PrintTable(T); </span><div><div>Pretty print of the array on the standard text output.<br/>Example:
 <pre>var T=[[2,6],[4,5],[7,8]]; // 2D array
-PrintTable(T);</pre> prints 
+PrintTable(T);</pre> prints
 <pre>
 2	6
 4	5
 7	8
 </pre></div></div>
-<span>DrawTable(T);</span><div><div>Create a diagram (in the graphical output) using the values stored in T.<br/>Example: 
+<span>DrawTable(T);</span><div><div>Create a diagram (in the graphical output) using the values stored in T.<br/>Example:
 <pre>var T=[[2,6],[4,5],[7,8]]; // 2D array
 DrawTable(T);</pre>
 Numbers of options are associated to this function. Here is its complete syntax: DrawTable(T,addition,fill,color,type,thickness) where
@@ -8236,8 +9070,14 @@ var data=[]; for(var i=0; i<22050; i++) {data[i]=128+Math.floor(127*Math.sin(i*0
 var LA=CreateAudio(data,22050);
 LA.play();
 </pre>
-</div></div> 
-<span>ImportAudio(filename); SampleRate(nomfichier);</span><div><div>Create an array that corresponds to the sample of the song (only 8bit, mono wav files or supported). The song must be stored in the internal filesystem. The obtained table can be manipulated and replayed using the CreateAudio function. The sample rate of the original song can be retrieved by using the SampleRate function.
+</div></div>
+<span>CreateAudio16bits(Table,SampleRate); </span><div><div>Create an audio object by using an array of values (real values between -1 and +1) that corresponds to the sample of the song at a given samplerate. It can be played using method play(). The main difference with CreateAudio is that the generated audio object has a better quality (16bits instead of 8bits).<br/>Exemple:
+<pre>
+var data=[]; for(var i=0; i<22050; i++) {data[i]=Math.sin(i*0.125315));}
+var LA=CreateAudio16bits(data,22050);
+LA.play();
+</pre>
+</div></div><span>ImportAudio(filename); SampleRate(nomfichier);</span><div><div>Create an array that corresponds to the sample of the song (only 8bit, mono wav files or supported). The song must be stored in the internal filesystem. The obtained table can be manipulated and replayed using the CreateAudio function. The sample rate of the original song can be retrieved by using the SampleRate function.
 <pre>
 var data=ImportAudio('Data/jedi3.wav');
 var SR=SampleRate('Data/jedi3.wav');
@@ -8249,13 +9089,35 @@ son.play();
 </div></div>
 <span>ExportAudio(data, samplerate); </span><div><div>Generate a wav file on a url encoded form. Can be saved using the "save as" functionality of the browser.
 </div></div>
+<span>NormalizeAudio(data); </span><div><div>Generate a 0-255 integer array from [-1,1] real array.
+</div></div>
+<span>StartMicrophone(function (T) {...}); StopMicrophone();</span><div><div>Gives access to the microphone. The sound signal is splitted into small parts as arrays of -1 to +1 reals values aimed to be processed by the given function. StopMicrophone() disables the connection with the microphone.
+<pre>
+// a simplistic oscilloscope
+StartMicrophone(function (T) {T[0]=-1; T[1]=1; DrawTable(T,false,false,'red','',1);});
+
+function MouseClick(x,y) {
+  StopMicrophone();
+}
+</pre>
+</div></div>
+<span>StartWebcam(function (T) {...}); StopWebcam();</span><div><div>Gives access to the webcam. The video signal is given image by image by means of a javascript imageData (see <a href="http://www.w3schools.com/tags/ref_canvas.asp">here</a> for a reference) aimed to be processed by the given function. StopWebcam() stops the process.
+<pre>
+// a simplistic example that draw the webcam on the standard output
+StartWebcam(function (T) {ctx.putImageData(T,0,0)});
+
+function MouseClick(x,y) {
+  StopWebcam();
+}
+</pre>
+</div></div>
 </dt>
 <dd>Functions for manipulating HTMLaudio objects.</dd>
 <dt>
 <span>Random(n); </span><div><div>Return a uniform random integer between 0 and n-1. <br/>Example: <t>Write(Random(10));</t></div></div>
 <span>ExecutionTime(codeJS);</span><div><div>Return the execution time (in milliseconds) used by the given JS code<br/>Example: <pre>
 Write(ExecutionTime('var c; for(var i=0; i<1000000; i++) {c=c+i;}'));
-</pre></div></div> 
+</pre></div></div>
 <span>getTextEntry(); setTextEntry(chaine);</span><div><div>Input/output functions from/to the text input window. getTextEntry() returns a string corresponding the the content of the window and setTextEntry(ch) replaces the content of the window by the content of ch.</div></div>
 <span>HTMLoutput(ch);</span><div><div>Interpret the HTML code ch. The result is displayed in the HTML output window.</div></div>
 </dt>
@@ -8286,6 +9148,7 @@ for(var i=0; i<20; i++) document.write('<br/>');
 </div>
 <div id="Mementofrench" style="display:block">
 <h2>Petit m&eacute;mento</h2>
+<h3>La bibliothèque Algoscript</h3>
 <dl>
 <dt><span>a=Saisie();</span><div><div>Fonction permettant de saisir une chaîne de caractères</div></div> [ou <span>Saisie([message]</span><div><div>Fonction permettant de saisir une chaîne de caractères, un message optionnel peut être affiché au moment de la saisie</div></div>) ou <span>SaisieEntier([message])</span><div><div>Fonction permettant de saisir un nombre entier, sa syntaxe est la même que la fonction Saisie()</div></div> ou <span>SaisieReel([message])</span><div><div>Fonction permettant de saisir un nombre réel, sa syntaxe est la même que la fonction Saisie()</div></div>]</dt>
 <dd>Permet la saisie d'une cha&icirc;ne de caract&egrave;re (ou d'un entier ou d'un réel).</dd>
@@ -8303,20 +9166,22 @@ for(var i=0; i<20; i++) document.write('<br/>');
 <dd>Fonctions d'initialisation de la fenêtre graphique.</dd>
 <dt><span>Avancer(l);</span><div><div>Avance la tortue de l unités (dépend du système de coordonnées défini par Viewport). Une ligne est tracée si la tortue est baissée.</div></div> <span>Droite(a);</span><div><div>Tourne la tortue de a degrés dans le sens des aiguilles d'une montre.</div></div> <span>Gauche(a);</span><div><div>Tourne la tortue de a degrés dans le sens inverse des aiguilles d'une montre.</div></div> <span>Lever();</span><div><div>Baisse la tortue (et donc la tortue laisse des traces lorsqu'elle avance).</div></div> <span>Baisser();</span><div><div>Lève la tortue (et donc supprime les traces laissées par la tortue lorsqu'elle avance).</div></div> <span>Deplacer(x,y);</span><div><div>Place la tortue en une position fixée de l'écran (par défaut, elle est en position 0,0).</div></div> <span>Couleur(c);</span><div><div>Change la couleur de la trace laissée par la tortue.</div></div></dt>
 <dd>Op&eacute;rations usuelles de manipulation de la tortue.</dd>
-<dt><span>Point(x,y,couleur);</span><div><div>Trace un point aux coordonnées x,y avec la couleur donnée. Le système de coordonnée est soit celui par défaut (exprimée en pixel avec une origine au coin supérieur gauche), soit celui fourni par la commande Viewport.<br/>Exemple: <pre>Point(100,200,'red');</pre></div></div> 
-<span>Ligne(x0,y0,x1,y1,couleur);</span><div><div>Trace une ligne joignant les points de coordonnées x0,y0 et x1,y1 avec la couleur donnée. Le système de coordonnée est soit celui par défaut (exprimée en pixel avec une origine au coin supérieur gauche), soit celui fourni par la commande Viewport.<br/>Exemple: <pre>Ligne(100,200,300,50,'red');</pre></div></div>  
-<span>Rectangle(x,y,l,h,couleur);</span><div><div>Trace (les bords d')un rectangle dont le coin supérieur gauche est le point de coordonnées x,y, de longueur l et de hauteur h avec la couleur donnée. Le système de coordonnée est soit celui par défaut (exprimée en pixel avec une origine au coin supérieur gauche), soit celui fourni par la commande Viewport.<br/>Exemple: <pre>Rectangle(100,200,150,50,'red');</pre></div></div> 
-<span>RectanglePlein(x,y,l,h,couleur);</span><div><div>Trace un rectangle plein dont le coin supérieur gauche est le point de coordonnées x,y, de longueur l et de hauteur h avec la couleur donnée. Le système de coordonnée est soit celui par défaut (exprimée en pixel avec une origine au coin supérieur gauche), soit celui fourni par la commande Viewport.<br/>Exemple: <pre>RectanglePlein(100,200,150,50,'red');</pre></div></div> 
-<span>Cercle(x,y,r,couleur);</span><div><div>Trace un cercle dont le centre est le point de coordonnées x,y, et le rayon est r avec la couleur donnée. Le système de coordonnée est soit celui par défaut (exprimée en pixel avec une origine au coin supérieur gauche), soit celui fourni par la commande Viewport (dans ce cas, le cercle peut apparaître déformé).<br/>Exemple: <pre>Cercle(100,200,50,'red');</pre></div></div> 
-<span>CerclePlein(x,y,r,couleur);</span><div><div>Trace un disque dont le centre est le point de coordonnées x,y, et le rayon est r avec la couleur donnée. Le système de coordonnée est soit celui par défaut (exprimée en pixel avec une origine au coin supérieur gauche), soit celui fourni par la commande Viewport (dans ce cas, le cercle peut apparaître déformé).<br/>Exemple: <pre>CerclePlein(100,200,50,'red');</pre></div></div> 
-<span>Ellipse(x,y,rx,ry,couleur);</span><div><div>Trace une ellipse dont le centre est le point de coordonnées x,y, et les rayons sont rx et ry avec la couleur donnée. Le système de coordonnée est soit celui par défaut (exprimée en pixel avec une origine au coin supérieur gauche), soit celui fourni par la commande Viewport.<br/>Exemple: <pre>Ellipse(100,200,50,'red');</pre></div></div> 
-<span>EllipsePlein(x,y,rx,ry,couleur);</span><div><div>Trace une ellipse pleine dont le centre est le point de coordonnées x,y, et les rayons sont rx et ry avec la couleur donnée. Le système de coordonnée est soit celui par défaut (exprimée en pixel avec une origine au coin supérieur gauche), soit celui fourni par la commande Viewport.<br/>Exemple: <pre>EllipsePlein(100,200,50,'red');</pre></div></div> 
-<span>Texte(x, y, ch, couleur);</span><div><div>Ecrit le texte ch sur la sortie graphique à partir du point de coordonnées x,y avec la couleur donnée. Le système de coordonnée est soit celui par défaut (exprimée en pixel avec une origine au coin supérieur gauche), soit celui fourni par la commande Viewport.<br/>Exemple: <pre>Texte(100,200,'Bonjour tout le monde','red');</pre></div></div>  
+<dt><span>Point(x,y,couleur);</span><div><div>Trace un point aux coordonnées x,y avec la couleur donnée. Le système de coordonnée est soit celui par défaut (exprimée en pixel avec une origine au coin supérieur gauche), soit celui fourni par la commande Viewport.<br/>Exemple: <pre>Point(100,200,'red');</pre></div></div>
+<span>Ligne(x0,y0,x1,y1,couleur);</span><div><div>Trace une ligne joignant les points de coordonnées x0,y0 et x1,y1 avec la couleur donnée. Le système de coordonnée est soit celui par défaut (exprimée en pixel avec une origine au coin supérieur gauche), soit celui fourni par la commande Viewport.<br/>Exemple: <pre>Ligne(100,200,300,50,'red');</pre></div></div>
+<span>Rectangle(x,y,l,h,couleur);</span><div><div>Trace (les bords d')un rectangle dont le coin supérieur gauche est le point de coordonnées x,y, de longueur l et de hauteur h avec la couleur donnée. Le système de coordonnée est soit celui par défaut (exprimée en pixel avec une origine au coin supérieur gauche), soit celui fourni par la commande Viewport.<br/>Exemple: <pre>Rectangle(100,200,150,50,'red');</pre></div></div>
+<span>RectanglePlein(x,y,l,h,couleur);</span><div><div>Trace un rectangle plein dont le coin supérieur gauche est le point de coordonnées x,y, de longueur l et de hauteur h avec la couleur donnée. Le système de coordonnée est soit celui par défaut (exprimée en pixel avec une origine au coin supérieur gauche), soit celui fourni par la commande Viewport.<br/>Exemple: <pre>RectanglePlein(100,200,150,50,'red');</pre></div></div>
+<span>Cercle(x,y,r,couleur);</span><div><div>Trace un cercle dont le centre est le point de coordonnées x,y, et le rayon est r avec la couleur donnée. Le système de coordonnée est soit celui par défaut (exprimée en pixel avec une origine au coin supérieur gauche), soit celui fourni par la commande Viewport (dans ce cas, le cercle peut apparaître déformé).<br/>Exemple: <pre>Cercle(100,200,50,'red');</pre></div></div>
+<span>CerclePlein(x,y,r,couleur);</span><div><div>Trace un disque dont le centre est le point de coordonnées x,y, et le rayon est r avec la couleur donnée. Le système de coordonnée est soit celui par défaut (exprimée en pixel avec une origine au coin supérieur gauche), soit celui fourni par la commande Viewport (dans ce cas, le cercle peut apparaître déformé).<br/>Exemple: <pre>CerclePlein(100,200,50,'red');</pre></div></div>
+<span>Ellipse(x,y,rx,ry,couleur);</span><div><div>Trace une ellipse dont le centre est le point de coordonnées x,y, et les rayons sont rx et ry avec la couleur donnée. Le système de coordonnée est soit celui par défaut (exprimée en pixel avec une origine au coin supérieur gauche), soit celui fourni par la commande Viewport.<br/>Exemple: <pre>Ellipse(100,200,50,'red');</pre></div></div>
+<span>EllipsePlein(x,y,rx,ry,couleur);</span><div><div>Trace une ellipse pleine dont le centre est le point de coordonnées x,y, et les rayons sont rx et ry avec la couleur donnée. Le système de coordonnée est soit celui par défaut (exprimée en pixel avec une origine au coin supérieur gauche), soit celui fourni par la commande Viewport.<br/>Exemple: <pre>EllipsePlein(100,200,50,'red');</pre></div></div>
+<span>Polygone(x1,y1,x2,y2,...,color);</span><div><div>Trace un polygone à partir d'une liste de points. Le système de coordonnée est soit celui par défaut (exprimée en pixel avec une origine au coin supérieur gauche), soit celui fourni par la commande Viewport.<br/>Exemple: <pre>Polygone(100,200,150,100,200,200,'blue'); // trace un triangle</pre></div></div>
+<span>PolygonePlein(x1,y1,x2,y2,...,color);</span><div><div>Dessine un polygone plein à partir d'une liste de points. Le système de coordonnée est soit celui par défaut (exprimée en pixel avec une origine au coin supérieur gauche), soit celui fourni par la commande Viewport.<br/>Exemple: <pre>PolygonePlein(100,200,150,100,200,200,'blue'); // trace un triangle plein</pre></div></div>
+<span>Texte(x, y, ch, couleur);</span><div><div>Ecrit le texte ch sur la sortie graphique à partir du point de coordonnées x,y avec la couleur donnée. Le système de coordonnée est soit celui par défaut (exprimée en pixel avec une origine au coin supérieur gauche), soit celui fourni par la commande Viewport.<br/>Exemple: <pre>Texte(100,200,'Bonjour tout le monde','red');</pre></div></div>
 <span>setCanvasFont(fontname, fontsize, fontstyle);</span><div><div>Modifie la police de caractères par défaut. fontname est le nom d'une police de caractères (ex: 'times', 'helvetica',...) qui doit être installée sur le système. fontsize est la taille de cette police exprimée en unité pt (points) )ou px (pixels) (par ex: '25pt'). fontstyle permet de changer le style de cette police (ex: 'bold', 'italic', 'bold italic').<br/>Exemple: <pre>
 setCanvasFont('helvetica', '25pt', 'bold');
 Texte(100,100,'Bonjour le monde','blue');
 setCanvasFont('helvetica', '25px', 'bold italic');
-Texte(100,200,'Bonjour le monde','red');</pre></div></div> 
+Texte(100,200,'Bonjour le monde','red');</pre></div></div>
 <span>DrawImage(imageurl,x,y,w,h);</span><div><div>Place une image dans le canvas. L'image, donnée par son url est placée au point de coordonnées x,y et affichée avec une largeur w et une hauteur h. L'utilisation de cette fonction est complexe, notamment car il y a des processus de sécurités développés par le serveur pour empêcher l'utilisation frauduleuse d'images externes (Il est possible d'utiliser ce type d'images mais il faut avoir au préalable desactivé la fonctionnalité "Tortue" de l'interface via l'instruction turtleEnabled=false;). Voici deux exemples:<ul>
 <li>Utilisation d'une url externe.
 <pre>
@@ -8332,11 +9197,11 @@ DrawImage(readFile('Data/image.png'),150,200,100,100);
 </pre>
 </li>
 </ul></pre></div></div>
-<span>rgb(cr,cv,cb); rgba(cr,cv,cb, opacité);</span><div><div>Définit une couleur en fonction de ses composantes de rouge, vert et bleu (trois entiers entre 0 et 255), et pour rgba d'un coefficient d'opacité compris entre 0 et 1. Ceci peut être placé à chaque fois qu'une couleur est demandée. En général, l'attribut couleur peut être soit un nom 'red', 'blue',..., soit rgb(10,100,255), soit GradientLineaire('red',rgb(10,100,255),0,0,500,600);<br/>Exemple: 
+<span>rgb(cr,cv,cb); rgba(cr,cv,cb, opacité);</span><div><div>Définit une couleur en fonction de ses composantes de rouge, vert et bleu (trois entiers entre 0 et 255), et pour rgba d'un coefficient d'opacité compris entre 0 et 1. Ceci peut être placé à chaque fois qu'une couleur est demandée. En général, l'attribut couleur peut être soit un nom 'red', 'blue',..., soit rgb(10,100,255), soit GradientLineaire('red',rgb(10,100,255),0,0,500,600);<br/>Exemple:
 <pre>
 RectanglePlein(200,200,300,50,rgb(255,0,255));
 
-// ou un autre exemple 
+// ou un autre exemple
 for(var i=0; i<10; i=i+1) {
    RectanglePlein(Hasard(500),Hasard(500),50,50,rgb(Hasard(255),Hasard(255),Hasard(255)));
 }
@@ -8346,13 +9211,13 @@ RectanglePlein(350,225,300,50,rgba(255,0,255,0.5));
 
 </pre></div></div>
 <span>GradientLineaire(couleur1,couleur2,xd,yd,xf,yf);</span><div><div>Définit un gradient de couleur entre deux couleurs (couleur1 et couleur2). Les points situés en xd,yd auront pour couleur couleur1, ceux situés en xf,yf auront pour couleur couleur2, les autres auront un mélange des deux couleurs.<br/>Exemple: <pre>CerclePlein(200,200,50,GradientLineaire('red','yellow',150,200,250,200));</pre></div></div>
-<span>ShadowOn(); ShadowOff();</span><div><div>Active ou désactive l'effet d'ombre. Lorsque l'effet est activé, tout ce qui est tracé apparaît avec une légère ombre<br/>Exemple: 
+<span>ShadowOn(); ShadowOff();</span><div><div>Active ou désactive l'effet d'ombre. Lorsque l'effet est activé, tout ce qui est tracé apparaît avec une légère ombre<br/>Exemple:
 <pre>
 ShadowOn();
 RectanglePlein(100,100,200,80,'red');
 ShadowOff();
 RectanglePlein(100,200,200,80,'red');
-</pre></div></div> 
+</pre></div></div>
 </dt>
 <dd>Fonctions usuelles pour le mode graphique.</dd>
 <dt>
@@ -8378,18 +9243,18 @@ On accède alors à l'élément du tableau situé à l'indice i par T[i].
 <span>Tableau(n,k); </span><div><div>Crée un tableau 2D de taille n x k (toutes les cases de ce tableau sont non définies).
 On accède alors à l'élément du tableau situé dans la case (i,j) par T[i][j].
 </div></div>
-<span>Taille(T); </span><div><div>Renvoie la taille du tableau T.<br/>Exemple: 
+<span>Taille(T); </span><div><div>Renvoie la taille du tableau T.<br/>Exemple:
 <pre>var T=[3,4,5];
 Ecrire(Taille(T));</pre> affiche 3.</div></div>
-<span>AfficherTableau(T); </span><div><div>Affiche le tableau, y compris s'il est à deux dimensions.<br/>Exemple: 
+<span>AfficherTableau(T); </span><div><div>Affiche le tableau, y compris s'il est à deux dimensions.<br/>Exemple:
 <pre>var T=[[2,6],[4,5],[7,8]];
-AfficherTableau(T);</pre> affiche 
+AfficherTableau(T);</pre> affiche
 <pre>
 2	6
 4	5
 7	8
 </pre></div></div>
-<span>AfficherCourbe(T);</span><div><div>Trace (dans la fenêtre graphique) la courbe correspondant aux valeurs stockées dans le  tableau (si le tableau est à deux dimensions, les valeurs d'abscisses sont celles d'indice 0 et les valeurs des ordonnées sont celles d'indice 1).<br/>Exemple: 
+<span>AfficherCourbe(T);</span><div><div>Trace (dans la fenêtre graphique) la courbe correspondant aux valeurs stockées dans le  tableau (si le tableau est à deux dimensions, les valeurs d'abscisses sont celles d'indice 0 et les valeurs des ordonnées sont celles d'indice 1).<br/>Exemple:
 <pre>var T=[[2,6],[4,5],[7,8]];
 AfficherCourbe(T);</pre>
 Il y a un certain nombre d'options à cette fonction. Voici sa syntaxe complète: AfficherCourbe(T,addition,remplissage,couleur,type,epaisseur) où
@@ -8434,7 +9299,14 @@ var data=[]; for(var i=0; i<22050; i++) {data[i]=128+Math.floor(127*Math.sin(i*0
 var LA=CreerSon(data,22050);
 LA.play();
 </pre>
-</div></div> 
+</div></div>
+<span>CreerSon16bits(Tableau,Echantillonnage); </span><div><div>Renvoie un objet audio, créé à partir du tableau donné (de réels compris entre -1 et 1) correspondant à un échantillonnage de ce son à la fréquence d'échantillonnage donnée. Il peut être joué par la suite avec la méthode play(). La différence avec CreerSon est que le son généré est un son en 16bits, de meilleure qualité.<br/>Exemple:
+<pre>
+var data=[]; for(var i=0; i<22050; i++) {data[i]=Math.sin(i*0.125315));}
+var LA=CreerSon16bits(data,22050);
+LA.play();
+</pre>
+</div></div>
 <span>ImportSon(nomfichier); SampleRate(nomfichier);</span><div><div>Renvoie le tableau de valeur correspondant au son stocké dans le fichier (uniquement format .wav, une seule voie, 8bits). Le son doit se trouver dans le gestionnaire de fichiers interne. Le tableau obtenu peut ensuite être manipulé et rejoué par exemple en utilisant la fonction CreerSon. Pour récupérer le taux d'échantillonnage du son, il faut utiliser la fonction SampleRate.
 <pre>
 var data=ImportSon('Data/jedi3.wav');
@@ -8447,13 +9319,35 @@ son.play();
 </div></div>
 <span>ExportSon(data, samplerate); </span><div><div>Génère le son au format .wav et avec le son chargé sous forme d'url. Il peut alors être enregistré (via le navigateur) sur le disque et joué avec n'importe quel autre outil.
 </div></div>
+<span>NormaliserSon(data); </span><div><div>Crée un tableau d'entiers entre 0 et 255 à partir d'un tableau de réels entre -1 et 1.
+</div></div>
+<span>StartMicrophone(function (T) {...}); StopMicrophone();</span><div><div>donne accès au microphone. Le son est découpé en tableau de réels compris entre -1 et 1 que la fonction gère en temps réel. StopMicrophone() stoppe la connection avec le micro.
+<pre>
+// un oscilloscope très simple
+StartMicrophone(function (T) {T[0]=-1; T[1]=1; AfficherCourbe(T,false,false,'red','',1);});
+
+function MouseClick(x,y) {
+  StopMicrophone();
+}
+</pre>
+</div></div>
+<span>StartWebcam(function (T) {...}); StopWebcam();</span><div><div>Donne accès à la webcam. Le signal video est obtenu sous la forme d'une imageData (cf <a href="http://www.w3schools.com/tags/ref_canvas.asp">here</a> pour une référence) qui est traité par la fonction passée en paramètre. StopWebcam() arrête le traitement.
+<pre>
+// Un exemple simple qui affiche le signal sur la sortie graphique
+StartWebcam(function (T) {ctx.putImageData(T,0,0)});
+
+function MouseClick(x,y) {
+  StopWebcam();
+}
+</pre>
+</div></div>
 </dt>
 <dd>Fonctions de cr&eacute;ation de son (&agrave; partir d'un fichier ou directement en g&eacute;n&eacute;rant le son). A chaque fois, on objet HTMLAudio est retourn&eacute; qui peut &ecirc;tre jou&eacute; par sa m&eacute;thode play().</dd>
 <dt>
 <span>Hasard(n); </span><div><div>Renvoie un nombre au hasard (uniforme) compris entre 0 et n-1. <br/>Exemple: <t>Ecrire(Hasard(10));</t></div></div>
 <span>chronometre(codeJS);</span><div><div>Renvoie le temps d'exécution en millisecondes mis par le code AlgoScript. <br/>Exemple: <pre>
 Ecrire(chronometre('var c; for(var i=0; i<1000000; i++) {c=c+i;}'));
-</pre></div></div> 
+</pre></div></div>
 <span>getEntreetexte(); setEntreetexte(chaine);</span><div><div>Permet de manipuler la fenêtre d'entrée de texte long. getEntreetexte() retourne une chaîne de caractère correspondant au contenu de la fenêtre et setEntreetexte(chaine) remplace le contenu de la fenêtre par le contenu de chaîne.</div></div>
 <span>HTMLoutput(ch);</span><div><div>Interpr&egrave;te le code HTML stock&eacute; dans la cha&icirc;ne ch. Le r&eacute;sultat est affich&eacute; dans la fen&ecirc;tre de sortie HTML. NB: cette fonctionnalit&eacute; se combine tr&egrave;s bien avec le champ d'entrée de texte long (taper le code HTML dans le champ de texte long et interpr&eacute;ter le r&eacute;sultat via la commande "HTMLoutput(getEntreetexte());" dans la fen&ecirc;tre Code JS).</div></div>
 </dt>
@@ -8594,11 +9488,11 @@ Navigate through windows
     	styleActiveLine: true,
 	    lint: true
       });
-      
-      
-      
-      
-      
+
+
+
+
+
     </script>
 <div id="filebox"></div>
 <div style="display: none">
@@ -9068,7 +9962,7 @@ function Animation(i) {
 		Tiges[depl[1]].push(Tiges[depl[0]].pop());
 		setTimeout(function () {Animation(i+1)},150);
 	} else {AnimeUnCran(); Ecrire('fini !');}
-}	
+}
 
 Animation(0);
 -----------------
@@ -9172,7 +10066,7 @@ function dessinePlasma(qualite) {
     t4 = p4;
     for (x = 0; x < 320; x += qualite) {
       col = cosTbl[t1] + cosTbl[t2] + cosTbl[t3] + cosTbl[t4];
-      
+
       image.data[4*pos]=palette[col][0];
       image.data[4*pos+1]=palette[col][1];
       image.data[4*pos+2]=palette[col][2];
@@ -9427,8 +10321,8 @@ column(1..n).
 :- occupied(R,C), occupied(R,C1),
    row(R), column(C), column(C1), C < C1.
 
-:- occupied(R,C), occupied(R1,C1), 
-   row(R), column(C), row(R1), column(C1), 
+:- occupied(R,C), occupied(R1,C1),
+   row(R), column(C), row(R1), column(C1),
    C < C1, abs(R - R1) == abs(C - C1).
 --------------------
 sudokuvierge.lp
@@ -9446,12 +10340,12 @@ border(1;4;7).
 % alldifferent rows, columns, values
 1 { x(X,Y,N) : val(N) } 1 :- val(X;Y).
 1 { x(X,Y,N) : val(X) } 1 :- val(N;Y).
-1 { x(X,Y,N) : val(Y) } 1 :- val(N;X). 
+1 { x(X,Y,N) : val(Y) } 1 :- val(N;X).
 
 % alternative:
 % :- 2 { x(X,Y,N) : val(N) }, val(X;Y).
 % :- 2 { x(X,Y,N) : val(X) }, val(N;Y).
-% :- 2 { x(X,Y,N) : val(Y) }, val(N;X). 
+% :- 2 { x(X,Y,N) : val(Y) }, val(N;X).
 --------------------
 Library/Lparse_clasp.js
 --------------------
@@ -9632,7 +10526,7 @@ function draw() {
     // Recopie de l'image
     // On récupère un tableau qui stocke une copie de (l'image de) la vidéo
     var imgData = ctx.getImageData(0, 0, 640, 480);
-    
+
     var imgDatabis = ctx.createImageData(640, 480);;
     var lg = 640 * 4;
     for (var x = 0; x < 480; x++) {
@@ -9657,7 +10551,7 @@ Loop(-1);
 Cours_2/Historique_Execution.js
 --------------------
 // Historique d'exécution
-// Variables position,deplacement à inspecter, ne pas oublier de les ajouter dans le champs correspondant 
+// Variables position,deplacement à inspecter, ne pas oublier de les ajouter dans le champs correspondant
 var position, deplacement;
 position = 25;
 deplacement = 11;
@@ -9900,7 +10794,7 @@ Algorithme Calcul de [log3(100)]
 Variables:
 	x,i: entiers;
 Début
-	x ← 1; 
+	x ← 1;
 	i ← 0;
 	Tant que (x < 100) faire
 		x ← 3 * x;
@@ -9924,11 +10818,11 @@ Ecrire(Math.log(100)/Math.log(3));
 Cours_3/VerificationSaisie.js
 --------------------
 /*
-Algorithme Saisie d’un nombre positif 
+Algorithme Saisie d’un nombre positif
 Variables:
 	x: entier;
 Début
-	x ← Saisie(); 
+	x ← Saisie();
 	Tant que (x < 0) faire
 		x ← Saisie();
 	fin tant que
@@ -9936,7 +10830,7 @@ Début
 Fin
 */
 
-// Algorithme Saisie d’un nombre positif 
+// Algorithme Saisie d’un nombre positif
 var x;
 
 x = SaisieEntier();
@@ -9947,7 +10841,7 @@ Ecrire(x);
 --------------------
 Cours_4/Exemple_Fleche.js
 --------------------
-/* 
+/*
 
 Fonction Repeter(nb : entier, symbole: caractère):chaîne de caractères
 Variables:
@@ -9965,7 +10859,7 @@ Algorithme Flèche
 Variables:
    i : entier;
 Début
-   pour i allant de 1 à 5 faire	
+   pour i allant de 1 à 5 faire
    Ecrire(Repeter(6-i,’˽‘)+Repeter(2*i-1,’*’));
    fin pour
    pour i allant de 1 à 5 faire
@@ -10080,7 +10974,7 @@ Cours_4/Exemple_declaration_CtoF.js
 /*
 
 Fonction C_to_F(temp : réel): réel;
-Variables 
+Variables
 	res: réel;
 Début
 	res <- 1.8*temp+32;
@@ -10734,7 +11628,7 @@ Cours_5/Exemple_son.js
 Comment générer un LA ???
 
 Un son est décrit par une onde (sinusoïdale si le son est cristallin).
-En informatique, cette "onde" est "échantillonnée" (calcul d'un sous-ensemble de valeurs) 
+En informatique, cette "onde" est "échantillonnée" (calcul d'un sous-ensemble de valeurs)
 et stockée dans un tableau. En pratique, on calculera une valeur de cette onde tous les 1/22050 secondes !
 
 Si on veut générer 1 seconde de son, il faut calculer 22050 valeurs et les stocker dans un tableau.
@@ -10752,12 +11646,12 @@ Variables:
   son : son
 Début
   Pour i allant de 0 à 22049 faire
-    T[i]=sin((i/22050) * 440 * 2 * Pi); 
+    T[i]=sin((i/22050) * 440 * 2 * Pi);
   fin pour
 
   // "Normalisation" = détail technique
   Pour i allant de 0 à 22049 faire
-    T[i]=128+ Arrondir (127*T[i]) 
+    T[i]=128+ Arrondir (127*T[i])
   fin pour
   son=CreerSon(T,22050);
   son.play();
@@ -10840,15 +11734,16 @@ function Keypressed(c) {
 	Ecrire('Vous avez appuyé sur '+c+' = '+Ascii_vers_Caractere(c));
 }
 
+
+--------------------
+Cours_6/Test_unitaire.js
+--------------------
 // Un exemple de test unitaire
 
 function Multiplier(a,b,c) {
   return a*b*c;
 }
 
---------------------
-Cours_6/Test_unitaire.js
---------------------
 // Algorithme test unitaire
 var a,b,c;
 // Arranger
@@ -10879,6 +11774,91 @@ function Puissance(x, n) {
 // Allez voir ce qui se passe dans la console javascript (shift+Ctrl+j)
 Ecrire(Puissance(2, 5));
 Ecrire(Puissance(2, -5));
+
+--------------------
+Cours_Crypto/Steganographie.js
+--------------------
+// Une petite animation pour la stéganographie
+
+var message = "RENSEIGNEMENTSARRIVENT";
+
+function bird(x, y, t) {
+  // procédure qui dessine un oiseau
+  var s = Math.sin(t * 3.14 / 180);
+  s = s * s + 0.2;
+  Ligne(x - 10 * s, y - 10 * s, x, y, 'black');
+  Ligne(x + 10 * s, y - 5 * s, x, y, 'black');
+}
+
+var taillex = 900;
+var tailley = 400;
+
+function alphabet(y) {
+  // procédure qui dessine l'alphabet
+  for (var i = 0; i < 26; i++) {
+    Ligne(50 + (taillex / 26) * i, 20, 50 + (taillex / 26) * i, y, 'white');
+    Texte(50 + (taillex / 26) * i, y, Ascii_vers_Caractere(i + 65), 'white');
+  }
+}
+
+setCanvasFont('helvetica', '20px', 'bold');
+
+function scene(t) {
+  Initialiser();
+  RectanglePlein(0, 0, 1500, 1000, rgb(100, 100, 255));
+  CerclePlein(200, 200, 100, 'red');
+
+  CerclePlein(0, 700, 1000, 'white');
+  CerclePlein(400, 700, 700, 'white');
+  CerclePlein(800, 700, 450, 'white');
+
+  CerclePlein(0, 700, 1000, rgba(100, 255, 0, 0.5));
+  CerclePlein(400, 700, 700, rgba(100, 255, 0, 0.5));
+  CerclePlein(800, 700, 450, rgba(100, 255, 0, 0.5));
+  CerclePlein(400, 700, 700, rgba(100, 255, 0, 0.5));
+  CerclePlein(800, 700, 450, rgba(100, 255, 0, 0.5));
+  CerclePlein(800, 700, 450, rgba(100, 255, 0, 0.5));
+
+
+  ShadowOn();
+
+
+  var y = 100;
+  for (var i = 0; i < Longueur(message); i++) {
+    var numcase = Caractere_vers_Ascii(message[i]) - 65;
+    bird(Math.floor(50 + (taillex / 26) * numcase) + 5 * Math.sin((t * ((i + 1) % 5)) * 3.14 / 180), Math.floor(50 + tailley * i / Taille(message)), t + i * 10);
+  }
+}
+
+var t = 0;
+
+function Min(a, b) {
+  return (a < b) ? a : b;
+}
+var tstart = 0;
+var flagstart = false;
+var flagfirststart = false;
+
+function MouseClick(x, y) {
+  flagfirststart = true;
+  flagstart = !flagstart;
+}
+
+function anim() {
+  scene(t);
+  if (flagfirststart) alphabet(Min(tstart + 20, 500));
+  if (flagstart) {
+    tstart += 2;
+  }
+  t++;
+  if (tstart < 500) {
+    setTimeout(function () {anim();}, 10);
+  } else {
+    Texte(100, 550, message, 'white');
+  }
+}
+
+anim();
 
 
 </textarea>
@@ -10955,8 +11935,8 @@ onchange="GEBID('filecontent').innerHTML='<pre>'+window.localStorage[GEBID('inte
 <div>
 <table>
 <tr><td colspan="2">
-<input type="button" value="Create App" onclick="var style_standalone=1; if (GEBID('style_standalone2').checked) style_standalone=2; if (GEBID('style_standalone3').checked) style_standalone=3; if (GEBID('style_standalone4').checked) style_standalone=4; var options_standalone=GEBID('internalFS_standalone').options; var allselected=[]; var nbselected=0; for(var i=0; i<options_standalone.length; i++) if (options_standalone[i].selected) allselected[nbselected++]=options_standalone[i].value; var w=window.open(); w.document.write(createStandaloneApp(editor.getValue(),GEBID('name_standalone').value,style_standalone, allselected)); w.document.close();"/>
-<input type="button" value="Create only a standalone Library" onclick="var style_standalone=1; var options_standalone=GEBID('internalFS_standalone').options; var allselected=[]; var nbselected=0; for(var i=0; i<options_standalone.length; i++) if (options_standalone[i].selected) allselected[nbselected++]=options_standalone[i].value; var w=window.open(); w.document.open('text/plain'); w.document.write(createLibraryApp(editor.getValue(),GEBID('name_standalone').value,style_standalone, allselected)); w.document.close();"/><br /><br /></div>
+<input type="button" value="Create App" onclick="var style_standalone=1; if (GEBID('style_standalone2').checked) style_standalone=2; if (GEBID('style_standalone3').checked) style_standalone=3; if (GEBID('style_standalone4').checked) style_standalone=4; var options_standalone=GEBID('internalFS_standalone').options; var allselected=[]; var nbselected=0; for(var i=0; i<options_standalone.length; i++) if (options_standalone[i].selected) allselected[nbselected++]=options_standalone[i].value; var w=window.open(); w.document.write(createStandaloneApp(editor.getValue(),GEBID('name_standalone').value,style_standalone, allselected,(GEBID('encryptioncheck').checked))); w.document.close();"/>
+<input type="button" value="Create only a standalone Library" onclick="var style_standalone=1; var options_standalone=GEBID('internalFS_standalone').options; var allselected=[]; var nbselected=0; for(var i=0; i<options_standalone.length; i++) if (options_standalone[i].selected) allselected[nbselected++]=options_standalone[i].value; var w=window.open(); w.document.open('text/html'); w.document.write(createLibraryApp(editor.getValue(),GEBID('name_standalone').value,style_standalone, allselected)); w.document.close();"/><br /><br /></div>
 </td></tr>
 <tr><td style="width: 50%; vertical-align: top; text-align: left;">
 <h2>Application title</h2><input type="text" id="name_standalone" value="Standalone application"/><br/>
@@ -10965,7 +11945,9 @@ onchange="GEBID('filecontent').innerHTML='<pre>'+window.localStorage[GEBID('inte
 <input type="radio" id="style_standalone2" name="style_standalone">Text + Graphics<br/>
 <input type="radio" id="style_standalone3" name="style_standalone">Graphics only<br/>
 <input type="radio" id="style_standalone4" name="style_standalone">HTML output div only<br/>
-</td><td  style="width: 50%; vertical-align: top; text-align: left;">
+<h2>Encryption of the code</h2>
+<input type="checkbox" id="encryptioncheck" name="encryptioncheck" checked value="on" autocomplete="off">The app code must be encrypted
+</td><td style="width: 50%; vertical-align: top; text-align: left;">
 <h2>Files to be included</h2>
 <select id="internalFS_standalone" size="10" style="width: 300px;" multiple="multiple"></select>
 </td></tr>
