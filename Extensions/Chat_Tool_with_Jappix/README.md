@@ -17,8 +17,8 @@ Adding an extension to AlgoScript is quite simple. It suffises to add these line
 	TITLE=Extension pour Jappix Mini
 	ENABLED=yes
 	JSURL=http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js
-	JSURL=https://dl.dropboxusercontent.com/u/1961350/jappix-static.js
-	JSURL=https://dl.dropboxusercontent.com/u/1961350/Chat-jappix.js
+	JSURL=https://algoscript.info/jappix-static.js
+	JSURL=https://algoscript.info/Chat-jappix.js
 
 # Example
 Users must possess a free jappix account created on https://jappix.com
