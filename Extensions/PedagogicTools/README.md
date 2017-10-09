@@ -16,8 +16,8 @@ Adding an extension to AlgoScript is quite simple. It suffises to add these line
 	[Pedagogic Library]
 	TITLE=Extension for adding pedagogic tools to the environment
 	ENABLED=yes
-	JSURL=https://dl.dropboxusercontent.com/u/1961350/Pedagogic-tools.js
-	CSSURL=https://dl.dropboxusercontent.com/u/1961350/rasterizeHTML.js
+	JSURL=https://algoscript.info/Pedagogic-tools.js
+	CSSURL=https://algoscript.info/rasterizeHTML.js
 
 # Remarks
 It uses the rasterizeHTML library to display the content of the algorithmic introductive exercices (these exercises must be saved in an HTML format in the file named Exercices_tous.txt of the internal FS ). 
