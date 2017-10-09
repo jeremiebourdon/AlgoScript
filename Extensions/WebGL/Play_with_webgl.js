@@ -74,6 +74,10 @@ function animate() {
   cylinder.rotation.x += angleChange;
   cylinder.rotation.y += 2*angleChange;
   cylinder.rotation.z += angleChange;
+  
+  icosaedre.position.x = 400*Math.cos(cylinder.rotation.x);
+  icosaedre.position.z = 400*Math.sin(cylinder.rotation.x);
+
   lastTime = time;
 
   // render
