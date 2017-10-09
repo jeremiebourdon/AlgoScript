@@ -39,7 +39,7 @@ cylinder = new THREE.Mesh(new THREE.CylinderGeometry(100, 100, 400, 50, 50, fals
   shininess: 100
 }));
 cylinder.overdraw = true;
-//scene.add(cylinder);
+scene.add(cylinder);
 
 icosaedre = new THREE.Mesh(new THREE.IcosahedronGeometry(100), new THREE.MeshPhongMaterial({
   // light
