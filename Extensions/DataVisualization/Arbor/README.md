@@ -16,9 +16,9 @@ Adding an extension to AlgoScript is quite simple. It suffises to add these line
 	[Arbor extension]
 	TITLE=Extension pour la visualisation de graphes (arbor.js)
 	ENABLED=yes
-	JSURL=https://dl.dropboxusercontent.com/u/1961350/jquery-2.0.3.min.js
-	JSURL=https://dl.dropboxusercontent.com/u/1961350/arbor.js
-	JSURL=https://dl.dropboxusercontent.com/u/1961350/arbor-tween.js
+	JSURL=https://algoscript.info/jquery-2.0.3.min.js
+	JSURL=https://algoscript.info/arbor.js
+	JSURL=https://algoscript.info/arbor-tween.js
 
 # Example
 
