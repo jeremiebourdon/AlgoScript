@@ -25,9 +25,21 @@ if (typeof(document.getElementById('weboutput')._leaflet) == 'undefined') {
 // Pour qu'elle s'affiche, il faut préciser les images qui seront utilisées (ajout d'un tileLayer, ici celui de cloudmate).
 L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   maxZoom: 18,
-  attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>'
+  attribution: ''
 }).addTo(map);
 // La carte s'affiche enfin !
+
+/*
+// D'autres styles de cartes sur MapBox
+// Un exemple avec un style de carte "Pirate" !
+L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+    attribution: '',
+    maxZoom: 19,
+    id: 'mapbox.pirates',
+    accessToken: 'pk.eyJ1IjoiamJvdXJkb24iLCJhIjoiY2o2aHc3cG1yMGxwZDJ3cDAxNHkyb24zYiJ9.gKyYrX97CQMX_rXINNmJ7A'
+}).addTo(map);
+*/
+
 
 // Passons à l'ajout de figures sur la carte (un cercle de 30m de rayon centré sur la FST de Nantes (avec un popup qui s'ouvre quand on clique dessus).
 // Il faut zoomer pour le voir...
