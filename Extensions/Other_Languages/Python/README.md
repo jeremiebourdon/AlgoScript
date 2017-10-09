@@ -17,9 +17,9 @@ Adding an extension to AlgoScript is quite simple. It suffises to add these line
 	TITLE=Extension Python (skulpt.js)
 	ENABLED=yes
 	JSURL=http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js
-	JSURL=https://dl.dropboxusercontent.com/u/1961350/skulpt.min.js
-	JSURL=https://dl.dropboxusercontent.com/u/1961350/skulpt-stdlib.js
-	JSURL=https://dl.dropboxusercontent.com/u/1961350/skulpt_post.js
+	JSURL=https://algoscript.info/skulpt.min.js
+	JSURL=https://algoscript.info/skulpt-stdlib.js
+	JSURL=https://algoscript.info/skulpt_post.js
 
 # Example
 
