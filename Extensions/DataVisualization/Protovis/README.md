@@ -16,7 +16,7 @@ Adding an extension to AlgoScript is quite simple. It suffises to add these line
 	[Protovis extension]
 	TITLE=Extension Protovis pour la visualisation de données http://mbostock.github.io/protovis/
 	ENABLED=yes
-	JSURL=https://dl.dropboxusercontent.com/u/1961350/protovis.min.js
+	JSURL=https://algoscript.info/protovis.min.js
 
 # Example
 
