@@ -17,7 +17,7 @@ Adding an extension to AlgoScript is quite simple. It suffises to add these line
 	[Audiolet extension]
 	TITLE=Extension Audiolet pour la synthèse audio
 	ENABLED=yes
-	JSURL=https://dl.dropboxusercontent.com/u/1961350/Audiolet.min.js
+	JSURL=https://algoscript.info/Audiolet.min.js
 
 # Example
 
