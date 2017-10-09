@@ -16,8 +16,8 @@ Adding an extension to AlgoScript is quite simple. It suffises to add these line
 	[Openstreetmap extension]
 	TITLE=Extension pour OpenStreetMap (leaflet.js)
 	ENABLED=yes
-	JSURL=https://dl.dropboxusercontent.com/u/1961350/leaflet.js
-	CSSURL=https://dl.dropboxusercontent.com/u/1961350/leaflet.css
+	JSURL=https://algoscript.info/leaflet.js
+	CSSURL=https://algoscript.info/leaflet.css
 
 # Example
 
