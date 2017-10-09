@@ -16,8 +16,8 @@ Adding an extension to AlgoScript is quite simple. It suffises to add these line
 	[Blockly]
 	TITLE=Extension for Visual code edition
 	ENABLED=yes
-	JSURL=https://dl.dropboxusercontent.com/u/1961350/blockly.js
-	JSURL=https://dl.dropboxusercontent.com/u/1961350/blockly_post.js
+	JSURL=https://algoscript.info/blockly.js
+	JSURL=https://algoscript.info/blockly_post.js
 
 # Example
 
