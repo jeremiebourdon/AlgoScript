@@ -16,8 +16,8 @@ Adding an extension to AlgoScript is quite simple. It suffises to add these line
 	[Speech synthesis extension]
 	TITLE=Extension mespeak
 	ENABLED=yes
-	JSURL=https://dl.dropboxusercontent.com/u/1961350/mespeak.js
-	JSURL=https://dl.dropboxusercontent.com/u/1961350/mespeak_post.js
+	JSURL=https://algoscript.info/mespeak.js
+	JSURL=https://algoscript.info/mespeak_post.js
 
 # Remarks
 Two basic functions are added: SaisieVocale(message) and EcrireVocale(message).
