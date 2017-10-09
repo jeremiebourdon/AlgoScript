@@ -15,8 +15,8 @@ Adding an extension to AlgoScript is quite simple. It suffises to add these line
 
 	[WebGL extension]
 	TITLE=Extension pour WebGL (three.js)
-	ENABLED=no
-	JSURL=https://dl.dropboxusercontent.com/u/1961350/three.min.js
+	ENABLED=yes
+	JSURL=https:algoscript.info/three.min.js
 
 # Example
 
