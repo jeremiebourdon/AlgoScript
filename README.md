@@ -3,7 +3,7 @@ AlgoScript
 AlgoScript is a programming environment for javascript.
 It has first been designed for educational purposes. Nevertheless, it implements several features that makes it useful for middle level javascript programmers too.
 
-Test it [here](https://dl.dropboxusercontent.com/u/1961350/AlgoScript-dropbox-int.html?lang=en&dropbox=off "AlgoScript Programming tool") or [here](https://dl.dropboxusercontent.com/u/1961350/AlgoScript-dropbox-int.html&dropbox=off "AlgoScript Programming tool") for its french version !
+Test it [here](https://algoscript.info/?lang=en&dropbox=off "AlgoScript Programming tool") or [here](https://algoscript.info/?dropbox=off "AlgoScript Programming tool") for its french version !
 
 # Basic features
 ## Editor with automatic indentation and syntax highligting
@@ -27,11 +27,11 @@ One of the most interesting feature of the environment consists in the construct
 # Advanced features
 ## Dropbox synchronization
 The local filesystem can be automaticaly synchronized by using a Dropbox(TM) datastore (require to have a free Dropbox account). Export of all the local filesystem as regular files in a dedicated Dropbox folder. By enabling this functionality, the local filesystem is always synchronized, whatever the computer/smartphone/tablet is used. By default, it is asked whether the local filesystem should be synchronized or not. The choice can be forced by adding dropbox=on or dropbox=off to the url of the interface. 
-Test the synchronized version [here](https://dl.dropboxusercontent.com/u/1961350/AlgoScript-dropbox-int.html?lang=en&dropbox=on "AlgoScript Programming tool")
+Test the synchronized version [here](https://algoscript.info/?lang=en&dropbox=on "AlgoScript Programming tool")
 
 ## Utilization of external libraries
 Many powerfull javascript libraries are available accross the internet (for managing webgl 3D, data visualization, OpenStreetMap managment, jQuery....). AlgoScript integrates a simple mechanism allowing the use of these external libraries, thus opening the road to design some very powerfull applications. Several examples are provided in this repository.
 
 ## Answer Set Programming
-Thanks to the javascript compiled versions of clasp provided by Adam Smith (via Emscripten), an ASP grounder and solver is now available. Examples on how Javascript/ASP can be used to solve both n-queens ([test it](https://dl.dropboxusercontent.com/u/1961350/AlgoScript-dropbox-int.html?load=Play_with_clasp_nqueens.js&dropbox=off&lang=en)) and Sudoku ([test it](https://dl.dropboxusercontent.com/u/1961350/AlgoScript-dropbox-int.html?load=Play_with_clasp_sudoku.js&dropbox=off&lang=en)) problems in ASP and pretty-print their solutions using javascript are provided. Notice that the trick used to combine compiled softwares and javascript opens many pedagogic perspectives. 
+Thanks to the javascript compiled versions of clasp provided by Adam Smith (via Emscripten), an ASP grounder and solver is now available. Examples on how Javascript/ASP can be used to solve both n-queens ([test it](https://algoscript.info/?load=Play_with_clasp_nqueens.js&dropbox=off&lang=en)) and Sudoku ([test it](https://algoscript.info/?load=Play_with_clasp_sudoku.js&dropbox=off&lang=en)) problems in ASP and pretty-print their solutions using javascript are provided. Notice that the trick used to combine compiled softwares and javascript opens many pedagogic perspectives. 
 
