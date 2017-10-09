@@ -16,7 +16,7 @@ Adding an extension to AlgoScript is quite simple. It suffises to add these line
 	[Parallel extension]
 	TITLE=Extension Parallel pour le calcul parallèle multi-coeurs
 	ENABLED=yes
-	JSURL=https://dl.dropboxusercontent.com/u/1961350/parallel.js  
+	JSURL=https://algoscript.info/parallel.js  
 
 # Example
 
