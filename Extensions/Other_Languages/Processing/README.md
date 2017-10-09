@@ -16,8 +16,8 @@ Adding an extension to AlgoScript is quite simple. It suffises to add these line
 	[Processing extension]
 	TITLE=Extension Processing 1.4.1 (processing.js)
 	ENABLED=yes
-	JSURL=https://dl.dropboxusercontent.com/u/1961350/processing-1.4.1.min.js
-	JSURL=https://dl.dropboxusercontent.com/u/1961350/Processing_post.js
+	JSURL=https://algoscript.info/processing-1.4.1.min.js
+	JSURL=https://algoscript.info/Processing_post.js
 
 # Example
 
